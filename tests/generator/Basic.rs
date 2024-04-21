@@ -8,45 +8,52 @@ use std::time::Instant;
 
 generate_atmp!(MeshedChannels, A, B, C);
 
-struct payload;
-struct integer;
-struct string;
-struct Test1 { payload: payload }
-struct Test2 { payload: integer }
-struct Test3 { payload: string }
-struct Test4 { payload: payload }
+// Types of the payloads
+struct Stri;
+struct Integer;
+struct Payload;
+struct Test3 {
+    payload: Stri,
+}
+struct Test1 {
+    payload: Payload,
+}
+struct Test4 {
+    payload: Payload,
+}
+struct Test2 {
+    payload: Integer,
+}
+
+// Binary sessions for B
+type Message_0_v_0_FromBToA = RecvTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromBToA>;
+type Message_0_v_1_FromBToA = RecvTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_2_FromBToA>;
+type Message_0_v_2_FromBToA = RecvTimed<Test1, 'a', 0, true, 1, false, ' ', Message_0_v_3_FromBToA>;
+type Message_0_v_3_FromBToA =
+    RecvTimed<Test1, 'a', 0, false, 1, false, ' ', Message_0_v_4_FromBToA>;
+type Message_0_v_4_FromBToA = RecvTimed<Test2, 'a', 0, true, 1, true, ' ', Message_0_v_5_FromBToA>;
+type Message_0_v_5_FromBToA = RecvTimed<Test3, 'a', 0, true, 1, true, 'a', Message_0_v_6_FromBToA>;
+type Message_0_v_6_FromBToA = RecvTimed<Test4, 'a', 0, true, 1, true, 'a', Message_0_v_7_FromBToA>;
+type Message_0_v_7_FromBToA = End;
+type Message_0_v_0_FromBToC = SendTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromBToC>;
+type Message_0_v_1_FromBToC = End;
+
+// Binary sessions for A
+type Message_0_v_0_FromAToB = SendTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromAToB>;
+type Message_0_v_1_FromAToB = SendTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_2_FromAToB>;
+type Message_0_v_2_FromAToB = SendTimed<Test1, 'a', 0, true, 1, false, ' ', Message_0_v_3_FromAToB>;
+type Message_0_v_3_FromAToB =
+    SendTimed<Test1, 'a', 0, false, 1, false, ' ', Message_0_v_4_FromAToB>;
+type Message_0_v_4_FromAToB = SendTimed<Test2, 'a', 0, true, 1, true, ' ', Message_0_v_5_FromAToB>;
+type Message_0_v_5_FromAToB = SendTimed<Test3, 'a', 0, true, 1, true, 'a', Message_0_v_6_FromAToB>;
+type Message_0_v_6_FromAToB = SendTimed<Test4, 'a', 0, true, 1, true, 'a', Message_0_v_7_FromAToB>;
+type Message_0_v_7_FromAToB = End;
+type Message_0_v_0_FromAToC = End;
 
 // Binary sessions for C
 type Message_0_v_0_FromCToA = End;
 type Message_0_v_0_FromCToB = RecvTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromCToB>;
 type Message_0_v_1_FromCToB = End;
-
-// Binary sessions for A
-type Message_0_v_0_FromAToC = End;
-type Message_0_v_0_FromAToB = SendTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromAToB>;
-type Message_0_v_1_FromAToB = SendTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_2_FromAToB>;
-type Message_0_v_2_FromAToB = SendTimed<Test1, 'a', 0, true, 1, false, ' ', Message_0_v_3_FromAToB>;
-type Message_0_v_3_FromAToB = SendTimed<Test1, 'a', 0, false, 1, false, ' ', Message_0_v_4_FromAToB>;
-type Message_0_v_4_FromAToB = SendTimed<Test2, 'a', 0, true, 1, true, ' ', Message_0_v_5_FromAToB>;
-type Message_0_v_5_FromAToB = SendTimed<Test3, 'a', 0, true, 1, true, 'a', Message_0_v_6_FromAToB>;
-type Message_0_v_6_FromAToB = SendTimed<Test4, 'a', 0, true, 1, true, 'a', Message_0_v_7_FromAToB>;
-type Message_0_v_7_FromAToB = End;
-
-// Binary sessions for B
-type Message_0_v_0_FromBToC = SendTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromBToC>;
-type Message_0_v_1_FromBToC = End;
-type Message_0_v_0_FromBToA = RecvTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromBToA>;
-type Message_0_v_1_FromBToA = RecvTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_v_2_FromBToA>;
-type Message_0_v_2_FromBToA = RecvTimed<Test1, 'a', 0, true, 1, false, ' ', Message_0_v_3_FromBToA>;
-type Message_0_v_3_FromBToA = RecvTimed<Test1, 'a', 0, false, 1, false, ' ', Message_0_v_4_FromBToA>;
-type Message_0_v_4_FromBToA = RecvTimed<Test2, 'a', 0, true, 1, true, ' ', Message_0_v_5_FromBToA>;
-type Message_0_v_5_FromBToA = RecvTimed<Test3, 'a', 0, true, 1, true, 'a', Message_0_v_6_FromBToA>;
-type Message_0_v_6_FromBToA = RecvTimed<Test4, 'a', 0, true, 1, true, 'a', Message_0_v_7_FromBToA>;
-type Message_0_v_7_FromBToA = End;
-
-// Stacks for C
-type Ordering_0_v_0_ForC = RoleB<Ordering_0_v_1_ForC>;
-type Ordering_0_v_1_ForC = RoleEnd;
 
 // Stacks for A
 type Ordering_0_v_0_ForA = RoleB<Ordering_0_v_1_ForA>;
@@ -69,39 +76,55 @@ type Ordering_0_v_6_ForB = RoleA<Ordering_0_v_7_ForB>;
 type Ordering_0_v_7_ForB = RoleA<Ordering_0_v_8_ForB>;
 type Ordering_0_v_8_ForB = RoleEnd;
 
+// Stacks for C
+type Ordering_0_v_0_ForC = RoleB<Ordering_0_v_1_ForC>;
+type Ordering_0_v_1_ForC = RoleEnd;
+
 // Endpoint for role A
-type Endpoint_0_v_0_ForA = MeshedChannels<Message_0_v_0_FromAToB, Message_0_v_0_FromAToC, Ordering_0_v_0_ForA, NameA>;
+type Endpoint_0_v_0_ForA =
+    MeshedChannels<Message_0_v_0_FromAToB, Message_0_v_0_FromAToC, Ordering_0_v_0_ForA, NameA>;
 
 // Endpoint for role B
-type Endpoint_0_v_0_ForB = MeshedChannels<Message_0_v_0_FromBToA, Message_0_v_0_FromBToC, Ordering_0_v_0_ForB, NameB>;
+type Endpoint_0_v_0_ForB =
+    MeshedChannels<Message_0_v_0_FromBToA, Message_0_v_0_FromBToC, Ordering_0_v_0_ForB, NameB>;
 
 // Endpoint for role C
-type Endpoint_0_v_0_ForC = MeshedChannels<Message_0_v_0_FromCToA, Message_0_v_0_FromCToB, Ordering_0_v_0_ForC, NameC>;
+type Endpoint_0_v_0_ForC =
+    MeshedChannels<Message_0_v_0_FromCToA, Message_0_v_0_FromCToB, Ordering_0_v_0_ForC, NameC>;
 
 // Fill in the functions here.
+fn endpoint_a_0_v_0(
+    s: Endpoint_0_v_0_ForA,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
 
-fn endpoint_a(s: Endpoint_0_v_0_ForA, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
-	all_clocks.insert('a', Instant::now());
-
-	Ok(())
+    Ok(())
 }
 
-fn endpoint_b(s: Endpoint_0_v_0_ForB, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
-	all_clocks.insert('a', Instant::now());
+fn endpoint_b_0_v_0(
+    s: Endpoint_0_v_0_ForB,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
 
-	Ok(())
+    Ok(())
 }
 
-fn endpoint_c(s: Endpoint_0_v_0_ForC, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {
-	all_clocks.insert('a', Instant::now());
+fn endpoint_c_0_v_0(
+    s: Endpoint_0_v_0_ForC,
+    all_clocks: &mut HashMap<char, Instant>,
+) -> Result<(), Box<dyn Error>> {
+    all_clocks.insert('a', Instant::now());
 
-	Ok(())
+    Ok(())
 }
 
 fn main() {
-	let (thread_a, thread_b, thread_c, ) = fork_mpst(endpoint_a, endpoint_b, endpoint_c, );
+    let (thread_a, thread_b, thread_c) =
+        fork_mpst(endpoint_a_0_v_0, endpoint_b_0_v_0, endpoint_c_0_v_0);
 
-	println!("Thread A: {:?}", thread_a.join());
-	println!("Thread B: {:?}", thread_b.join());
-	println!("Thread C: {:?}", thread_c.join());
+    println!("Thread A: {:?}", thread_a.join());
+    println!("Thread B: {:?}", thread_b.join());
+    println!("Thread C: {:?}", thread_c.join());
 }

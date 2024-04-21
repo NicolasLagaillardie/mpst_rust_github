@@ -4,452 +4,13 @@
 
 use std::fs::File;
 
-use std::io::{BufRead, BufReader, Error, Lines};
+use std::io::{BufRead, BufReader};
 
 use std::collections::{HashMap, HashSet};
-use std::iter::{Enumerate, Map};
 
 use super::auxiliary_objects::{
-    code_generate::*, line_is_message::update_messages, regex::*, Tree, GlobalElements
+    code_generate::*, process_line::process_line, GlobalElements, Tree,
 };
-
-
-
-
-
-
-
-pub(crate)fn process_line(lines_iter: &mut Map<Enumerate<Lines<BufReader<File>>>, impl FnMut((usize, Result<String, Error>)) -> (usize, String)>, global_elements: &mut GlobalElements, main_tree: &mut Tree) -> Result<(), Box<dyn std::error::Error>> {
-
-
-
-    match lines_iter.next() {
-
-        None => Ok(()), 
-        Some((line_number, line)) => {
-
-            let temp_line = line;
-
-            global_elements.opening_brackets += temp_line.matches('{').count();
-            global_elements.closing_brackets += temp_line.matches('}').count();
-    
-            if global_elements.opening_brackets < global_elements.closing_brackets {
-                return Err(format!("There are more {{ than }}. See line: {}", line_number).into());
-            }
-    
-            if check_global(&temp_line) && line_number == 0 {
-                let captured_fields = GLOBAL_PROTOCOL.captures(&temp_line).unwrap();
-    
-                let name = &captured_fields["name"];
-    
-                println!("{:?}", name);
-    
-                if global_elements.output.is_none() {
-                    global_elements.output = Some(File::create(&format!("{}{}.rs", global_elements.output_path, name))?);
-                }
-    
-                for (_, [role]) in ROLE.captures_iter(&temp_line).map(|c| c.extract()) {
-                    global_elements.roles.push(role.into());
-                    main_tree.messages.insert(role.to_string(), HashMap::new());
-                    main_tree
-                        .first_message
-                        .insert(role.to_string(), HashMap::new());
-                    main_tree
-                        .last_message
-                        .insert(role.to_string(), HashMap::new());
-                    main_tree.stacks.insert(role.to_string(), vec![]);
-                    main_tree
-                        .first_stack
-                        .insert(role.to_string(), format!("Ordering_0_v_0_For{}", role));
-                    main_tree
-                        .last_stack
-                        .insert(role.to_string(), format!("Ordering_0_v_0_For{}", role));
-                    main_tree.endpoints.insert(
-                        role.to_string(),
-                        vec![format!("Endpoint_0_v_0_For{}", role)],
-                    );
-                }
-    
-                global_elements.roles.sort();
-    
-                for (role, channels) in main_tree.messages.iter_mut() {
-                    for other_role in global_elements.roles.iter() {
-                        if other_role != role {
-                            channels.insert(other_role.to_string(), vec![]);
-                        }
-                    }
-                }
-    
-                for (role, channels) in main_tree.first_message.iter_mut() {
-                    for other_role in global_elements.roles.iter() {
-                        if other_role != role {
-                            channels.insert(
-                                other_role.to_string(),
-                                format!("Message_0_v_0_From{}To{}", role, other_role),
-                            );
-                        }
-                    }
-                }
-    
-                for (role, channels) in main_tree.last_message.iter_mut() {
-                    for other_role in global_elements.roles.iter() {
-                        if other_role != role {
-                            channels.insert(
-                                other_role.to_string(),
-                                format!("Message_0_v_0_From{}To{}", role, other_role),
-                            );
-                        }
-                    }
-                }
-
-                
-            } else if !check_global(&temp_line) && line_number > 0 {
-                if check_message(&temp_line) {
-                    update_messages(
-                        &temp_line,
-                        &global_elements.roles,
-                        &line_number,
-                        &mut global_elements.clocks,
-                        &mut global_elements.payloads,
-                        main_tree,
-                    )?;
-                }
-                if check_choice(&temp_line) {
-                    global_elements.has_choice = true;
-    
-                    let captured_fields = CHOICE.captures(&temp_line).unwrap();
-    
-                    let sender = &captured_fields["choice"];
-    
-    
-    
-                            
-                    let mut temp_index = main_tree.index.clone();
-                    temp_index.push(0);
-    
-    
-    
-                    let current_index_string = main_tree.index
-                    .iter()
-                    .map(|&id| id.to_string())
-                    .collect::<Vec<_>>()
-                    .join("_");
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-                let mut subtree = Tree {
-                    index: temp_index,
-                    message_with_payloads: HashMap::new(),
-                    messages: HashMap::new(),
-                    first_message: HashMap::new(),
-                    last_message: HashMap::new(),
-                    stacks: HashMap::new(),
-                    first_stack: HashMap::new(),
-                    last_stack: HashMap::new(),
-                    enums: HashMap::new(),
-                    loops: vec![],
-                    endpoints: HashMap::new(),
-                    sub_trees: vec![],
-                };
-    
-                subtree.enums.insert(current_index_string.to_string(), (sender.to_string(), 0));
-    
-    
-                for role in global_elements.roles.iter() {
-                    subtree.messages.insert(role.to_string(), HashMap::new());
-                    subtree
-                        .first_message
-                        .insert(role.to_string(), HashMap::new());
-                    subtree
-                        .last_message
-                        .insert(role.to_string(), HashMap::new());
-                    subtree.stacks.insert(role.to_string(), vec![]);
-                    subtree
-                        .first_stack
-                        .insert(role.to_string(), format!("Ordering_{}_v_0_For{}", current_index_string, role));
-                    subtree
-                        .last_stack
-                        .insert(role.to_string(), format!("Ordering_{}_v_0_For{}", current_index_string, role));
-                    subtree.endpoints.insert(
-                        role.to_string(),
-                        vec![format!("Endpoint_{}_v_0_For{}", current_index_string, role)],
-                    );
-                }
-    
-                for (role, channels) in subtree.messages.iter_mut() {
-                    for other_role in global_elements.roles.iter() {
-                        if other_role != role {
-                            channels.insert(other_role.to_string(), vec![]);
-                        }
-                    }
-                }
-    
-                for (role, channels) in subtree.first_message.iter_mut() {
-                    for other_role in global_elements.roles.iter() {
-                        if other_role != role {
-                            channels.insert(
-                                other_role.to_string(),
-                                format!("Message_{}_v_0_From{}To{}", current_index_string,role, other_role),
-                            );
-                        }
-                    }
-                }
-    
-                for (role, channels) in subtree.last_message.iter_mut() {
-                    for other_role in global_elements.roles.iter() {
-                        if other_role != role {
-                            channels.insert(
-                                other_role.to_string(),
-                                format!("Message_{}_v_0_From{}To{}", current_index_string,role, other_role),
-                            );
-                        }
-                    }
-                }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-                main_tree.sub_trees.push(subtree);
-    
-    
-    
-                    for receiver in global_elements.roles.iter() {
-                        if receiver != sender {
-    
-    
-    
-    
-    
-                            // The sender must send the choice to each other role (receiver)
-    
-    
-    
-                            let channels_sender = main_tree.messages.get_mut(sender).unwrap();
-    
-    
-    
-                            
-                            let messages_sender = channels_sender.get_mut(receiver).unwrap();
-                            let size_messages_sender = messages_sender.len();
-                        
-                            let last_channel_sender = main_tree.last_message.get_mut(sender).unwrap();
-                            let last_messages_sender = last_channel_sender.get_mut(receiver).unwrap();
-                        
-                            messages_sender.push(
-                                format!(
-                                    "type {} = SendTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
-                                    last_messages_sender,
-                                    current_index_string,
-                                    sender,
-                                    receiver,
-                                )
-                            );
-                        
-                            *last_messages_sender = format!(
-                                "Message_{}_v_{}_From{}To{}",
-                                current_index_string,
-                                size_messages_sender,
-                                sender,
-                                receiver
-                            );
-    
-    
-    
-    
-    
-                            // The receiver must receive the choice from the sender
-    
-                            let channels_receiver = main_tree.messages.get_mut(receiver).unwrap();
-    
-    
-    
-                            
-                            let messages_receiver = channels_receiver.get_mut(sender).unwrap();
-                            let size_messages_receiver = messages_receiver.len();
-                        
-                            let last_channel_receiver = main_tree.last_message.get_mut(receiver).unwrap();
-                            let last_messages_receiver = last_channel_receiver.get_mut(sender).unwrap();
-                        
-                            messages_receiver.push(
-                                format!(
-                                    "type {} = RecvTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
-                                    last_messages_receiver,
-                                    current_index_string,
-                                    sender,
-                                    receiver,
-                                )
-                            );
-                        
-                            *last_messages_receiver = format!(
-                                "Message_{}_v_{}_From{}To{}",
-                                current_index_string,
-                                size_messages_receiver,
-                                receiver,
-                                sender
-                            );
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-                            // Update stack for the receiver:
-                            // they must receive the choice from the sender
-    
-    
-                            let stack_receiver = main_tree.stacks.get_mut(receiver).unwrap();
-                            let size_stack_receiver = stack_receiver.len();
-                        
-                            let last_stacks_receiver = main_tree.last_stack.get_mut(receiver).unwrap();
-                        
-                            stack_receiver.push(format!(
-                                "type {} = Role{}<RoleEnd>;",
-                                last_stacks_receiver,
-                                sender
-                            ));
-                        
-                            *last_stacks_receiver = format!(
-                                "Ordering_{}_v_{}_For{}",
-                                current_index_string,
-                                size_stack_receiver + 1,
-                                receiver
-                            );
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-                        }else {
-    
-    
-                            // Update stack for the sender:
-                            // they must broadcast their choice
-    
-                            let stack_sender = main_tree.stacks.get_mut(sender).unwrap();
-                            let size_stack_sender = stack_sender.len();
-                        
-                            let last_stacks_sender = main_tree.last_stack.get_mut(sender).unwrap();
-                        
-                            stack_sender.push(format!(
-                                "type {} = RoleBroadcast;",
-                                last_stacks_sender
-                            ));
-                        
-                            *last_stacks_sender = format!(
-                                "Ordering_{}_v_{}_For{}",
-                                current_index_string,
-                                size_stack_sender + 1,
-                                sender
-                            );
-                        }
-                    }
-                } else if check_or(&temp_line) {
-                    if !global_elements.has_choice {
-                        return Err(format!(
-                            "There is a branching without any choice. See line: {}",
-                            line_number
-                        )
-                        .into());
-                    }
-    
-    
-    
-                    let current_index_string = main_tree.index
-                    .iter()
-                    .map(|&id| id.to_string())
-                    .collect::<Vec<_>>()
-                    .join("_");
-    
-    
-    
-    
-                    main_tree.enums.get_mut(&format!("{}", current_index_string)).unwrap().1+=1;
-    
-    
-    
-                    let main_tree_index = main_tree.index.len();
-    
-                    main_tree.index[main_tree_index - 1]+=1;
-    
-    
-    
-    
-    
-    
-    
-                    
-    
-    
-    
-    
-                } else if check_rec(&temp_line) {
-                    // let captured_fields = REC.captures(&temp_line).unwrap();
-    
-                    // loops.push(captured_fields["loop"].to_string());
-                } else if check_continue(&temp_line) {
-                    // let captured_fields = CONTINUE.captures(&temp_line).unwrap();
-    
-                    // if !loops.contains(&(captured_fields["loop"].to_string())) {
-                    //     return Err(format!(
-                    //         "There is a continue loop without an initialisation. See line: {}",
-                    //         line_number
-                    //     )
-                    //     .into());
-                    // }
-                }
-            } else {
-                return Err("This is not a timed global protocol.".into());
-            }
-
-            Ok(())
-
-        }
-    }
-
-
-
-
-}
-
-
-
-
-
-
 
 /// Generate endpoints from a nuscr file
 /// with timed global protocol
@@ -458,8 +19,8 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
     let file = File::open(filepath)?;
     let reader = BufReader::new(file);
 
+    // Global elements
     let mut global_elements = GlobalElements {
-
         output_path: output_path.to_string(),
         output: None,
         roles: vec![],
@@ -467,10 +28,7 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
         clocks: HashMap::new(),
         opening_brackets: 0,
         closing_brackets: 0,
-
         has_choice: false,
-
-        
     };
 
     // Running elements
@@ -489,18 +47,15 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
         sub_trees: vec![],
     };
 
+    // Iterator over the lines of the input file
+    let mut lines_iter = reader
+        .lines()
+        .enumerate()
+        .map(|(line_number, line)| (line_number, line.unwrap()));
 
+    process_line(&mut lines_iter, &mut global_elements, &mut main_tree, 0)?;
 
-    let mut lines_iter = reader.lines().enumerate().map(|(line_number, line)| (line_number, line.unwrap()));
-
-
-    process_line(&mut lines_iter, &mut global_elements, &mut main_tree)?;    
-
-
-    // for (line_number, line) in reader.lines().enumerate() {
-      
-    // }
-
+    // Check if number of opening and closing brackets are the same
     if global_elements.opening_brackets != global_elements.closing_brackets {
         return Err(
             "The number of opening and closing brackets is not the same in the end.".into(),
@@ -508,15 +63,15 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
     }
 
     // Generate everything
-    generate_imports( &mut global_elements)?;
-    generate_structs(&mut global_elements, &main_tree)?;
+    generate_imports(&mut global_elements)?;
+    generate_structs(&mut global_elements, &main_tree, &mut vec![], true)?;
     generate_sessions(&mut global_elements, &main_tree)?;
     generate_stacks(&mut global_elements, &main_tree)?;
     if global_elements.has_choice {
         generate_enums(&mut global_elements, &main_tree)?;
     }
     generate_endpoints(&mut global_elements, &main_tree)?;
-    generate_fn_endpoints(&mut global_elements, &main_tree)?;
+    generate_fn_endpoints(&mut global_elements, &main_tree, true)?;
     generate_fn_main(&mut global_elements)?;
 
     Ok(())

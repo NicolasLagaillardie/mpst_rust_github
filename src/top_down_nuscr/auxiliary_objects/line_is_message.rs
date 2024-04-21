@@ -17,7 +17,7 @@ pub(crate) fn update_messages(
     payloads: &mut HashSet<String>,
     main_tree: &mut Tree,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let captured_fields = MESSAGE.captures(&temp_line).unwrap();
+    let captured_fields = MESSAGE.captures(temp_line).unwrap();
 
     let message = &captured_fields["message"];
     let sender = &captured_fields["sender"];
@@ -84,8 +84,8 @@ pub(crate) fn update_messages(
         reset: " ".to_string(),
     };
 
-    if check_message_with_payload_and_resetting_clock(&temp_line) {
-        let captured_fields = MESSAGE_WITH_PAYLOAD_AND_RESET.captures(&temp_line).unwrap();
+    if check_message_with_payload_and_resetting_clock(temp_line) {
+        let captured_fields = MESSAGE_WITH_PAYLOAD_AND_RESET.captures(temp_line).unwrap();
 
         let payload = &captured_fields["payload"];
         let reset = &captured_fields["reset"];
@@ -105,8 +105,8 @@ pub(crate) fn update_messages(
             &mut main_tree.last_stack,
             &message_parameters,
         );
-    } else if check_message_with_resetting_clock(&temp_line) {
-        let captured_fields = MESSAGE_WITH_RESET.captures(&temp_line).unwrap();
+    } else if check_message_with_resetting_clock(temp_line) {
+        let captured_fields = MESSAGE_WITH_RESET.captures(temp_line).unwrap();
 
         let reset = &captured_fields["reset"];
 
@@ -124,8 +124,8 @@ pub(crate) fn update_messages(
             &mut main_tree.last_stack,
             &message_parameters,
         );
-    } else if check_message_with_payload(&temp_line) {
-        let captured_fields = MESSAGE_WITH_PAYLOAD.captures(&temp_line).unwrap();
+    } else if check_message_with_payload(temp_line) {
+        let captured_fields = MESSAGE_WITH_PAYLOAD.captures(temp_line).unwrap();
 
         let payload = &captured_fields["payload"];
 

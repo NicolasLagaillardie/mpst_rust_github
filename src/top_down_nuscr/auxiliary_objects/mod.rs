@@ -52,4 +52,5 @@ pub(crate) struct Tree {
 pub(crate) mod code_generate;
 pub(crate) mod line_is_message;
 pub(crate) mod messages_and_stacks_update;
+pub(crate) mod process_line;
 pub(crate) mod regex;

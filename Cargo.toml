@@ -175,6 +175,22 @@ name = "test"
 path = "examples/test.rs"
 required-features = ["top_down_nuscr"]
 
+[[example]]
+name = "generator_basic"
+path = "tests/generator/Basic.rs"
+
+[[example]]
+name = "generator_choice"
+path = "tests/generator/Choice.rs"
+
+[[example]]
+name = "generator_nested_choice"
+path = "tests/generator/NestedChoice.rs"
+
+[[example]]
+name = "generator_recursive"
+path = "tests/generator/Recursive.rs"
+
 ################################### Ping-Pong
 
 ######### Ping-Pong start
@@ -207,6 +223,7 @@ protobuf-codegen = "3.4.0"
 protoc-bin-vendored = "3.0.0"
 # Parser for Top-Down
 once_cell = {version = "1.19.0", optional = true}
+Inflector = "0.11.4"
 
 ################################### Dev-dependencies for tests/benches
 

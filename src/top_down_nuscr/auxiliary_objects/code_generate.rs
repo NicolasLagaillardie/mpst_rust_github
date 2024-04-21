@@ -1,7 +1,6 @@
-use super::{Tree, GlobalElements};
+use super::{GlobalElements, Tree};
+use inflector::Inflector;
 use std::io::Write;
-
-
 
 /// Generate all imports in the global_elements.output file using all elements gathered from
 /// the nuscr protocol.
@@ -20,7 +19,7 @@ pub(crate) fn generate_imports(
                 "use mpstthree::binary_atmp::struct_trait::{{recv::RecvTimed, send::SendTimed}};"
             )?;
             writeln!(generated_file, "use mpstthree::generate_atmp;")?;
-            if  global_elements.has_choice {
+            if global_elements.has_choice {
                 writeln!(
                     generated_file,
                     "use mpstthree::role::broadcast::RoleBroadcast;"
@@ -48,28 +47,43 @@ pub(crate) fn generate_imports(
 pub(crate) fn generate_structs(
     global_elements: &mut GlobalElements,
     main_tree: &Tree,
+    already_generated: &mut Vec<String>,
+    comment_payload: bool,
 ) -> Result<(), Box<dyn std::error::Error>> {
     match global_elements.output.as_mut() {
         Some(generated_file) => {
             // Generate the structs for the global_elements.payloads
-            for payload in global_elements.payloads.iter() {
-                writeln!(generated_file, "struct {};", payload)?;
+            if comment_payload {
+                writeln!(generated_file, "// Types of the payloads")?;
             }
-            for (name_message, payload) in main_tree.message_with_payloads.iter() {
-                if payload.is_empty() {
-                    writeln!(generated_file, "struct {};", name_message)?;
-                } else {
-                    writeln!(
-                        generated_file,
-                        "struct {} {{ payload: {} }}",
-                        name_message, payload
-                    )?;
+
+            for payload in global_elements.payloads.iter() {
+                if !already_generated.contains(&(payload).to_title_case()) {
+                    writeln!(generated_file, "struct {};", payload.to_title_case())?;
+                    already_generated.push(payload.to_title_case().to_string());
                 }
             }
+
+            for (name_message, payload) in main_tree.message_with_payloads.iter() {
+                if !already_generated.contains(&(name_message).to_title_case()) {
+                    if payload.is_empty() {
+                        writeln!(generated_file, "struct {};", name_message.to_title_case())?;
+                    } else {
+                        writeln!(
+                            generated_file,
+                            "struct {} {{ payload: {} }}",
+                            name_message.to_title_case(),
+                            payload.to_title_case()
+                        )?;
+                    }
+                    already_generated.push(name_message.to_title_case().to_string());
+                }
+            }
+
             writeln!(generated_file)?;
 
             for sub_tree in &main_tree.sub_trees {
-                generate_structs(global_elements, sub_tree)?;
+                generate_structs(global_elements, sub_tree, already_generated, false)?;
             }
 
             Ok(())
@@ -149,20 +163,6 @@ pub(crate) fn generate_stacks(
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /// Generate all enums TODO
 pub(crate) fn generate_enums(
     global_elements: &mut GlobalElements,
@@ -170,74 +170,44 @@ pub(crate) fn generate_enums(
 ) -> Result<(), Box<dyn std::error::Error>> {
     match global_elements.output.as_mut() {
         Some(generated_file) => {
-            // Generate the enums
-
             for (branch, elt) in main_tree.enums.iter() {
-
-
                 for role in global_elements.roles.iter() {
-
-
                     if role != &elt.0 {
                         writeln!(generated_file, "// Enums (Branching) for {}", role)?;
-                writeln!(
-                    generated_file,
-                    "enum Choice_{}_From{}To{} {{",
-                    branch,
-                    elt.0,
-                    role,
-                    
-                )?;
+                        writeln!(
+                            generated_file,
+                            "enum Choice_{}_From{}To{} {{",
+                            branch, elt.0, role,
+                        )?;
 
-                let endpoints_role = 
-                    main_tree.endpoints.get(role).unwrap();
+                        let endpoints_role = main_tree.endpoints.get(role).unwrap();
 
-                for i in 0..=elt.1 {
+                        println!("{:?}", endpoints_role);
 
+                        for i in 0..=elt.1 {
+                            writeln!(
+                                generated_file,
+                                "\tBranching_{}({}),",
+                                i, endpoints_role[i as usize]
+                            )?;
+                        }
 
-                writeln!(
-                    generated_file,
-                    "\tBranching_{}({}),",
-                    i,
-                    endpoints_role[i as usize]
-                )?;
+                        writeln!(generated_file, "}}")?;
+                    }
 
-
-
+                    writeln!(generated_file)?;
                 }
-
-
-                writeln!(generated_file, "}}")?;
-
             }
 
-            writeln!(generated_file)?;
-
+            for sub_tree in &main_tree.sub_trees {
+                generate_enums(global_elements, sub_tree)?;
             }
-
-            }
-
-
-
 
             Ok(())
         }
         None => Err("Generated file was not initialised.".into()),
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /// Generate all endpoints in the global_elements.output file using all elements gathered from
 /// the nuscr protocol.
@@ -294,35 +264,54 @@ pub(crate) fn generate_endpoints(
 pub(crate) fn generate_fn_endpoints(
     global_elements: &mut GlobalElements,
     main_tree: &Tree,
+    comment_section: bool,
 ) -> Result<(), Box<dyn std::error::Error>> {
     match global_elements.output.as_mut() {
         Some(generated_file) => {
-
             // Add the main function and invite dev to complete code
-            writeln!(generated_file, "// Fill in the functions here.\n")?;
+            if comment_section {
+                writeln!(generated_file, "// Fill in the functions here.")?;
+            }
+
+            let current_index_string = main_tree
+                .index
+                .iter()
+                .map(|&id| id.to_string())
+                .collect::<Vec<_>>()
+                .join("_");
+
+            let number_branches = main_tree.index[main_tree.index.len() - 1];
 
             for role in global_elements.roles.iter() {
-                writeln!(
+                for index_branch in 0..=number_branches {
+                    writeln!(
                     generated_file,
-                    "fn endpoint_{}(s: {}, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {{",
+                    "fn endpoint_{}_{}_v_{}(s: {}, all_clocks: &mut HashMap<char, Instant>) -> Result<(), Box<dyn Error>> {{",
                     role.to_lowercase(),
+                    current_index_string,
+                    index_branch,
                     main_tree.endpoints.get(role).unwrap()[0]
                 )?;
 
-                if let Some(role_clock) = global_elements.clocks.get(role) {
-                    for clock in role_clock {
-                        writeln!(
-                            generated_file,
-                            "\tall_clocks.insert('{}', Instant::now());",
-                            clock
-                        )?;
+                    if let Some(role_clock) = global_elements.clocks.get(role) {
+                        for clock in role_clock {
+                            writeln!(
+                                generated_file,
+                                "\tall_clocks.insert('{}', Instant::now());",
+                                clock
+                            )?;
+                        }
                     }
-                }
 
-                writeln!(generated_file)?;
-                writeln!(generated_file, "\tOk(())")?;
-                writeln!(generated_file, "}}")?;
-                writeln!(generated_file)?;
+                    writeln!(generated_file)?;
+                    writeln!(generated_file, "\tOk(())")?;
+                    writeln!(generated_file, "}}")?;
+                    writeln!(generated_file)?;
+                }
+            }
+
+            for sub_tree in &main_tree.sub_trees {
+                generate_fn_endpoints(global_elements, sub_tree, false)?;
             }
 
             Ok(())
@@ -350,7 +339,7 @@ pub(crate) fn generate_fn_main(
             write!(generated_file, ") = fork_mpst(")?;
 
             for role in global_elements.roles.iter() {
-                write!(generated_file, "endpoint_{}, ", role.to_lowercase())?;
+                write!(generated_file, "endpoint_{}_0_v_0, ", role.to_lowercase())?;
             }
 
             writeln!(generated_file, ");")?;
