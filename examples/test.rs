@@ -5,5 +5,7 @@ fn main() {
 
     generator("tests/generator/choice.nuscr", "tests/generator/").unwrap();
 
+    generator("tests/generator/nested_choice.nuscr", "tests/generator/").unwrap();
+
     generator("tests/generator/recursive.nuscr", "tests/generator/").unwrap();
 }

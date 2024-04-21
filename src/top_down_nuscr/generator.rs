@@ -4,278 +4,520 @@
 
 use std::fs::File;
 
-use std::io::{BufRead, BufReader};
+use std::io::{BufRead, BufReader, Error, Lines};
 
 use std::collections::{HashMap, HashSet};
+use std::iter::{Enumerate, Map};
 
 use super::auxiliary_objects::{
-    check_brackets::check_brackets, code_generate::*,
-    messages_and_stacks_update::messages_and_stacks_update, regex::*, MessageParameters,
+    code_generate::*, line_is_message::update_messages, regex::*, Tree, GlobalElements
 };
+
+
+
+
+
+
+
+pub(crate)fn process_line(lines_iter: &mut Map<Enumerate<Lines<BufReader<File>>>, impl FnMut((usize, Result<String, Error>)) -> (usize, String)>, global_elements: &mut GlobalElements, main_tree: &mut Tree) -> Result<(), Box<dyn std::error::Error>> {
+
+
+
+    match lines_iter.next() {
+
+        None => Ok(()), 
+        Some((line_number, line)) => {
+
+            let temp_line = line;
+
+            global_elements.opening_brackets += temp_line.matches('{').count();
+            global_elements.closing_brackets += temp_line.matches('}').count();
+    
+            if global_elements.opening_brackets < global_elements.closing_brackets {
+                return Err(format!("There are more {{ than }}. See line: {}", line_number).into());
+            }
+    
+            if check_global(&temp_line) && line_number == 0 {
+                let captured_fields = GLOBAL_PROTOCOL.captures(&temp_line).unwrap();
+    
+                let name = &captured_fields["name"];
+    
+                println!("{:?}", name);
+    
+                if global_elements.output.is_none() {
+                    global_elements.output = Some(File::create(&format!("{}{}.rs", global_elements.output_path, name))?);
+                }
+    
+                for (_, [role]) in ROLE.captures_iter(&temp_line).map(|c| c.extract()) {
+                    global_elements.roles.push(role.into());
+                    main_tree.messages.insert(role.to_string(), HashMap::new());
+                    main_tree
+                        .first_message
+                        .insert(role.to_string(), HashMap::new());
+                    main_tree
+                        .last_message
+                        .insert(role.to_string(), HashMap::new());
+                    main_tree.stacks.insert(role.to_string(), vec![]);
+                    main_tree
+                        .first_stack
+                        .insert(role.to_string(), format!("Ordering_0_v_0_For{}", role));
+                    main_tree
+                        .last_stack
+                        .insert(role.to_string(), format!("Ordering_0_v_0_For{}", role));
+                    main_tree.endpoints.insert(
+                        role.to_string(),
+                        vec![format!("Endpoint_0_v_0_For{}", role)],
+                    );
+                }
+    
+                global_elements.roles.sort();
+    
+                for (role, channels) in main_tree.messages.iter_mut() {
+                    for other_role in global_elements.roles.iter() {
+                        if other_role != role {
+                            channels.insert(other_role.to_string(), vec![]);
+                        }
+                    }
+                }
+    
+                for (role, channels) in main_tree.first_message.iter_mut() {
+                    for other_role in global_elements.roles.iter() {
+                        if other_role != role {
+                            channels.insert(
+                                other_role.to_string(),
+                                format!("Message_0_v_0_From{}To{}", role, other_role),
+                            );
+                        }
+                    }
+                }
+    
+                for (role, channels) in main_tree.last_message.iter_mut() {
+                    for other_role in global_elements.roles.iter() {
+                        if other_role != role {
+                            channels.insert(
+                                other_role.to_string(),
+                                format!("Message_0_v_0_From{}To{}", role, other_role),
+                            );
+                        }
+                    }
+                }
+
+                
+            } else if !check_global(&temp_line) && line_number > 0 {
+                if check_message(&temp_line) {
+                    update_messages(
+                        &temp_line,
+                        &global_elements.roles,
+                        &line_number,
+                        &mut global_elements.clocks,
+                        &mut global_elements.payloads,
+                        main_tree,
+                    )?;
+                }
+                if check_choice(&temp_line) {
+                    global_elements.has_choice = true;
+    
+                    let captured_fields = CHOICE.captures(&temp_line).unwrap();
+    
+                    let sender = &captured_fields["choice"];
+    
+    
+    
+                            
+                    let mut temp_index = main_tree.index.clone();
+                    temp_index.push(0);
+    
+    
+    
+                    let current_index_string = main_tree.index
+                    .iter()
+                    .map(|&id| id.to_string())
+                    .collect::<Vec<_>>()
+                    .join("_");
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+                let mut subtree = Tree {
+                    index: temp_index,
+                    message_with_payloads: HashMap::new(),
+                    messages: HashMap::new(),
+                    first_message: HashMap::new(),
+                    last_message: HashMap::new(),
+                    stacks: HashMap::new(),
+                    first_stack: HashMap::new(),
+                    last_stack: HashMap::new(),
+                    enums: HashMap::new(),
+                    loops: vec![],
+                    endpoints: HashMap::new(),
+                    sub_trees: vec![],
+                };
+    
+                subtree.enums.insert(current_index_string.to_string(), (sender.to_string(), 0));
+    
+    
+                for role in global_elements.roles.iter() {
+                    subtree.messages.insert(role.to_string(), HashMap::new());
+                    subtree
+                        .first_message
+                        .insert(role.to_string(), HashMap::new());
+                    subtree
+                        .last_message
+                        .insert(role.to_string(), HashMap::new());
+                    subtree.stacks.insert(role.to_string(), vec![]);
+                    subtree
+                        .first_stack
+                        .insert(role.to_string(), format!("Ordering_{}_v_0_For{}", current_index_string, role));
+                    subtree
+                        .last_stack
+                        .insert(role.to_string(), format!("Ordering_{}_v_0_For{}", current_index_string, role));
+                    subtree.endpoints.insert(
+                        role.to_string(),
+                        vec![format!("Endpoint_{}_v_0_For{}", current_index_string, role)],
+                    );
+                }
+    
+                for (role, channels) in subtree.messages.iter_mut() {
+                    for other_role in global_elements.roles.iter() {
+                        if other_role != role {
+                            channels.insert(other_role.to_string(), vec![]);
+                        }
+                    }
+                }
+    
+                for (role, channels) in subtree.first_message.iter_mut() {
+                    for other_role in global_elements.roles.iter() {
+                        if other_role != role {
+                            channels.insert(
+                                other_role.to_string(),
+                                format!("Message_{}_v_0_From{}To{}", current_index_string,role, other_role),
+                            );
+                        }
+                    }
+                }
+    
+                for (role, channels) in subtree.last_message.iter_mut() {
+                    for other_role in global_elements.roles.iter() {
+                        if other_role != role {
+                            channels.insert(
+                                other_role.to_string(),
+                                format!("Message_{}_v_0_From{}To{}", current_index_string,role, other_role),
+                            );
+                        }
+                    }
+                }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+                main_tree.sub_trees.push(subtree);
+    
+    
+    
+                    for receiver in global_elements.roles.iter() {
+                        if receiver != sender {
+    
+    
+    
+    
+    
+                            // The sender must send the choice to each other role (receiver)
+    
+    
+    
+                            let channels_sender = main_tree.messages.get_mut(sender).unwrap();
+    
+    
+    
+                            
+                            let messages_sender = channels_sender.get_mut(receiver).unwrap();
+                            let size_messages_sender = messages_sender.len();
+                        
+                            let last_channel_sender = main_tree.last_message.get_mut(sender).unwrap();
+                            let last_messages_sender = last_channel_sender.get_mut(receiver).unwrap();
+                        
+                            messages_sender.push(
+                                format!(
+                                    "type {} = SendTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
+                                    last_messages_sender,
+                                    current_index_string,
+                                    sender,
+                                    receiver,
+                                )
+                            );
+                        
+                            *last_messages_sender = format!(
+                                "Message_{}_v_{}_From{}To{}",
+                                current_index_string,
+                                size_messages_sender,
+                                sender,
+                                receiver
+                            );
+    
+    
+    
+    
+    
+                            // The receiver must receive the choice from the sender
+    
+                            let channels_receiver = main_tree.messages.get_mut(receiver).unwrap();
+    
+    
+    
+                            
+                            let messages_receiver = channels_receiver.get_mut(sender).unwrap();
+                            let size_messages_receiver = messages_receiver.len();
+                        
+                            let last_channel_receiver = main_tree.last_message.get_mut(receiver).unwrap();
+                            let last_messages_receiver = last_channel_receiver.get_mut(sender).unwrap();
+                        
+                            messages_receiver.push(
+                                format!(
+                                    "type {} = RecvTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
+                                    last_messages_receiver,
+                                    current_index_string,
+                                    sender,
+                                    receiver,
+                                )
+                            );
+                        
+                            *last_messages_receiver = format!(
+                                "Message_{}_v_{}_From{}To{}",
+                                current_index_string,
+                                size_messages_receiver,
+                                receiver,
+                                sender
+                            );
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+                            // Update stack for the receiver:
+                            // they must receive the choice from the sender
+    
+    
+                            let stack_receiver = main_tree.stacks.get_mut(receiver).unwrap();
+                            let size_stack_receiver = stack_receiver.len();
+                        
+                            let last_stacks_receiver = main_tree.last_stack.get_mut(receiver).unwrap();
+                        
+                            stack_receiver.push(format!(
+                                "type {} = Role{}<RoleEnd>;",
+                                last_stacks_receiver,
+                                sender
+                            ));
+                        
+                            *last_stacks_receiver = format!(
+                                "Ordering_{}_v_{}_For{}",
+                                current_index_string,
+                                size_stack_receiver + 1,
+                                receiver
+                            );
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+                        }else {
+    
+    
+                            // Update stack for the sender:
+                            // they must broadcast their choice
+    
+                            let stack_sender = main_tree.stacks.get_mut(sender).unwrap();
+                            let size_stack_sender = stack_sender.len();
+                        
+                            let last_stacks_sender = main_tree.last_stack.get_mut(sender).unwrap();
+                        
+                            stack_sender.push(format!(
+                                "type {} = RoleBroadcast;",
+                                last_stacks_sender
+                            ));
+                        
+                            *last_stacks_sender = format!(
+                                "Ordering_{}_v_{}_For{}",
+                                current_index_string,
+                                size_stack_sender + 1,
+                                sender
+                            );
+                        }
+                    }
+                } else if check_or(&temp_line) {
+                    if !global_elements.has_choice {
+                        return Err(format!(
+                            "There is a branching without any choice. See line: {}",
+                            line_number
+                        )
+                        .into());
+                    }
+    
+    
+    
+                    let current_index_string = main_tree.index
+                    .iter()
+                    .map(|&id| id.to_string())
+                    .collect::<Vec<_>>()
+                    .join("_");
+    
+    
+    
+    
+                    main_tree.enums.get_mut(&format!("{}", current_index_string)).unwrap().1+=1;
+    
+    
+    
+                    let main_tree_index = main_tree.index.len();
+    
+                    main_tree.index[main_tree_index - 1]+=1;
+    
+    
+    
+    
+    
+    
+    
+                    
+    
+    
+    
+    
+                } else if check_rec(&temp_line) {
+                    // let captured_fields = REC.captures(&temp_line).unwrap();
+    
+                    // loops.push(captured_fields["loop"].to_string());
+                } else if check_continue(&temp_line) {
+                    // let captured_fields = CONTINUE.captures(&temp_line).unwrap();
+    
+                    // if !loops.contains(&(captured_fields["loop"].to_string())) {
+                    //     return Err(format!(
+                    //         "There is a continue loop without an initialisation. See line: {}",
+                    //         line_number
+                    //     )
+                    //     .into());
+                    // }
+                }
+            } else {
+                return Err("This is not a timed global protocol.".into());
+            }
+
+            Ok(())
+
+        }
+    }
+
+
+
+
+}
+
+
+
+
+
+
 
 /// Generate endpoints from a nuscr file
 /// with timed global protocol
 pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::error::Error>> {
+    // Open the nuscr file
     let file = File::open(filepath)?;
     let reader = BufReader::new(file);
 
-    let mut output: Option<File> = None;
+    let mut global_elements = GlobalElements {
 
-    // Lists for elements to add to the output file
-    let mut roles: Vec<String> = vec![];
-    let mut payloads: HashSet<String> = HashSet::new();
-    let mut message_with_payloads: HashMap<String, String> = HashMap::new();
-    let mut choices: Vec<String> = vec![];
-    let mut loops: Vec<String> = vec![];
-    let mut messages: HashMap<String, HashMap<String, Vec<String>>> = HashMap::new();
-    let mut last_messages: HashMap<String, HashMap<String, String>> = HashMap::new();
-    let mut clocks: HashMap<String, Vec<String>> = HashMap::new();
-    let mut stacks: HashMap<String, Vec<String>> = HashMap::new();
-    let mut last_stacks: HashMap<String, String> = HashMap::new();
+        output_path: output_path.to_string(),
+        output: None,
+        roles: vec![],
+        payloads: HashSet::new(),
+        clocks: HashMap::new(),
+        opening_brackets: 0,
+        closing_brackets: 0,
 
-    let mut opening_brackets = 0;
-    let mut closing_brackets = 0;
-    let mut is_recursive = false;
+        has_choice: false,
 
-    for (line_number, line) in reader.lines().enumerate() {
-        let temp_line = line?;
+        
+    };
 
-        check_brackets(
-            &mut opening_brackets,
-            &mut closing_brackets,
-            &temp_line,
-            &line_number,
-        )?;
+    // Running elements
+    let mut main_tree = Tree {
+        index: vec![0],
+        message_with_payloads: HashMap::new(),
+        messages: HashMap::new(),
+        first_message: HashMap::new(),
+        last_message: HashMap::new(),
+        stacks: HashMap::new(),
+        first_stack: HashMap::new(),
+        last_stack: HashMap::new(),
+        enums: HashMap::new(),
+        loops: vec![],
+        endpoints: HashMap::new(),
+        sub_trees: vec![],
+    };
 
-        if check_global(&temp_line) && line_number == 0 {
-            let captured_fields = GLOBAL_PROTOCOL.captures(&temp_line).unwrap();
 
-            let name = &captured_fields["name"];
 
-            if output.is_none() {
-                output = Some(File::create(&format!("{}{}.rs", output_path, name))?);
-            }
+    let mut lines_iter = reader.lines().enumerate().map(|(line_number, line)| (line_number, line.unwrap()));
 
-            for (_, [role]) in ROLE.captures_iter(&temp_line).map(|c| c.extract()) {
-                roles.push(role.into());
-                messages.insert(role.to_string(), HashMap::new());
-                last_messages.insert(role.to_string(), HashMap::new());
-                stacks.insert(role.to_string(), vec![]);
-                last_stacks.insert(role.to_string(), format!("Ordering0For{}", role));
-            }
 
-            roles.sort();
+    process_line(&mut lines_iter, &mut global_elements, &mut main_tree)?;    
 
-            for (role, channels) in messages.iter_mut() {
-                for other_role in roles.iter() {
-                    if other_role != role {
-                        channels.insert(other_role.to_string(), vec![]);
-                    }
-                }
-            }
 
-            for (role, channels) in last_messages.iter_mut() {
-                for other_role in roles.iter() {
-                    if other_role != role {
-                        channels.insert(
-                            other_role.to_string(),
-                            format!("Message0From{}To{}", role, other_role),
-                        );
-                    }
-                }
-            }
-        } else if !check_global(&temp_line) && line_number > 0 {
-            if check_message(&temp_line) {
-                let captured_fields = MESSAGE.captures(&temp_line).unwrap();
+    // for (line_number, line) in reader.lines().enumerate() {
+      
+    // }
 
-                let message = &captured_fields["message"];
-                let sender = &captured_fields["sender"];
-                let receiver = &captured_fields["receiver"];
-                let left_bracket = &captured_fields["left_bracket"];
-                let left_bound = &captured_fields["left_bound"];
-                let right_bound = &captured_fields["right_bound"];
-                let right_bracket = &captured_fields["right_bracket"];
-                let clock = &captured_fields["clock"];
-
-                // Check if sender and receiver exist in roles
-                if !roles.contains(&String::from(sender)) {
-                    return Err(format!(
-                        "{} is not in the roles: {:?}. See line: {}.",
-                        sender, roles, line_number
-                    )
-                    .into());
-                }
-                if !roles.contains(&String::from(receiver)) {
-                    return Err(format!(
-                        "{} is not in the roles: {:?}. See line : {}.",
-                        receiver, roles, line_number
-                    )
-                    .into());
-                }
-                if sender == receiver {
-                    return Err(format!(
-                        "Sender and receiver must be different. See line: {}",
-                        line_number
-                    )
-                    .into());
-                }
-
-                // Add clock to clocks of sender and receiver
-                if let Some(clocks_sender) = clocks.get_mut(sender) {
-                    clocks_sender.push((clock).to_string());
-                } else {
-                    clocks.insert(sender.to_string(), vec![(clock).to_string()]);
-                }
-                if let Some(clocks_receiver) = clocks.get_mut(receiver) {
-                    clocks_receiver.push((clock).to_string());
-                } else {
-                    clocks.insert(receiver.to_string(), vec![(clock).to_string()]);
-                }
-
-                if check_message_with_payload_and_resetting_clock(&temp_line) {
-                    let captured_fields =
-                        MESSAGE_WITH_PAYLOAD_AND_RESET.captures(&temp_line).unwrap();
-
-                    let payload = &captured_fields["payload"];
-                    let reset = &captured_fields["reset"];
-
-                    payloads.insert(payload.into());
-                    message_with_payloads.insert(message.into(), payload.into());
-
-                    messages_and_stacks_update(
-                        &mut messages,
-                        &mut last_messages,
-                        &mut stacks,
-                        &mut last_stacks,
-                        &MessageParameters {
-                            sender: sender.to_string(),
-                            receiver: receiver.to_string(),
-                            message: message.to_string(),
-                            clock: clock.to_string(),
-                            left_bound: left_bound.to_string(),
-                            left_bracket: left_bracket.to_string(),
-                            right_bound: right_bound.to_string(),
-                            right_bracket: right_bracket.to_string(),
-                            reset: reset.to_string(),
-                        },
-                    );
-                } else if check_message_with_resetting_clock(&temp_line) {
-                    let captured_fields = MESSAGE_WITH_RESET.captures(&temp_line).unwrap();
-
-                    let reset = &captured_fields["reset"];
-
-                    message_with_payloads.insert(message.into(), "".into());
-
-                    messages_and_stacks_update(
-                        &mut messages,
-                        &mut last_messages,
-                        &mut stacks,
-                        &mut last_stacks,
-                        &MessageParameters {
-                            sender: sender.to_string(),
-                            receiver: receiver.to_string(),
-                            message: message.to_string(),
-                            clock: clock.to_string(),
-                            left_bound: left_bound.to_string(),
-                            left_bracket: left_bracket.to_string(),
-                            right_bound: right_bound.to_string(),
-                            right_bracket: right_bracket.to_string(),
-                            reset: reset.to_string(),
-                        },
-                    );
-                } else if check_message_with_payload(&temp_line) {
-                    let captured_fields = MESSAGE_WITH_PAYLOAD.captures(&temp_line).unwrap();
-
-                    let payload = &captured_fields["payload"];
-
-                    payloads.insert(payload.into());
-                    message_with_payloads.insert(message.into(), payload.into());
-
-                    messages_and_stacks_update(
-                        &mut messages,
-                        &mut last_messages,
-                        &mut stacks,
-                        &mut last_stacks,
-                        &MessageParameters {
-                            sender: sender.to_string(),
-                            receiver: receiver.to_string(),
-                            message: message.to_string(),
-                            clock: clock.to_string(),
-                            left_bound: left_bound.to_string(),
-                            left_bracket: left_bracket.to_string(),
-                            right_bound: right_bound.to_string(),
-                            right_bracket: right_bracket.to_string(),
-                            reset: " ".to_string(),
-                        },
-                    );
-                } else {
-                    message_with_payloads.insert(message.into(), "".into());
-
-                    messages_and_stacks_update(
-                        &mut messages,
-                        &mut last_messages,
-                        &mut stacks,
-                        &mut last_stacks,
-                        &MessageParameters {
-                            sender: sender.to_string(),
-                            receiver: receiver.to_string(),
-                            message: message.to_string(),
-                            clock: clock.to_string(),
-                            left_bound: left_bound.to_string(),
-                            left_bracket: left_bracket.to_string(),
-                            right_bound: right_bound.to_string(),
-                            right_bracket: right_bracket.to_string(),
-                            reset: " ".to_string(),
-                        },
-                    );
-                }
-            }
-
-            if check_choice(&temp_line) {
-                let captured_fields = CHOICE.captures(&temp_line).unwrap();
-
-                choices.push(captured_fields["choice"].to_string());
-            } else if check_or(&temp_line) {
-            } else if check_rec(&temp_line) {
-                is_recursive = true;
-
-                let captured_fields = REC.captures(&temp_line).unwrap();
-
-                loops.push(captured_fields["loop"].to_string());
-            } else if check_continue(&temp_line) {
-                let captured_fields = CONTINUE.captures(&temp_line).unwrap();
-
-                if !loops.contains(&(captured_fields["loop"].to_string())) {
-                    return Err(format!(
-                        "There is a continue loop without an initialisation. See line: {}",
-                        line_number
-                    )
-                    .into());
-                }
-            }
-        } else {
-            return Err("This is not a timed global protocol.".into());
-        }
-    }
-
-    if opening_brackets != closing_brackets {
+    if global_elements.opening_brackets != global_elements.closing_brackets {
         return Err(
-            "The number of opening and closing brackets is not the same at the end of the process."
-                .into(),
+            "The number of opening and closing brackets is not the same in the end.".into(),
         );
     }
 
-    generate_imports(&mut output, &roles, is_recursive)?;
-
-    generate_structs(&mut output, &payloads, &message_with_payloads)?;
-
-    generate_sessions(&mut output, &messages, &last_messages)?;
-
-    generate_stacks(&mut output, &stacks, &last_stacks)?;
-
-    generate_endpoints(&mut output, &roles)?;
-
-    generate_fn(&mut output)?;
+    // Generate everything
+    generate_imports( &mut global_elements)?;
+    generate_structs(&mut global_elements, &main_tree)?;
+    generate_sessions(&mut global_elements, &main_tree)?;
+    generate_stacks(&mut global_elements, &main_tree)?;
+    if global_elements.has_choice {
+        generate_enums(&mut global_elements, &main_tree)?;
+    }
+    generate_endpoints(&mut global_elements, &main_tree)?;
+    generate_fn_endpoints(&mut global_elements, &main_tree)?;
+    generate_fn_main(&mut global_elements)?;
 
     Ok(())
 }

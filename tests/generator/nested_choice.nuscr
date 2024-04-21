@@ -1,0 +1,38 @@
+timed global protocol NestedChoice(role A, role B, role C) {
+    choice at A
+    {
+        choice at A
+        {
+            Test1() from A to B within [0;1] using a and resetting ();
+            Test2(payload) from A to B within [0;1] using a and resetting ();
+            Test3() from A to B within [0;1] using a and resetting (a);
+            Test4(payload) from A to B within [0;1] using a and resetting (a);
+        } or {
+            Test1() from A to B within [0;1] using a and resetting ();
+            Test2(payload) from A to B within [0;1] using a and resetting ();
+            Test3() from A to B within [0;1] using a and resetting (a);
+            Test4(payload) from A to B within [0;1] using a and resetting (a);
+        }
+    } or {
+        choice at A
+        {
+            choice at A
+            {
+                Test1() from A to B within [0;1] using a and resetting ();
+                Test2(payload) from A to B within [0;1] using a and resetting ();
+                Test3() from A to B within [0;1] using a and resetting (a);
+                Test4(payload) from A to B within [0;1] using a and resetting (a);
+            } or {
+                Test1() from A to B within [0;1] using a and resetting ();
+                Test2(payload) from A to B within [0;1] using a and resetting ();
+                Test3() from A to B within [0;1] using a and resetting (a);
+                Test4(payload) from A to B within [0;1] using a and resetting (a);
+            }
+        } or {
+            Test1() from A to B within [0;1] using a and resetting ();
+            Test2(payload) from A to B within [0;1] using a and resetting ();
+            Test3() from A to B within [0;1] using a and resetting (a);
+            Test4(payload) from A to B within [0;1] using a and resetting (a);
+        }
+    }
+}
