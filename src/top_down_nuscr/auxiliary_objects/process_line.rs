@@ -132,7 +132,7 @@ pub(crate) fn process_line(
             }
 
             if *bracket_offset > 1 {
-                return Err("Nested protocols are not supported yet.".into());
+                return Err("Nested protocols are currently not supported yet.".into());
             }
 
             if global_elements.opening_brackets
