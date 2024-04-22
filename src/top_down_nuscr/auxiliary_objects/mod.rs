@@ -39,6 +39,8 @@ pub(crate) struct Tree {
     pub(crate) message_with_payloads: HashMap<String, String>,
     pub(crate) messages: HashMap<String, HashMap<String, Vec<String>>>,
     pub(crate) first_message: HashMap<String, HashMap<String, String>>,
+    pub(crate) previous_message_wrt_clocks:
+        HashMap<String, HashMap<String, (String, String, String, String)>>,
     pub(crate) last_message: HashMap<String, HashMap<String, String>>,
     pub(crate) stacks: HashMap<String, Vec<String>>,
     pub(crate) first_stack: HashMap<String, String>,

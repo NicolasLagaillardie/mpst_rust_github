@@ -100,11 +100,12 @@ pub(crate) fn update_messages(
         messages_and_stacks_update(
             &main_tree.index,
             &mut main_tree.messages,
+            &mut main_tree.previous_message_wrt_clocks,
             &mut main_tree.last_message,
             &mut main_tree.stacks,
             &mut main_tree.last_stack,
             &message_parameters,
-        );
+        )?;
     } else if check_message_with_resetting_clock(temp_line) {
         let captured_fields = MESSAGE_WITH_RESET.captures(temp_line).unwrap();
 
@@ -119,11 +120,12 @@ pub(crate) fn update_messages(
         messages_and_stacks_update(
             &main_tree.index,
             &mut main_tree.messages,
+            &mut main_tree.previous_message_wrt_clocks,
             &mut main_tree.last_message,
             &mut main_tree.stacks,
             &mut main_tree.last_stack,
             &message_parameters,
-        );
+        )?;
     } else if check_message_with_payload(temp_line) {
         let captured_fields = MESSAGE_WITH_PAYLOAD.captures(temp_line).unwrap();
 
@@ -137,11 +139,12 @@ pub(crate) fn update_messages(
         messages_and_stacks_update(
             &main_tree.index,
             &mut main_tree.messages,
+            &mut main_tree.previous_message_wrt_clocks,
             &mut main_tree.last_message,
             &mut main_tree.stacks,
             &mut main_tree.last_stack,
             &message_parameters,
-        );
+        )?;
     } else {
         main_tree
             .message_with_payloads
@@ -150,11 +153,12 @@ pub(crate) fn update_messages(
         messages_and_stacks_update(
             &main_tree.index,
             &mut main_tree.messages,
+            &mut main_tree.previous_message_wrt_clocks,
             &mut main_tree.last_message,
             &mut main_tree.stacks,
             &mut main_tree.last_stack,
             &message_parameters,
-        );
+        )?;
     }
 
     Ok(())

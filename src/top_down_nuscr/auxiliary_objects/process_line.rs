@@ -62,6 +62,7 @@ fn init_sub_tree(
         message_with_payloads: HashMap::new(),
         messages: HashMap::new(),
         first_message: HashMap::new(),
+        previous_message_wrt_clocks: HashMap::new(),
         last_message: HashMap::new(),
         stacks: HashMap::new(),
         first_stack: HashMap::new(),
