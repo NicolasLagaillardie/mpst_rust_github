@@ -498,9 +498,24 @@ where
                     panic!("The clock {} is not available in {:?}", s.clock, all_clocks);
                 }
             }
-        // if there is are not correct bounds: both are negative
+        // if both are negative, send with blocking
         } else {
-            panic!("Both start and end parameters are negative")
+            if !s.include_start && !s.include_end {
+                let (here, there) = S::new();
+                match s.channel.send((x, there)) {
+                    Ok(()) => Ok(here),
+                    Err(e) => {
+                        cancel(s);
+                        panic!("{}", e.to_string())
+                    }
+                }
+            } else {
+                cancel(s);
+                panic!(
+                    "{}",
+                    "None of the bounds must be included when they are both negative.".to_string()
+                );
+            }
         }
     // if there is a lower bound
     } else {

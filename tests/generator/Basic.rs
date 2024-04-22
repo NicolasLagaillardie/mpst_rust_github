@@ -9,20 +9,20 @@ use std::time::Instant;
 generate_atmp!(MeshedChannels, A, B, C);
 
 // Types of the payloads
-struct Payload;
 struct Integer;
 struct Stri;
-struct Test2 { payload: Integer }
+struct Payload;
 struct Test3 { payload: Stri }
+struct Test2 { payload: Integer }
 struct Test4 { payload: Payload }
-struct Test5 { payload: Payload }
 struct Test1;
+struct Test5 { payload: Payload }
 
 // Binary sessions in depth 0
 // Binary sessions for C
+type Message_0_v_0_FromCToA = End;
 type Message_0_v_0_FromCToB = RecvTimed<Test1, 'a', 0, true, 2, true, ' ', Message_0_v_1_FromCToB>;
 type Message_0_v_1_FromCToB = End;
-type Message_0_v_0_FromCToA = End;
 
 // Binary sessions for A
 type Message_0_v_0_FromAToB = SendTimed<Test1, 'a', 0, true, 2, true, ' ', Message_0_v_1_FromAToB>;

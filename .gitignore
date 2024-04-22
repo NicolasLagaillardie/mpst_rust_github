@@ -95,4 +95,9 @@ scripts/stderr/
 
 tests/generator/Basic.rs
 tests/generator/Choice.rs
+tests/generator/NestedChoice.rs
 tests/generator/Recursive.rs
+tests/generator/CorrectBasic.rs
+tests/generator/CorrectChoice.rs
+tests/generator/CorrectNestedChoice.rs
+tests/generator/CorrectRecursive.rs
