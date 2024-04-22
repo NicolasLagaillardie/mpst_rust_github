@@ -18,8 +18,6 @@ pub(crate) struct GlobalElements {
     // Brackets
     pub(crate) opening_brackets: usize,
     pub(crate) closing_brackets: usize,
-    // For choices
-    pub(crate) has_choice: bool,
 }
 
 pub(crate) struct MessageParameters {
@@ -44,7 +42,6 @@ pub(crate) struct Tree {
     pub(crate) first_stack: HashMap<String, String>,
     pub(crate) last_stack: HashMap<String, String>,
     pub(crate) enums: HashMap<String, (String, i32)>,
-    pub(crate) choice_makers: HashMap<String, String>,
     pub(crate) loops: Vec<String>,
     pub(crate) endpoints: HashMap<String, Vec<String>>,
     pub(crate) sub_trees: Vec<Tree>,

@@ -110,8 +110,6 @@ pub(crate) fn process_line(
                         main_tree,
                     )?;
                 } else if check_choice(&line) {
-                    global_elements.has_choice = true;
-
                     let captured_fields = CHOICE.captures(&line).unwrap();
 
                     let sender = &captured_fields["choice"];
@@ -126,8 +124,8 @@ pub(crate) fn process_line(
                         .join("_");
 
                     main_tree
-                        .choice_makers
-                        .insert(current_index_string.to_string(), sender.to_string());
+                        .enums
+                        .insert(current_index_string.to_string(), (sender.to_string(), 0));
 
                     let mut sub_tree = Tree {
                         index: temp_index,
@@ -138,14 +136,14 @@ pub(crate) fn process_line(
                         stacks: HashMap::new(),
                         first_stack: HashMap::new(),
                         last_stack: HashMap::new(),
-                        choice_makers: HashMap::new(),
                         enums: HashMap::new(),
                         loops: vec![],
                         endpoints: HashMap::new(),
                         sub_trees: vec![],
                     };
 
-                    let index = sub_tree.index[sub_tree.index.len() - 1];
+                    // let index = sub_tree.index[sub_tree.index.len() - 1];
+                    let index = 0;
 
                     sub_tree
                         .enums
@@ -299,13 +297,6 @@ pub(crate) fn process_line(
 
                     main_tree.sub_trees.push(sub_tree);
                 } else if check_or(&line) {
-                    if !global_elements.has_choice {
-                        return Err(format!(
-                            "There is a branching without any choice. See line: {}",
-                            line_number
-                        )
-                        .into());
-                    }
                     // Get the original sender of the choice
                     let mut temp_basic_index = main_tree.index.clone();
                     let temp_basic_index_len = temp_basic_index.len() - 1;
@@ -317,10 +308,10 @@ pub(crate) fn process_line(
                         .collect::<Vec<_>>()
                         .join("_");
 
-                    println!("parent_tree.choice_makers: {:?}", parent_tree.choice_makers);
-                    println!("basic_index_string: {:?}", basic_index_string);
+                    let elt = parent_tree.enums.get_mut(&basic_index_string).unwrap();
 
-                    let sender = parent_tree.choice_makers.get(&basic_index_string).unwrap();
+                    let sender = &elt.0;
+                    elt.1 += 1;
 
                     // Update everything in the main_tree
                     let mut temp_index = main_tree.index.clone();
@@ -343,13 +334,12 @@ pub(crate) fn process_line(
                         first_stack: HashMap::new(),
                         last_stack: HashMap::new(),
                         enums: HashMap::new(),
-                        choice_makers: HashMap::new(),
                         loops: vec![],
                         endpoints: HashMap::new(),
                         sub_trees: vec![],
                     };
 
-                    let index = sub_tree.index[sub_tree.index.len() - 1];
+                    let index = 0;
 
                     sub_tree
                         .enums
@@ -501,7 +491,7 @@ pub(crate) fn process_line(
                         bracket_offset,
                     )?;
 
-                    main_tree.sub_trees.push(sub_tree);
+                    parent_tree.sub_trees.push(sub_tree);
                 } else if check_rec(&line) {
                     let captured_fields = REC.captures(&line).unwrap();
 

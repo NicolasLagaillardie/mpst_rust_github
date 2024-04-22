@@ -6,6 +6,7 @@ use std::io::Write;
 /// the nuscr protocol.
 pub(crate) fn generate_imports(
     global_elements: &mut GlobalElements,
+    main_tree: &Tree,
 ) -> Result<(), Box<dyn std::error::Error>> {
     match global_elements.output.as_mut() {
         Some(generated_file) => {
@@ -19,7 +20,7 @@ pub(crate) fn generate_imports(
                 "use mpstthree::binary_atmp::struct_trait::{{recv::RecvTimed, send::SendTimed}};"
             )?;
             writeln!(generated_file, "use mpstthree::generate_atmp;")?;
-            if global_elements.has_choice {
+            if !main_tree.sub_trees.is_empty() {
                 writeln!(
                     generated_file,
                     "use mpstthree::role::broadcast::RoleBroadcast;"
@@ -166,44 +167,49 @@ pub(crate) fn generate_enums(
     global_elements: &mut GlobalElements,
     main_tree: &Tree,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    match global_elements.output.as_mut() {
-        Some(generated_file) => {
-            for (branch, elt) in main_tree.enums.iter() {
-                for role in global_elements.roles.iter() {
-                    if role != &elt.0 {
-                        writeln!(generated_file, "// Enums (Branching) for {}", role)?;
-                        writeln!(
-                            generated_file,
-                            "enum Choice_{}_From{}To{} {{",
-                            branch, elt.0, role,
-                        )?;
-
-                        let endpoints_role = main_tree.endpoints.get(role).unwrap();
-
-                        println!("{:?}", endpoints_role);
-
-                        for i in 0..=elt.1 {
+    if !main_tree.sub_trees.is_empty() {
+        match global_elements.output.as_mut() {
+            Some(generated_file) => {
+                for (branch, elt) in main_tree.enums.iter() {
+                    for role in global_elements.roles.iter() {
+                        if role != &elt.0 {
+                            writeln!(generated_file, "// Enums (Branching) for {}", role)?;
                             writeln!(
                                 generated_file,
-                                "\tBranching{}({}),",
-                                i, endpoints_role[i as usize]
+                                "enum Choice_{}_From{}To{} {{",
+                                branch, elt.0, role,
                             )?;
+
+                            let endpoints_role = main_tree.endpoints.get(role).unwrap();
+
+                            println!("{:?}", endpoints_role);
+                            println!("{:?}", endpoints_role);
+
+                            for i in 0..=elt.1 {
+                                writeln!(
+                                    generated_file,
+                                    "\tBranching{}(Endpoint_{}_v_{}_For{}),",
+                                    i, branch, i, role
+                                )?;
+                            }
+
+                            writeln!(generated_file, "}}")?;
                         }
 
-                        writeln!(generated_file, "}}")?;
+                        writeln!(generated_file)?;
                     }
-
-                    writeln!(generated_file)?;
                 }
-            }
 
-            for sub_tree in &main_tree.sub_trees {
-                generate_enums(global_elements, sub_tree)?;
-            }
+                for sub_tree in main_tree.sub_trees.iter() {
+                    generate_enums(global_elements, sub_tree)?;
+                }
 
-            Ok(())
+                Ok(())
+            }
+            None => Err("Generated file was not initialised.".into()),
         }
-        None => Err("Generated file was not initialised.".into()),
+    } else {
+        Ok(())
     }
 }
 

@@ -28,7 +28,6 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
         clocks: HashMap::new(),
         opening_brackets: 0,
         closing_brackets: 0,
-        has_choice: false,
     };
 
     // Running elements
@@ -42,7 +41,6 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
         first_stack: HashMap::new(),
         last_stack: HashMap::new(),
         enums: HashMap::new(),
-        choice_makers: HashMap::new(),
         loops: vec![],
         endpoints: HashMap::new(),
         sub_trees: vec![],
@@ -67,7 +65,6 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
             first_stack: HashMap::new(),
             last_stack: HashMap::new(),
             enums: HashMap::new(),
-            choice_makers: HashMap::new(),
             loops: vec![],
             endpoints: HashMap::new(),
             sub_trees: vec![],
@@ -84,13 +81,11 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
     }
 
     // Generate everything
-    generate_imports(&mut global_elements)?;
+    generate_imports(&mut global_elements, &main_tree)?;
     generate_structs(&mut global_elements, &main_tree, &mut vec![], true)?;
     generate_sessions(&mut global_elements, &main_tree)?;
     generate_stacks(&mut global_elements, &main_tree)?;
-    if global_elements.has_choice {
-        generate_enums(&mut global_elements, &main_tree)?;
-    }
+    generate_enums(&mut global_elements, &main_tree)?;
     generate_endpoints(&mut global_elements, &main_tree)?;
     generate_fn_endpoints(&mut global_elements, &main_tree, true)?;
     generate_fn_main(&mut global_elements)?;
