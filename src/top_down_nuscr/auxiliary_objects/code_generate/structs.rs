@@ -19,21 +19,45 @@ pub(crate) fn generate_structs(
 
             for payload in global_elements.payloads.iter() {
                 if !already_generated.contains(&(payload).to_title_case()) {
-                    writeln!(generated_file, "struct {};", payload.to_title_case())?;
+                    writeln!(
+                        generated_file,
+                        "struct {};",
+                        payload
+                            .to_title_case()
+                            .chars()
+                            .filter(|c| !c.is_whitespace())
+                            .collect::<String>()
+                    )?;
                     already_generated.push(payload.to_title_case().to_string());
                 }
             }
 
-            for (name_message, payload) in main_tree.message_with_payloads.iter() {
+            for (name_message, payload) in main_tree.messages_with_payloads.iter() {
                 if !already_generated.contains(&(name_message).to_title_case()) {
                     if payload.is_empty() {
-                        writeln!(generated_file, "struct {};", name_message.to_title_case())?;
+                        writeln!(
+                            generated_file,
+                            "struct {};",
+                            name_message
+                                .to_title_case()
+                                .chars()
+                                .filter(|c| !c.is_whitespace())
+                                .collect::<String>()
+                        )?;
                     } else {
                         writeln!(
                             generated_file,
                             "struct {} {{ payload: {} }}",
-                            name_message.to_title_case(),
-                            payload.to_title_case()
+                            name_message
+                                .to_title_case()
+                                .chars()
+                                .filter(|c| !c.is_whitespace())
+                                .collect::<String>(),
+                            payload
+                                .to_title_case()
+                                .chars()
+                                .filter(|c| !c.is_whitespace())
+                                .collect::<String>()
                         )?;
                     }
                     already_generated.push(name_message.to_title_case().to_string());

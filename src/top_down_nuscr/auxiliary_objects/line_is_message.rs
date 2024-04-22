@@ -10,14 +10,14 @@ use std::collections::{HashMap, HashSet};
 
 /// Check when the current line is a message
 pub(crate) fn update_messages(
-    temp_line: &str,
+    line: &str,
     roles: &[String],
     line_number: &usize,
     clocks: &mut HashMap<String, HashSet<String>>,
     payloads: &mut HashSet<String>,
     main_tree: &mut Tree,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let captured_fields = MESSAGE.captures(temp_line).unwrap();
+    let captured_fields = MESSAGE.captures(line).unwrap();
 
     let message = &captured_fields["message"];
     let sender = &captured_fields["sender"];
@@ -84,15 +84,15 @@ pub(crate) fn update_messages(
         reset: " ".to_string(),
     };
 
-    if check_message_with_payload_and_resetting_clock(temp_line) {
-        let captured_fields = MESSAGE_WITH_PAYLOAD_AND_RESET.captures(temp_line).unwrap();
+    if check_message_with_payload_and_resetting_clock(line) {
+        let captured_fields = MESSAGE_WITH_PAYLOAD_AND_RESET.captures(line).unwrap();
 
         let payload = &captured_fields["payload"];
         let reset = &captured_fields["reset"];
 
         payloads.insert(payload.into());
         main_tree
-            .message_with_payloads
+            .messages_with_payloads
             .insert(message.into(), payload.into());
 
         message_parameters.reset = reset.to_string();
@@ -106,13 +106,13 @@ pub(crate) fn update_messages(
             &mut main_tree.last_stack,
             &message_parameters,
         )?;
-    } else if check_message_with_resetting_clock(temp_line) {
-        let captured_fields = MESSAGE_WITH_RESET.captures(temp_line).unwrap();
+    } else if check_message_with_resetting_clock(line) {
+        let captured_fields = MESSAGE_WITH_RESET.captures(line).unwrap();
 
         let reset = &captured_fields["reset"];
 
         main_tree
-            .message_with_payloads
+            .messages_with_payloads
             .insert(message.into(), "".into());
 
         message_parameters.reset = reset.to_string();
@@ -126,14 +126,14 @@ pub(crate) fn update_messages(
             &mut main_tree.last_stack,
             &message_parameters,
         )?;
-    } else if check_message_with_payload(temp_line) {
-        let captured_fields = MESSAGE_WITH_PAYLOAD.captures(temp_line).unwrap();
+    } else if check_message_with_payload(line) {
+        let captured_fields = MESSAGE_WITH_PAYLOAD.captures(line).unwrap();
 
         let payload = &captured_fields["payload"];
 
         payloads.insert(payload.into());
         main_tree
-            .message_with_payloads
+            .messages_with_payloads
             .insert(message.into(), payload.into());
 
         messages_and_stacks(
@@ -147,7 +147,7 @@ pub(crate) fn update_messages(
         )?;
     } else {
         main_tree
-            .message_with_payloads
+            .messages_with_payloads
             .insert(message.into(), "".into());
 
         messages_and_stacks(

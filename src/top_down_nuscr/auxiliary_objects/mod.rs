@@ -16,7 +16,7 @@ pub(crate) struct GlobalElements {
     pub(crate) payloads: HashSet<String>,
     pub(crate) clocks: HashMap<String, HashSet<String>>,
     // Count loops
-    pub(crate) loops: Vec<String>,
+    pub(crate) loops: HashMap<String, Vec<String>>,
     // Brackets
     pub(crate) opening_brackets: usize,
     pub(crate) closing_brackets: usize,
@@ -33,10 +33,9 @@ pub(crate) struct MessageParameters {
     pub(crate) right_bracket: String,
     pub(crate) reset: String,
 }
-
 pub(crate) struct Tree {
     pub(crate) index: Vec<i32>,
-    pub(crate) message_with_payloads: HashMap<String, String>,
+    pub(crate) messages_with_payloads: HashMap<String, String>,
     pub(crate) messages: HashMap<String, HashMap<String, Vec<String>>>,
     pub(crate) first_message: HashMap<String, HashMap<String, String>>,
     pub(crate) previous_message_wrt_clocks:

@@ -59,7 +59,7 @@ fn init_sub_tree(
 ) -> Result<Tree, Box<dyn std::error::Error>> {
     let mut sub_tree = Tree {
         index: temp_index.to_vec(),
-        message_with_payloads: HashMap::new(),
+        messages_with_payloads: HashMap::new(),
         messages: HashMap::new(),
         first_message: HashMap::new(),
         previous_message_wrt_clocks: HashMap::new(),
@@ -106,6 +106,18 @@ fn init_sub_tree(
 
     Ok(sub_tree)
 }
+
+// fn update_choice(
+//     lines_iter: &mut Map<
+//         Enumerate<Lines<BufReader<File>>>,
+//         impl FnMut((usize, Result<String, Error>)) -> (usize, String),
+//     >,
+//     global_elements: &mut GlobalElements,
+//     parent_tree: &mut Tree,
+//     main_tree: &mut Tree,
+//     bracket_offset: &mut usize,
+// ) -> Result<(), Box<dyn std::error::Error>> {
+// }
 
 pub(crate) fn process_line(
     lines_iter: &mut Map<
@@ -189,6 +201,10 @@ pub(crate) fn process_line(
                 init_messages(global_elements, main_tree, "0")?;
             } else if !check_global(&line) && line_number > 0 {
                 if check_message(&line) {
+                    for (_index, saved_lines) in global_elements.loops.iter_mut() {
+                        saved_lines.push(line.to_string());
+                    }
+
                     update_messages(
                         &line,
                         &global_elements.roles,
@@ -198,6 +214,10 @@ pub(crate) fn process_line(
                         main_tree,
                     )?;
                 } else if check_choice(&line) {
+                    for (_index, saved_lines) in global_elements.loops.iter_mut() {
+                        saved_lines.push(line.to_string());
+                    }
+
                     let captured_fields = CHOICE.captures(&line).unwrap();
 
                     let sender = &captured_fields["choice"];
@@ -354,14 +374,132 @@ pub(crate) fn process_line(
 
                     global_elements
                         .loops
-                        .push(captured_fields["loop"].to_string());
+                        .insert(captured_fields["loop"].to_string(), vec![]);
+
+                    for (_index, saved_lines) in global_elements.loops.iter_mut() {
+                        saved_lines.push(line.to_string());
+                    }
                 } else if check_continue(&line) {
                     let captured_fields = CONTINUE.captures(&line).unwrap();
 
-                    if !global_elements
+                    if let Some(looping_messages) = global_elements
                         .loops
-                        .contains(&(captured_fields["loop"].to_string()))
+                        .get_mut(&(captured_fields["loop"].to_string()))
                     {
+                        let mut do_something = false;
+
+                        'outer: for saved_line in looping_messages.iter() {
+                            if check_rec(saved_line)
+                                && saved_line.contains(&captured_fields["loop"])
+                            {
+                                do_something = true;
+                            } else if check_message(saved_line) && do_something {
+                                update_messages(
+                                    saved_line,
+                                    &global_elements.roles,
+                                    &line_number,
+                                    &mut global_elements.clocks,
+                                    &mut global_elements.payloads,
+                                    main_tree,
+                                )?;
+                            } else if check_choice(saved_line) && do_something {
+                                let captured_fields = CHOICE.captures(saved_line).unwrap();
+
+                                let sender = &captured_fields["choice"];
+
+                                let previous_index_string = parent_tree
+                                    .index
+                                    .iter()
+                                    .map(|&id| id.to_string())
+                                    .collect::<Vec<_>>()
+                                    .join("_");
+
+                                for receiver in global_elements.roles.iter() {
+                                    if receiver != sender {
+                                        // The sender must send the choice to each other role (receiver)
+                                        let channels_sender =
+                                            main_tree.messages.get_mut(sender).unwrap();
+
+                                        let messages_sender =
+                                            channels_sender.get_mut(receiver).unwrap();
+
+                                        let last_channel_sender =
+                                            main_tree.last_message.get_mut(sender).unwrap();
+                                        let last_messages_sender =
+                                            last_channel_sender.get_mut(receiver).unwrap();
+
+                                        messages_sender.push(
+                                            format!(
+                                                "type {} = SendTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
+                                                last_messages_sender,
+                                                previous_index_string,
+                                                sender,
+                                                receiver,
+                                            )
+                                        );
+
+                                        *last_messages_sender = "".to_string();
+
+                                        // The receiver must receive the choice from the sender
+                                        let channels_receiver =
+                                            main_tree.messages.get_mut(receiver).unwrap();
+
+                                        let messages_receiver =
+                                            channels_receiver.get_mut(sender).unwrap();
+
+                                        let last_channel_receiver =
+                                            main_tree.last_message.get_mut(receiver).unwrap();
+                                        let last_messages_receiver =
+                                            last_channel_receiver.get_mut(sender).unwrap();
+
+                                        messages_receiver.push(
+                                            format!(
+                                                "type {} = RecvTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
+                                                last_messages_receiver,
+                                                previous_index_string,
+                                                sender,
+                                                receiver,
+                                            )
+                                        );
+
+                                        *last_messages_receiver = "".to_string();
+
+                                        // Update stack for the receiver:
+                                        // they must receive the choice from the sender
+                                        let stack_receiver =
+                                            main_tree.stacks.get_mut(receiver).unwrap();
+
+                                        let last_stacks_receiver =
+                                            main_tree.last_stack.get_mut(receiver).unwrap();
+
+                                        stack_receiver.push(format!(
+                                            "type {} = Role{}<RoleEnd>;",
+                                            last_stacks_receiver, sender
+                                        ));
+
+                                        *last_stacks_receiver = "".to_string();
+                                    } else {
+                                        // Update stack for the sender:
+                                        // they must broadcast their choice
+                                        let stack_sender =
+                                            main_tree.stacks.get_mut(sender).unwrap();
+
+                                        let last_stacks_sender =
+                                            main_tree.last_stack.get_mut(sender).unwrap();
+
+                                        stack_sender.push(format!(
+                                            "type {} = RoleBroadcast;",
+                                            last_stacks_sender
+                                        ));
+
+                                        *last_stacks_sender = "".to_string();
+                                    }
+                                }
+
+                                break 'outer;
+                            }
+                        }
+                    } else {
                         return Err(format!(
                             "There is a continue loop without an initialisation. See line: {}",
                             line_number

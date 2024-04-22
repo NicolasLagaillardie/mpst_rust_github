@@ -26,7 +26,7 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
         roles: vec![],
         payloads: HashSet::new(),
         clocks: HashMap::new(),
-        loops: vec![],
+        loops: HashMap::new(),
         opening_brackets: 0,
         closing_brackets: 0,
     };
@@ -34,7 +34,7 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
     // Running elements
     let mut main_tree = Tree {
         index: vec![0],
-        message_with_payloads: HashMap::new(),
+        messages_with_payloads: HashMap::new(),
         messages: HashMap::new(),
         first_message: HashMap::new(),
         previous_message_wrt_clocks: HashMap::new(),
@@ -58,7 +58,7 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
         &mut global_elements,
         &mut Tree {
             index: vec![],
-            message_with_payloads: HashMap::new(),
+            messages_with_payloads: HashMap::new(),
             messages: HashMap::new(),
             first_message: HashMap::new(),
             last_message: HashMap::new(),

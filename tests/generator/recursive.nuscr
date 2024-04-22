@@ -1,5 +1,7 @@
 timed global protocol Recursive(role A, role B, role C) {
+    TestInit() from A to B within [0;1] using a and resetting ();
     rec Loop {
+        Test0() from A to B within [0;1] using a and resetting ();
         choice at A
         {
             Test1() from A to B within [0;1] using a and resetting ();
