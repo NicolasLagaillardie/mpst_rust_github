@@ -5,7 +5,7 @@ use super::regex::{
     check_message_with_resetting_clock, MESSAGE, MESSAGE_WITH_PAYLOAD,
     MESSAGE_WITH_PAYLOAD_AND_RESET, MESSAGE_WITH_RESET,
 };
-use super::{messages_and_stacks_update::messages_and_stacks_update, MessageParameters, Tree};
+use super::{messages_and_stacks_update::messages_and_stacks, MessageParameters, Tree};
 use std::collections::{HashMap, HashSet};
 
 /// Check when the current line is a message
@@ -97,7 +97,7 @@ pub(crate) fn update_messages(
 
         message_parameters.reset = reset.to_string();
 
-        messages_and_stacks_update(
+        messages_and_stacks(
             &main_tree.index,
             &mut main_tree.messages,
             &mut main_tree.previous_message_wrt_clocks,
@@ -117,7 +117,7 @@ pub(crate) fn update_messages(
 
         message_parameters.reset = reset.to_string();
 
-        messages_and_stacks_update(
+        messages_and_stacks(
             &main_tree.index,
             &mut main_tree.messages,
             &mut main_tree.previous_message_wrt_clocks,
@@ -136,7 +136,7 @@ pub(crate) fn update_messages(
             .message_with_payloads
             .insert(message.into(), payload.into());
 
-        messages_and_stacks_update(
+        messages_and_stacks(
             &main_tree.index,
             &mut main_tree.messages,
             &mut main_tree.previous_message_wrt_clocks,
@@ -150,7 +150,7 @@ pub(crate) fn update_messages(
             .message_with_payloads
             .insert(message.into(), "".into());
 
-        messages_and_stacks_update(
+        messages_and_stacks(
             &main_tree.index,
             &mut main_tree.messages,
             &mut main_tree.previous_message_wrt_clocks,
