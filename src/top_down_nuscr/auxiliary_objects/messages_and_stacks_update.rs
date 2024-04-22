@@ -24,14 +24,11 @@ fn update_previous_message_wrt_clocks(
             {
                 return Err("Two of the consecutive time bounds are not feasible.".into());
             } else {
-                role_time_bounds.insert(
-                    elts.clock.to_string(),
-                    (
-                        elts.left_bound.to_string(),
-                        (elts.left_bracket == "[").to_string(),
-                        elts.right_bound.to_string(),
-                        (elts.right_bracket == "]").to_string(),
-                    ),
+                *previous_time_bound = (
+                    elts.left_bound.to_string(),
+                    (elts.left_bracket == "[").to_string(),
+                    elts.right_bound.to_string(),
+                    (elts.right_bracket == "]").to_string(),
                 );
             }
         } else {
