@@ -1,5 +1,3 @@
-#![cfg(feature = "checking")]
-
 //! This module contains the macros and the functions for
 //! checking whether a protocol is well written or not,
 //! according to a bottom-up method.

@@ -1,5 +1,3 @@
-#![cfg(feature = "mpst")]
-
 //! This module contains all the functions that are used
 //! for consuming [`MeshedChannels`].
 //!

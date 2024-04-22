@@ -170,26 +170,26 @@ required-features = ["mpst"]
 
 ################################### Test TODO: To remove
 
-[[example]]
-name = "test"
-path = "examples/test.rs"
-required-features = ["top_down_nuscr"]
+# [[example]]
+# name = "test"
+# path = "examples/test.rs"
+# required-features = ["top_down_nuscr"]
 
-[[example]]
-name = "generator_basic"
-path = "tests/generator/Basic.rs"
+# [[example]]
+# name = "generator_basic"
+# path = "tests/generator/Basic.rs"
 
-[[example]]
-name = "generator_choice"
-path = "tests/generator/Choice.rs"
+# [[example]]
+# name = "generator_choice"
+# path = "tests/generator/Choice.rs"
 
-[[example]]
-name = "generator_nested_choice"
-path = "tests/generator/NestedChoice.rs"
+# [[example]]
+# name = "generator_nested_choice"
+# path = "tests/generator/NestedChoice.rs"
 
-[[example]]
-name = "generator_recursive"
-path = "tests/generator/Recursive.rs"
+# [[example]]
+# name = "generator_recursive"
+# path = "tests/generator/Recursive.rs"
 
 ################################### Ping-Pong
 

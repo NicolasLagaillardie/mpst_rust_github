@@ -1,5 +1,3 @@
-#![cfg(feature = "mpst")]
-
 //! The main trait used for representing an ordering of a participant.
 //!
 //! Every structure that relies on this trait, such as

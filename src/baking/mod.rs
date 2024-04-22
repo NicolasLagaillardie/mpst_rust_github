@@ -1,5 +1,3 @@
-#![cfg(feature = "baking")]
-
 //! This module contains the macros for
 //! creating the different structures and
 //! associated functions for any number

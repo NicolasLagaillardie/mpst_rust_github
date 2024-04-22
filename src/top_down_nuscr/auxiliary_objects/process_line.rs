@@ -145,7 +145,7 @@ pub(crate) fn process_line(
             if global_elements.opening_brackets
                 <= global_elements.closing_brackets + *bracket_offset
             {
-                if global_elements.closing_brackets >= 1 + global_elements.opening_brackets {
+                if global_elements.closing_brackets > global_elements.opening_brackets {
                     *bracket_offset =
                         global_elements.closing_brackets - global_elements.opening_brackets - 1;
                 }
@@ -305,12 +305,8 @@ pub(crate) fn process_line(
                         .enums
                         .insert(current_index_string.to_string(), (sender.to_string(), 0));
 
-                    let mut sub_tree = init_sub_tree(
-                        global_elements,
-                        &temp_index,
-                        &current_index_string,
-                        &sender,
-                    )?;
+                    let mut sub_tree =
+                        init_sub_tree(global_elements, &temp_index, &current_index_string, sender)?;
 
                     for receiver in global_elements.roles.iter() {
                         if receiver != sender {
@@ -424,12 +420,8 @@ pub(crate) fn process_line(
                         .collect::<Vec<_>>()
                         .join("_");
 
-                    let mut sub_tree = init_sub_tree(
-                        global_elements,
-                        &temp_index,
-                        &current_index_string,
-                        &sender,
-                    )?;
+                    let mut sub_tree =
+                        init_sub_tree(global_elements, &temp_index, &current_index_string, sender)?;
 
                     process_line(
                         lines_iter,
@@ -443,7 +435,9 @@ pub(crate) fn process_line(
                 } else if check_rec(&line) {
                     let captured_fields = REC.captures(&line).unwrap();
 
-                    global_elements.loops.push(captured_fields["loop"].to_string());
+                    global_elements
+                        .loops
+                        .push(captured_fields["loop"].to_string());
                 } else if check_continue(&line) {
                     let captured_fields = CONTINUE.captures(&line).unwrap();
 

@@ -1,5 +1,3 @@
-#![cfg(feature = "macros_simple")]
-
 //! This module contains all the macros that are used for
 //! the parametrisation on the name of the participants.
 //!

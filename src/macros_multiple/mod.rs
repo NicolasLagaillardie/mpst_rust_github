@@ -1,5 +1,3 @@
-#![cfg(feature = "macros_multiple")]
-
 //! This module contains all the macros that are used for
 //! the parametrisation on the number of
 //! participants.

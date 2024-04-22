@@ -1,5 +1,3 @@
-#![cfg(feature = "transport_tcp")]
-
 //! This module contains the functions
 //! and macros for handling a TCP connection.
 //!

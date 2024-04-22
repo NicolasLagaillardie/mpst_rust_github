@@ -1,5 +1,3 @@
-#![cfg(feature = "binary_atmp")]
-
 //! The slightly modified binary session type library.
 //!
 //! [![github]](https://github.com/wenkokke/sesh)&ensp;[![crates-io]](https://crates.io/crates/sesh)&ensp;[![docs-rs]](https://docs.rs/sesh)
