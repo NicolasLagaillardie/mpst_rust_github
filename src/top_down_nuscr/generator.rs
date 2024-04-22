@@ -82,14 +82,14 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
     }
 
     // Generate everything
-    generate_imports(&mut global_elements, &main_tree)?;
-    generate_structs(&mut global_elements, &main_tree, &mut vec![], true)?;
-    generate_sessions(&mut global_elements, &main_tree)?;
-    generate_stacks(&mut global_elements, &main_tree)?;
-    generate_enums(&mut global_elements, &main_tree)?;
-    generate_endpoints(&mut global_elements, &main_tree)?;
-    generate_fn_endpoints(&mut global_elements, &main_tree, true)?;
-    generate_fn_main(&mut global_elements)?;
+    imports::generate_imports(&mut global_elements, &main_tree)?;
+    structs::generate_structs(&mut global_elements, &main_tree, &mut vec![], true)?;
+    sessions::generate_sessions(&mut global_elements, &main_tree)?;
+    stacks::generate_stacks(&mut global_elements, &main_tree)?;
+    enums::generate_enums(&mut global_elements, &main_tree)?;
+    endpoints::generate_endpoints(&mut global_elements, &main_tree)?;
+    fn_endpoints::generate_fn_endpoints(&mut global_elements, &main_tree, true)?;
+    fn_main::generate_fn_main(&mut global_elements)?;
 
     Ok(())
 }

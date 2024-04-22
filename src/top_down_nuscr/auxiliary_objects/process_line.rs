@@ -123,26 +123,6 @@ pub(crate) fn process_line(
             global_elements.opening_brackets += line.matches('{').count();
             global_elements.closing_brackets += line.matches('}').count();
 
-            println!(
-                "line: {:?} / {} / {} / {} / {} / {}",
-                line,
-                global_elements.opening_brackets,
-                global_elements.closing_brackets,
-                bracket_offset,
-                main_tree
-                    .index
-                    .iter()
-                    .map(|&id| id.to_string())
-                    .collect::<Vec<String>>()
-                    .join("."),
-                parent_tree
-                    .index
-                    .iter()
-                    .map(|&id| id.to_string())
-                    .collect::<Vec<String>>()
-                    .join(".")
-            );
-
             if global_elements.opening_brackets < global_elements.closing_brackets {
                 return Err(format!(
                     "There are too many closing brackets. See line: {}",
@@ -158,13 +138,6 @@ pub(crate) fn process_line(
                     *bracket_offset =
                         global_elements.closing_brackets - global_elements.opening_brackets - 1;
                 }
-
-                println!(
-                    "{} / {} / {}",
-                    global_elements.opening_brackets,
-                    global_elements.closing_brackets,
-                    bracket_offset
-                );
 
                 // let temp_basic_index_len = main_tree.index.len() - 1;
                 // main_tree.index[temp_basic_index_len] += 1;
@@ -183,7 +156,8 @@ pub(crate) fn process_line(
                 // parent_tree.sub_trees.push(sub_tree);
 
                 println!(
-                    "{} / {} / {} / {} / {}",
+                    "{} / {} / {} / {} / {} / {}",
+                    line,
                     global_elements.opening_brackets,
                     global_elements.closing_brackets,
                     bracket_offset,
