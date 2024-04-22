@@ -7,6 +7,50 @@ use std::iter::{Enumerate, Map};
 
 use super::{line_is_message::update_messages, regex::*, GlobalElements, Tree};
 
+fn init_messages(
+    global_elements: &mut GlobalElements,
+    tree: &mut Tree,
+    current_index_string: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    for (role, channels) in tree.messages.iter_mut() {
+        for other_role in global_elements.roles.iter() {
+            if other_role != role {
+                channels.insert(other_role.to_string(), vec![]);
+            }
+        }
+    }
+
+    for (role, channels) in tree.first_message.iter_mut() {
+        for other_role in global_elements.roles.iter() {
+            if other_role != role {
+                channels.insert(
+                    other_role.to_string(),
+                    format!(
+                        "Message_{}_v_0_From{}To{}",
+                        current_index_string, role, other_role
+                    ),
+                );
+            }
+        }
+    }
+
+    for (role, channels) in tree.last_message.iter_mut() {
+        for other_role in global_elements.roles.iter() {
+            if other_role != role {
+                channels.insert(
+                    other_role.to_string(),
+                    format!(
+                        "Message_{}_v_0_From{}To{}",
+                        current_index_string, role, other_role
+                    ),
+                );
+            }
+        }
+    }
+
+    Ok(())
+}
+
 fn init_sub_tree(
     global_elements: &mut GlobalElements,
     temp_index: &[i32],
@@ -27,8 +71,6 @@ fn init_sub_tree(
         sub_trees: vec![],
     };
 
-    let index = 0;
-
     sub_tree
         .enums
         .insert(current_index_string.to_string(), (sender.to_string(), 0));
@@ -44,56 +86,22 @@ fn init_sub_tree(
         sub_tree.stacks.insert(role.to_string(), vec![]);
     }
 
-    for (role, channels) in sub_tree.messages.iter_mut() {
-        for other_role in global_elements.roles.iter() {
-            if other_role != role {
-                channels.insert(other_role.to_string(), vec![]);
-            }
-        }
-    }
-
-    for (role, channels) in sub_tree.first_message.iter_mut() {
-        for other_role in global_elements.roles.iter() {
-            if other_role != role {
-                channels.insert(
-                    other_role.to_string(),
-                    format!(
-                        "Message_{}_v_{}_From{}To{}",
-                        current_index_string, index, role, other_role
-                    ),
-                );
-            }
-        }
-    }
-
-    for (role, channels) in sub_tree.last_message.iter_mut() {
-        for other_role in global_elements.roles.iter() {
-            if other_role != role {
-                channels.insert(
-                    other_role.to_string(),
-                    format!(
-                        "Message_{}_v_{}_From{}To{}",
-                        current_index_string, index, role, other_role
-                    ),
-                );
-            }
-        }
-    }
-
     for role in global_elements.roles.iter() {
         sub_tree.first_stack.insert(
             role.to_string(),
-            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
+            format!("Ordering_{}_v_0_For{}", current_index_string, role),
         );
         sub_tree.last_stack.insert(
             role.to_string(),
-            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
+            format!("Ordering_{}_v_0_For{}", current_index_string, role),
         );
         sub_tree.endpoints.insert(
             role.to_string(),
             vec![format!("Endpoint_{}_For{}", current_index_string, role)],
         );
     }
+
+    init_messages(global_elements, &mut sub_tree, current_index_string)?;
 
     Ok(sub_tree)
 }
@@ -241,35 +249,7 @@ pub(crate) fn process_line(
 
                 global_elements.roles.sort();
 
-                for (role, channels) in main_tree.messages.iter_mut() {
-                    for other_role in global_elements.roles.iter() {
-                        if other_role != role {
-                            channels.insert(other_role.to_string(), vec![]);
-                        }
-                    }
-                }
-
-                for (role, channels) in main_tree.first_message.iter_mut() {
-                    for other_role in global_elements.roles.iter() {
-                        if other_role != role {
-                            channels.insert(
-                                other_role.to_string(),
-                                format!("Message_0_v_0_From{}To{}", role, other_role),
-                            );
-                        }
-                    }
-                }
-
-                for (role, channels) in main_tree.last_message.iter_mut() {
-                    for other_role in global_elements.roles.iter() {
-                        if other_role != role {
-                            channels.insert(
-                                other_role.to_string(),
-                                format!("Message_0_v_0_From{}To{}", role, other_role),
-                            );
-                        }
-                    }
-                }
+                init_messages(global_elements, main_tree, "0")?;
             } else if !check_global(&line) && line_number > 0 {
                 if check_message(&line) {
                     update_messages(
