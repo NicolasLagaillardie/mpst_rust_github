@@ -7,6 +7,97 @@ use std::iter::{Enumerate, Map};
 
 use super::{line_is_message::update_messages, regex::*, GlobalElements, Tree};
 
+fn init_sub_tree(
+    global_elements: &mut GlobalElements,
+    temp_index: &[i32],
+    current_index_string: &str,
+    sender: &str,
+) -> Result<Tree, Box<dyn std::error::Error>> {
+    let mut sub_tree = Tree {
+        index: temp_index.to_vec(),
+        message_with_payloads: HashMap::new(),
+        messages: HashMap::new(),
+        first_message: HashMap::new(),
+        last_message: HashMap::new(),
+        stacks: HashMap::new(),
+        first_stack: HashMap::new(),
+        last_stack: HashMap::new(),
+        enums: HashMap::new(),
+        endpoints: HashMap::new(),
+        sub_trees: vec![],
+    };
+
+    let index = 0;
+
+    sub_tree
+        .enums
+        .insert(current_index_string.to_string(), (sender.to_string(), 0));
+
+    for role in global_elements.roles.iter() {
+        sub_tree.messages.insert(role.to_string(), HashMap::new());
+        sub_tree
+            .first_message
+            .insert(role.to_string(), HashMap::new());
+        sub_tree
+            .last_message
+            .insert(role.to_string(), HashMap::new());
+        sub_tree.stacks.insert(role.to_string(), vec![]);
+    }
+
+    for (role, channels) in sub_tree.messages.iter_mut() {
+        for other_role in global_elements.roles.iter() {
+            if other_role != role {
+                channels.insert(other_role.to_string(), vec![]);
+            }
+        }
+    }
+
+    for (role, channels) in sub_tree.first_message.iter_mut() {
+        for other_role in global_elements.roles.iter() {
+            if other_role != role {
+                channels.insert(
+                    other_role.to_string(),
+                    format!(
+                        "Message_{}_v_{}_From{}To{}",
+                        current_index_string, index, role, other_role
+                    ),
+                );
+            }
+        }
+    }
+
+    for (role, channels) in sub_tree.last_message.iter_mut() {
+        for other_role in global_elements.roles.iter() {
+            if other_role != role {
+                channels.insert(
+                    other_role.to_string(),
+                    format!(
+                        "Message_{}_v_{}_From{}To{}",
+                        current_index_string, index, role, other_role
+                    ),
+                );
+            }
+        }
+    }
+
+    for role in global_elements.roles.iter() {
+        sub_tree.first_stack.insert(
+            role.to_string(),
+            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
+        );
+        sub_tree.last_stack.insert(
+            role.to_string(),
+            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
+        );
+        sub_tree.endpoints.insert(
+            role.to_string(),
+            vec![format!("Endpoint_{}_For{}", current_index_string, role)],
+        );
+    }
+
+    Ok(sub_tree)
+}
+
 pub(crate) fn process_line(
     lines_iter: &mut Map<
         Enumerate<Lines<BufReader<File>>>,
@@ -15,7 +106,7 @@ pub(crate) fn process_line(
     global_elements: &mut GlobalElements,
     parent_tree: &mut Tree,
     main_tree: &mut Tree,
-    bracket_offset: usize,
+    bracket_offset: &mut usize,
 ) -> Result<(), Box<dyn std::error::Error>> {
     match lines_iter.next() {
         None => Ok(()),
@@ -23,13 +114,91 @@ pub(crate) fn process_line(
             global_elements.opening_brackets += line.matches('{').count();
             global_elements.closing_brackets += line.matches('}').count();
 
-            if global_elements.opening_brackets + bracket_offset < global_elements.closing_brackets
+            println!(
+                "line: {:?} / {} / {} / {} / {} / {}",
+                line,
+                global_elements.opening_brackets,
+                global_elements.closing_brackets,
+                bracket_offset,
+                main_tree
+                    .index
+                    .iter()
+                    .map(|&id| id.to_string())
+                    .collect::<Vec<String>>()
+                    .join("."),
+                parent_tree
+                    .index
+                    .iter()
+                    .map(|&id| id.to_string())
+                    .collect::<Vec<String>>()
+                    .join(".")
+            );
+
+            if global_elements.opening_brackets < global_elements.closing_brackets {
+                return Err(format!(
+                    "There are too many closing brackets. See line: {}",
+                    line_number
+                )
+                .into());
+            }
+
+            if global_elements.opening_brackets
+                <= global_elements.closing_brackets + *bracket_offset
             {
+                if global_elements.closing_brackets >= 1 + global_elements.opening_brackets {
+                    *bracket_offset =
+                        global_elements.closing_brackets - global_elements.opening_brackets - 1;
+                }
+
                 println!(
                     "{} / {} / {}",
-                    global_elements.opening_brackets, global_elements.closing_brackets, line_number
+                    global_elements.opening_brackets,
+                    global_elements.closing_brackets,
+                    bracket_offset
                 );
-                return Ok(());
+
+                // let temp_basic_index_len = main_tree.index.len() - 1;
+                // main_tree.index[temp_basic_index_len] += 1;
+
+                // let basic_index_string = temp_basic_index
+                //     .iter()
+                //     .map(|&id| id.to_string())
+                //     .collect::<Vec<_>>()
+                //     .join("_");
+
+                // let elt = parent_tree.enums.get_mut(&basic_index_string).unwrap();
+
+                // let sender = &elt.0;
+                // elt.1 += 1;
+
+                // parent_tree.sub_trees.push(sub_tree);
+
+                println!(
+                    "{} / {} / {} / {} / {}",
+                    global_elements.opening_brackets,
+                    global_elements.closing_brackets,
+                    bracket_offset,
+                    main_tree
+                        .index
+                        .iter()
+                        .map(|&id| id.to_string())
+                        .collect::<Vec<String>>()
+                        .join("."),
+                    parent_tree
+                        .index
+                        .iter()
+                        .map(|&id| id.to_string())
+                        .collect::<Vec<String>>()
+                        .join(".")
+                );
+
+                return process_line(
+                    lines_iter,
+                    global_elements,
+                    parent_tree,
+                    main_tree,
+                    bracket_offset,
+                );
             }
 
             if check_global(&line) && line_number == 0 {
@@ -56,16 +225,18 @@ pub(crate) fn process_line(
                         .last_message
                         .insert(role.to_string(), HashMap::new());
                     main_tree.stacks.insert(role.to_string(), vec![]);
+                }
+
+                for (_, [role]) in ROLE.captures_iter(&line).map(|c| c.extract()) {
                     main_tree
                         .first_stack
                         .insert(role.to_string(), format!("Ordering_0_v_0_For{}", role));
                     main_tree
                         .last_stack
                         .insert(role.to_string(), format!("Ordering_0_v_0_For{}", role));
-                    main_tree.endpoints.insert(
-                        role.to_string(),
-                        vec![format!("Endpoint_0_For{}", role)],
-                    );
+                    main_tree
+                        .endpoints
+                        .insert(role.to_string(), vec![format!("Endpoint_0_For{}", role)]);
                 }
 
                 global_elements.roles.sort();
@@ -123,96 +294,23 @@ pub(crate) fn process_line(
                         .collect::<Vec<_>>()
                         .join("_");
 
+                    let previous_index_string = main_tree
+                        .index
+                        .iter()
+                        .map(|&id| id.to_string())
+                        .collect::<Vec<_>>()
+                        .join("_");
+
                     main_tree
                         .enums
                         .insert(current_index_string.to_string(), (sender.to_string(), 0));
 
-                    let mut sub_tree = Tree {
-                        index: temp_index,
-                        message_with_payloads: HashMap::new(),
-                        messages: HashMap::new(),
-                        first_message: HashMap::new(),
-                        last_message: HashMap::new(),
-                        stacks: HashMap::new(),
-                        first_stack: HashMap::new(),
-                        last_stack: HashMap::new(),
-                        enums: HashMap::new(),
-                        loops: vec![],
-                        endpoints: HashMap::new(),
-                        sub_trees: vec![],
-                    };
-
-                    // let index = sub_tree.index[sub_tree.index.len() - 1];
-                    let index = 0;
-
-                    sub_tree
-                        .enums
-                        .insert(current_index_string.to_string(), (sender.to_string(), 0));
-
-                    for role in global_elements.roles.iter() {
-                        sub_tree.messages.insert(role.to_string(), HashMap::new());
-                        sub_tree
-                            .first_message
-                            .insert(role.to_string(), HashMap::new());
-                        sub_tree
-                            .last_message
-                            .insert(role.to_string(), HashMap::new());
-                        sub_tree.stacks.insert(role.to_string(), vec![]);
-                    }
-
-                    for (role, channels) in sub_tree.messages.iter_mut() {
-                        for other_role in global_elements.roles.iter() {
-                            if other_role != role {
-                                channels.insert(other_role.to_string(), vec![]);
-                            }
-                        }
-                    }
-
-                    for (role, channels) in sub_tree.first_message.iter_mut() {
-                        for other_role in global_elements.roles.iter() {
-                            if other_role != role {
-                                channels.insert(
-                                    other_role.to_string(),
-                                    format!(
-                                        "Message_{}_v_{}_From{}To{}",
-                                        current_index_string, index, role, other_role
-                                    ),
-                                );
-                            }
-                        }
-                    }
-
-                    for (role, channels) in sub_tree.last_message.iter_mut() {
-                        for other_role in global_elements.roles.iter() {
-                            if other_role != role {
-                                channels.insert(
-                                    other_role.to_string(),
-                                    format!(
-                                        "Message_{}_v_{}_From{}To{}",
-                                        current_index_string, index, role, other_role
-                                    ),
-                                );
-                            }
-                        }
-                    }
-
-                    for role in global_elements.roles.iter() {
-                        sub_tree.first_stack.insert(
-                            role.to_string(),
-                            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
-                        );
-                        sub_tree.last_stack.insert(
-                            role.to_string(),
-                            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
-                        );
-                        sub_tree.endpoints.insert(
-                            role.to_string(),
-                            vec![format!(
-                                "Endpoint_{}_For{}",
-                                current_index_string, role
-                            )],
-                        );
-                    }
+                    let mut sub_tree = init_sub_tree(
+                        global_elements,
+                        &temp_index,
+                        &current_index_string,
+                        &sender,
+                    )?;
 
                     for receiver in global_elements.roles.iter() {
                         if receiver != sender {
@@ -230,7 +328,7 @@ pub(crate) fn process_line(
                                 format!(
                                     "type {} = SendTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
                                     last_messages_sender,
-                                    current_index_string,
+                                    previous_index_string,
                                     sender,
                                     receiver,
                                 )
@@ -252,7 +350,7 @@ pub(crate) fn process_line(
                                 format!(
                                     "type {} = RecvTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
                                     last_messages_receiver,
-                                    current_index_string,
+                                    previous_index_string,
                                     sender,
                                     receiver,
                                 )
@@ -287,12 +385,14 @@ pub(crate) fn process_line(
                         }
                     }
 
+                    *bracket_offset += 1;
+
                     process_line(
                         lines_iter,
                         global_elements,
                         main_tree,
                         &mut sub_tree,
-                        bracket_offset + 1,
+                        bracket_offset,
                     )?;
 
                     main_tree.sub_trees.push(sub_tree);
@@ -324,91 +424,12 @@ pub(crate) fn process_line(
                         .collect::<Vec<_>>()
                         .join("_");
 
-                    let mut sub_tree = Tree {
-                        index: temp_index,
-                        message_with_payloads: HashMap::new(),
-                        messages: HashMap::new(),
-                        first_message: HashMap::new(),
-                        last_message: HashMap::new(),
-                        stacks: HashMap::new(),
-                        first_stack: HashMap::new(),
-                        last_stack: HashMap::new(),
-                        enums: HashMap::new(),
-                        loops: vec![],
-                        endpoints: HashMap::new(),
-                        sub_trees: vec![],
-                    };
-
-                    let index = 0;
-
-                    sub_tree
-                        .enums
-                        .insert(current_index_string.to_string(), (sender.to_string(), 0));
-
-                    for role in global_elements.roles.iter() {
-                        sub_tree.messages.insert(role.to_string(), HashMap::new());
-                        sub_tree
-                            .first_message
-                            .insert(role.to_string(), HashMap::new());
-                        sub_tree
-                            .last_message
-                            .insert(role.to_string(), HashMap::new());
-                        sub_tree.stacks.insert(role.to_string(), vec![]);
-                    }
-
-                    for (role, channels) in sub_tree.messages.iter_mut() {
-                        for other_role in global_elements.roles.iter() {
-                            if other_role != role {
-                                channels.insert(other_role.to_string(), vec![]);
-                            }
-                        }
-                    }
-
-                    for (role, channels) in sub_tree.first_message.iter_mut() {
-                        for other_role in global_elements.roles.iter() {
-                            if other_role != role {
-                                channels.insert(
-                                    other_role.to_string(),
-                                    format!(
-                                        "Message_{}_v_{}_From{}To{}",
-                                        current_index_string, index, role, other_role
-                                    ),
-                                );
-                            }
-                        }
-                    }
-
-                    for (role, channels) in sub_tree.last_message.iter_mut() {
-                        for other_role in global_elements.roles.iter() {
-                            if other_role != role {
-                                channels.insert(
-                                    other_role.to_string(),
-                                    format!(
-                                        "Message_{}_v_{}_From{}To{}",
-                                        current_index_string, index, role, other_role
-                                    ),
-                                );
-                            }
-                        }
-                    }
-
-                    for role in global_elements.roles.iter() {
-                        sub_tree.first_stack.insert(
-                            role.to_string(),
-                            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
-                        );
-                        sub_tree.last_stack.insert(
-                            role.to_string(),
-                            format!("Ordering_{}_v_{}_For{}", current_index_string, index, role),
-                        );
-                        sub_tree.endpoints.insert(
-                            role.to_string(),
-                            vec![format!(
-                                "Endpoint_{}_For{}",
-                                current_index_string, role
-                            )],
-                        );
-                    }
+                    let mut sub_tree = init_sub_tree(
+                        global_elements,
+                        &temp_index,
+                        &current_index_string,
+                        &sender,
+                    )?;
 
                     process_line(
                         lines_iter,
@@ -422,11 +443,11 @@ pub(crate) fn process_line(
                 } else if check_rec(&line) {
                     let captured_fields = REC.captures(&line).unwrap();
 
-                    main_tree.loops.push(captured_fields["loop"].to_string());
+                    global_elements.loops.push(captured_fields["loop"].to_string());
                 } else if check_continue(&line) {
                     let captured_fields = CONTINUE.captures(&line).unwrap();
 
-                    if !main_tree
+                    if !global_elements
                         .loops
                         .contains(&(captured_fields["loop"].to_string()))
                     {

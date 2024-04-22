@@ -168,7 +168,7 @@ name = "readme"
 path = "examples/readme_example.rs"
 required-features = ["mpst"]
 
-################################### Test
+################################### Test TODO: To remove
 
 [[example]]
 name = "test"

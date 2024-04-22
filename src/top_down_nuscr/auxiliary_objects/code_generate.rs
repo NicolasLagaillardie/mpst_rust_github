@@ -182,7 +182,7 @@ pub(crate) fn generate_stacks(
     }
 }
 
-/// Generate all enums TODO
+/// Generate all enums
 pub(crate) fn generate_enums(
     global_elements: &mut GlobalElements,
     main_tree: &Tree,
@@ -208,14 +208,14 @@ pub(crate) fn generate_enums(
                     .map(|&id| id.to_string())
                     .collect::<Vec<String>>()
                     .join("_");
-                for (branch, elt) in main_tree.enums.iter() {
+                for (_branch, elt) in main_tree.enums.iter() {
                     for role in global_elements.roles.iter() {
                         if role != &elt.0 {
                             writeln!(generated_file, "// Enums (Branchings) for {}", role)?;
                             writeln!(
                                 generated_file,
                                 "enum Choice_{}_From{}To{} {{",
-                                branch, elt.0, role,
+                                index, elt.0, role,
                             )?;
 
                             let endpoints_role = main_tree.endpoints.get(role).unwrap();
@@ -259,6 +259,16 @@ pub(crate) fn generate_endpoints(
 ) -> Result<(), Box<dyn std::error::Error>> {
     match global_elements.output.as_mut() {
         Some(generated_file) => {
+            writeln!(
+                generated_file,
+                "// Endpoints in depth {}",
+                main_tree
+                    .index
+                    .iter()
+                    .map(|&id| id.to_string())
+                    .collect::<Vec<String>>()
+                    .join(".")
+            )?;
             // Generate the endpoints
             for role in global_elements.roles.iter() {
                 writeln!(generated_file, "// Endpoint for role {}", role)?;

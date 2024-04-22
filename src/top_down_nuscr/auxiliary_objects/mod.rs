@@ -15,6 +15,8 @@ pub(crate) struct GlobalElements {
     pub(crate) roles: Vec<String>,
     pub(crate) payloads: HashSet<String>,
     pub(crate) clocks: HashMap<String, HashSet<String>>,
+    // Count loops
+    pub(crate) loops: Vec<String>,
     // Brackets
     pub(crate) opening_brackets: usize,
     pub(crate) closing_brackets: usize,
@@ -42,7 +44,6 @@ pub(crate) struct Tree {
     pub(crate) first_stack: HashMap<String, String>,
     pub(crate) last_stack: HashMap<String, String>,
     pub(crate) enums: HashMap<String, (String, i32)>,
-    pub(crate) loops: Vec<String>,
     pub(crate) endpoints: HashMap<String, Vec<String>>,
     pub(crate) sub_trees: Vec<Tree>,
 }
