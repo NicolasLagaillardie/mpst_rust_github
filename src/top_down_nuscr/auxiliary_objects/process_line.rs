@@ -131,6 +131,10 @@ pub(crate) fn process_line(
                 .into());
             }
 
+            if *bracket_offset > 1 {
+                return Err("Nested protocols are not supported yet.".into());
+            }
+
             if global_elements.opening_brackets
                 <= global_elements.closing_brackets + *bracket_offset
             {
@@ -139,49 +143,7 @@ pub(crate) fn process_line(
                         global_elements.closing_brackets - global_elements.opening_brackets - 1;
                 }
 
-                // let temp_basic_index_len = main_tree.index.len() - 1;
-                // main_tree.index[temp_basic_index_len] += 1;
-
-                // let basic_index_string = temp_basic_index
-                //     .iter()
-                //     .map(|&id| id.to_string())
-                //     .collect::<Vec<_>>()
-                //     .join("_");
-
-                // let elt = parent_tree.enums.get_mut(&basic_index_string).unwrap();
-
-                // let sender = &elt.0;
-                // elt.1 += 1;
-
-                // parent_tree.sub_trees.push(sub_tree);
-
-                println!(
-                    "{} / {} / {} / {} / {} / {}",
-                    line,
-                    global_elements.opening_brackets,
-                    global_elements.closing_brackets,
-                    bracket_offset,
-                    main_tree
-                        .index
-                        .iter()
-                        .map(|&id| id.to_string())
-                        .collect::<Vec<String>>()
-                        .join("."),
-                    parent_tree
-                        .index
-                        .iter()
-                        .map(|&id| id.to_string())
-                        .collect::<Vec<String>>()
-                        .join(".")
-                );
-
-                return process_line(
-                    lines_iter,
-                    global_elements,
-                    parent_tree,
-                    main_tree,
-                    bracket_offset,
-                );
+                return Ok(());
             }
 
             if check_global(&line) && line_number == 0 {
