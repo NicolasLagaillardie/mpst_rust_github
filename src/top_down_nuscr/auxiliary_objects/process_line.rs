@@ -64,7 +64,7 @@ pub(crate) fn process_line(
                         .insert(role.to_string(), format!("Ordering_0_v_0_For{}", role));
                     main_tree.endpoints.insert(
                         role.to_string(),
-                        vec![format!("Endpoint_0_v_0_For{}", role)],
+                        vec![format!("Endpoint_0_For{}", role)],
                     );
                 }
 
@@ -208,8 +208,8 @@ pub(crate) fn process_line(
                         sub_tree.endpoints.insert(
                             role.to_string(),
                             vec![format!(
-                                "Endpoint_{}_v_{}_For{}",
-                                current_index_string, index, role
+                                "Endpoint_{}_For{}",
+                                current_index_string, role
                             )],
                         );
                     }
@@ -404,83 +404,10 @@ pub(crate) fn process_line(
                         sub_tree.endpoints.insert(
                             role.to_string(),
                             vec![format!(
-                                "Endpoint_{}_v_{}_For{}",
-                                current_index_string, index, role
+                                "Endpoint_{}_For{}",
+                                current_index_string, role
                             )],
                         );
-                    }
-
-                    for receiver in global_elements.roles.iter() {
-                        if receiver != sender {
-                            // The sender must send the choice to each other role (receiver)
-                            let channels_sender = main_tree.messages.get_mut(sender).unwrap();
-
-                            let messages_sender = channels_sender.get_mut(receiver).unwrap();
-
-                            let last_channel_sender =
-                                main_tree.last_message.get_mut(sender).unwrap();
-                            let last_messages_sender =
-                                last_channel_sender.get_mut(receiver).unwrap();
-
-                            messages_sender.push(
-                                format!(
-                                    "type {} = SendTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
-                                    last_messages_sender,
-                                    current_index_string,
-                                    sender,
-                                    receiver,
-                                )
-                            );
-
-                            *last_messages_sender = "".to_string();
-
-                            // The receiver must receive the choice from the sender
-                            let channels_receiver = main_tree.messages.get_mut(receiver).unwrap();
-
-                            let messages_receiver = channels_receiver.get_mut(sender).unwrap();
-
-                            let last_channel_receiver =
-                                main_tree.last_message.get_mut(receiver).unwrap();
-                            let last_messages_receiver =
-                                last_channel_receiver.get_mut(sender).unwrap();
-
-                            messages_receiver.push(
-                                format!(
-                                    "type {} = RecvTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
-                                    last_messages_receiver,
-                                    current_index_string,
-                                    sender,
-                                    receiver,
-                                )
-                            );
-
-                            *last_messages_receiver = "".to_string();
-
-                            // Update stack for the receiver:
-                            // they must receive the choice from the sender
-                            let stack_receiver = main_tree.stacks.get_mut(receiver).unwrap();
-
-                            let last_stacks_receiver =
-                                main_tree.last_stack.get_mut(receiver).unwrap();
-
-                            stack_receiver.push(format!(
-                                "type {} = Role{}<RoleEnd>;",
-                                last_stacks_receiver, sender
-                            ));
-
-                            *last_stacks_receiver = "".to_string();
-                        } else {
-                            // Update stack for the sender:
-                            // they must broadcast their choice
-                            let stack_sender = main_tree.stacks.get_mut(sender).unwrap();
-
-                            let last_stacks_sender = main_tree.last_stack.get_mut(sender).unwrap();
-
-                            stack_sender
-                                .push(format!("type {} = RoleBroadcast;", last_stacks_sender));
-
-                            *last_stacks_sender = "".to_string();
-                        }
                     }
 
                     process_line(

@@ -102,6 +102,16 @@ pub(crate) fn generate_sessions(
     match global_elements.output.as_mut() {
         Some(generated_file) => {
             // Generate the sessions
+            writeln!(
+                generated_file,
+                "// Binary sessions in depth {}",
+                main_tree
+                    .index
+                    .iter()
+                    .map(|&id| id.to_string())
+                    .collect::<Vec<String>>()
+                    .join(".")
+            )?;
             for (role, channels) in main_tree.messages.iter() {
                 writeln!(generated_file, "// Binary sessions for {}", role)?;
                 for (other_role, role_messages) in channels.iter() {
@@ -139,6 +149,16 @@ pub(crate) fn generate_stacks(
 ) -> Result<(), Box<dyn std::error::Error>> {
     match global_elements.output.as_mut() {
         Some(generated_file) => {
+            writeln!(
+                generated_file,
+                "// Stacks in depth {}",
+                main_tree
+                    .index
+                    .iter()
+                    .map(|&id| id.to_string())
+                    .collect::<Vec<String>>()
+                    .join(".")
+            )?;
             // Generate the stacks
             for (role, role_stacks) in main_tree.stacks.iter() {
                 writeln!(generated_file, "// Stacks for {}", role)?;
@@ -170,10 +190,28 @@ pub(crate) fn generate_enums(
     if !main_tree.sub_trees.is_empty() {
         match global_elements.output.as_mut() {
             Some(generated_file) => {
+                if !main_tree.enums.is_empty() {
+                    writeln!(
+                        generated_file,
+                        "// Enums (Branchings) in depth {}",
+                        main_tree
+                            .index
+                            .iter()
+                            .map(|&id| id.to_string())
+                            .collect::<Vec<String>>()
+                            .join(".")
+                    )?;
+                }
+                let index = main_tree
+                    .index
+                    .iter()
+                    .map(|&id| id.to_string())
+                    .collect::<Vec<String>>()
+                    .join("_");
                 for (branch, elt) in main_tree.enums.iter() {
                     for role in global_elements.roles.iter() {
                         if role != &elt.0 {
-                            writeln!(generated_file, "// Enums (Branching) for {}", role)?;
+                            writeln!(generated_file, "// Enums (Branchings) for {}", role)?;
                             writeln!(
                                 generated_file,
                                 "enum Choice_{}_From{}To{} {{",
@@ -188,8 +226,8 @@ pub(crate) fn generate_enums(
                             for i in 0..=elt.1 {
                                 writeln!(
                                     generated_file,
-                                    "\tBranching{}(Endpoint_{}_v_{}_For{}),",
-                                    i, branch, i, role
+                                    "\tBranching{}(Endpoint_{}_{}_For{}),",
+                                    i, index, i, role
                                 )?;
                             }
 
