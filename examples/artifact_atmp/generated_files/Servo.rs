@@ -11,27 +11,27 @@ use std::time::Instant;
 generate_atmp!(MeshedChannels, C, L, S);
 
 // Types of the payloads
-struct WebFontLoaded;
 struct OutstandingWebFonts;
 struct DocumentLoading;
 struct GetWebPageLoadState;
 struct GetCurrentState;
+struct WebFontLoaded;
 
 // Binary sessions in depth 0
 // Binary sessions for S
-type Message_0_v_0_FromSToL = RecvTimed<WebFontLoaded, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromSToL>;
-type Message_0_v_1_FromSToL = End;
 type Message_0_v_0_FromSToC = RecvTimed<GetCurrentState, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromSToC>;
 type Message_0_v_1_FromSToC = SendTimed<DocumentLoading, 'a', 0, true, 1, true, ' ', Message_0_v_2_FromSToC>;
 type Message_0_v_2_FromSToC = End;
+type Message_0_v_0_FromSToL = RecvTimed<WebFontLoaded, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromSToL>;
+type Message_0_v_1_FromSToL = End;
 
 // Binary sessions for C
-type Message_0_v_0_FromCToS = SendTimed<GetCurrentState, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromCToS>;
-type Message_0_v_1_FromCToS = RecvTimed<DocumentLoading, 'a', 0, true, 1, true, ' ', Message_0_v_2_FromCToS>;
-type Message_0_v_2_FromCToS = End;
 type Message_0_v_0_FromCToL = SendTimed<GetWebPageLoadState, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromCToL>;
 type Message_0_v_1_FromCToL = RecvTimed<OutstandingWebFonts, 'a', 0, true, 1, true, ' ', Message_0_v_2_FromCToL>;
 type Message_0_v_2_FromCToL = End;
+type Message_0_v_0_FromCToS = SendTimed<GetCurrentState, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromCToS>;
+type Message_0_v_1_FromCToS = RecvTimed<DocumentLoading, 'a', 0, true, 1, true, ' ', Message_0_v_2_FromCToS>;
+type Message_0_v_2_FromCToS = End;
 
 // Binary sessions for L
 type Message_0_v_0_FromLToS = SendTimed<WebFontLoaded, 'a', 0, true, 1, true, ' ', Message_0_v_1_FromLToS>;
