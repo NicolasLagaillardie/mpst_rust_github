@@ -82,7 +82,7 @@ pub(crate) fn check_fsm(filepath: &str) -> Result<(), Box<dyn std::error::Error>
     let file = File::open(filepath)?;
     let reader = BufReader::new(file);
 
-    let mut lines_iter = reader.lines().into_iter().map(|line| line.unwrap());
+    let mut lines_iter = reader.lines().map(|line| line.unwrap());
 
     let name_file = format!(
         "{}.nuscr",

@@ -799,12 +799,26 @@ name = "readme"
 path = "examples/readme_example.rs"
 required-features = ["mpst"]
 
-################################### Test
+################################### ATMP Artifact
+
+########### Generators
 
 [[example]]
-name = "test"
-path = "examples/test.rs"
+name = "generator_servo"
+path = "examples/artifact_atmp/generator_files/servo.rs"
 required-features = ["top_down_nuscr"]
+
+[[example]]
+name = "generator_three_buyers"
+path = "examples/artifact_atmp/generator_files/three_buyers.rs"
+required-features = ["top_down_nuscr"]
+
+[[example]]
+name = "generator_remote_data"
+path = "examples/artifact_atmp/generator_files/remote_data.rs"
+required-features = ["top_down_nuscr"]
+
+########### Generators
 
 [[example]]
 name = "generated_servo"
