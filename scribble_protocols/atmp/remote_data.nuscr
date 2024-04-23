@@ -8,10 +8,10 @@ timed global protocol RemoteData(role Sensor, role Satellite, role Server) {
             Data(int) from Sensor to Satellite within [2;4] using b and resetting (a);
             Data(int) from Satellite to Server within [4;6] using a and resetting (a);
 
-            continue Loop
+            continue Loop;
         } or {
             Stop() from Server to Satellite within [0;1] using a and resetting ();
-            Stop() from Satellite to Sensor() within [1;2] using b and resetting ();
+            Stop() from Satellite to Sensor within [1;2] using b and resetting ();
         }
     }
 }

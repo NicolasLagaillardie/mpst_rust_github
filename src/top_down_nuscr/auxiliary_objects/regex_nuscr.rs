@@ -31,7 +31,7 @@ pub(crate) static MESSAGE_WITH_PAYLOAD_AND_RESET: Lazy<Regex> = Lazy::new(|| {
 pub(crate) static REC: Lazy<Regex> = Lazy::new(|| Regex::new(r"rec( +)(?P<loop>\w+)").unwrap());
 
 pub(crate) static CONTINUE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"continue( +)(?P<loop>\w+)( *)").unwrap());
+    Lazy::new(|| Regex::new(r"continue( +)(?P<loop>\w+)( *);").unwrap());
 
 // Check whether the input is the first line of any new nuscrT protocol
 pub(crate) fn check_global(input: &str) -> bool {

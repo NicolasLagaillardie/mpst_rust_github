@@ -8,7 +8,7 @@ global protocol RemoteData(role Sensor, role Satellite, role Server) {
             Data(int) from Sensor to Satellite;
             Data(int) from Satellite to Server;
 
-            continue Loop
+            continue Loop;
         } or {
             Stop() from Server to Satellite;
             Stop() from Satellite to Sensor;

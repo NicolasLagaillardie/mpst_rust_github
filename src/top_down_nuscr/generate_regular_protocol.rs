@@ -21,25 +21,6 @@ fn generate_regular_protocol(
                 name_protocol = captured_fields["name"].to_string();
 
                 writeln!(file, "{}", line.replace("timed ", ""))?;
-            } else if check_message_with_payload(&line) {
-                let starting_spaces = line
-                    .chars()
-                    .take_while(|ch| ch.is_whitespace() && *ch != '\n')
-                    .map(|_| " ")
-                    .collect::<String>();
-
-                let captured_fields = MESSAGE_WITH_PAYLOAD.captures(&line).unwrap();
-
-                let message = &captured_fields["message"];
-                let payload = &captured_fields["payload"];
-                let sender = &captured_fields["sender"];
-                let receiver = &captured_fields["receiver"];
-
-                writeln!(
-                    file,
-                    "{}{}({}) from {} to {};",
-                    starting_spaces, message, payload, sender, receiver
-                )?;
             } else if check_message(&line) {
                 let starting_spaces = line
                     .chars()
@@ -53,11 +34,39 @@ fn generate_regular_protocol(
                 let sender = &captured_fields["sender"];
                 let receiver = &captured_fields["receiver"];
 
-                writeln!(
-                    file,
-                    "{}{}() from {} to {};",
-                    starting_spaces, message, sender, receiver
-                )?;
+                if check_message_with_payload_and_resetting_clock(&line) {
+                    let captured_fields = MESSAGE_WITH_PAYLOAD_AND_RESET.captures(&line).unwrap();
+
+                    let payload = &captured_fields["payload"];
+
+                    writeln!(
+                        file,
+                        "{}{}({}) from {} to {};",
+                        starting_spaces, message, payload, sender, receiver
+                    )?;
+                } else if check_message_with_resetting_clock(&line) {
+                    writeln!(
+                        file,
+                        "{}{}() from {} to {};",
+                        starting_spaces, message, sender, receiver
+                    )?;
+                } else if check_message_with_payload(&line) {
+                    let captured_fields = MESSAGE_WITH_PAYLOAD.captures(&line).unwrap();
+
+                    let payload = &captured_fields["payload"];
+
+                    writeln!(
+                        file,
+                        "{}{}({}) from {} to {};",
+                        starting_spaces, message, payload, sender, receiver
+                    )?;
+                } else {
+                    writeln!(
+                        file,
+                        "{}{}() from {} to {};",
+                        starting_spaces, message, sender, receiver
+                    )?;
+                }
             } else {
                 writeln!(file, "{}", line)?;
             }
@@ -104,7 +113,11 @@ pub(crate) fn check_fsm(filepath: &str) -> Result<(), Box<dyn std::error::Error>
     remove_file(&name_file)?;
 
     if output.stdout.is_empty() {
-        return Err("There was an issue with the nuscr protocol.".into());
+        return Err(format!(
+            "There was an issue with the {} nuscr protocol.",
+            name_protocol
+        )
+        .into());
     }
 
     Ok(())
