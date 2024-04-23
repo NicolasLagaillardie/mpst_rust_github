@@ -1,4 +1,4 @@
-global protocol VideoStreamingProtocol(role Auth, role Client, role Server) {
+timed global protocol VideoStreamingProtocol(role Auth, role Client, role Server) {
 	Declare(Id) from Client to Auth within [0;1] using a and resetting (); // Sends a message labelled Declare with a payload Id
 	Accept(Answer) from Auth to Client within [0;1] using a and resetting (); // The Auth role replies with an Accept message
 	rec Loop {

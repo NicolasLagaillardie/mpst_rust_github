@@ -1,5 +1,5 @@
 
-global protocol ping_pong(role A, role B)
+timed global protocol ping_pong(role A, role B)
 {
     rec PP
     {

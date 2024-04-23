@@ -1,4 +1,4 @@
-global protocol API(role API, role Controller, role Storage, role User)
+timed global protocol API(role API, role Controller, role Storage, role User)
     {
     Start(int) from Controller to Storage within [0;1] using a and resetting ();
     Start(int) from Controller to API  within [0;1] using a and resetting ();

@@ -1,4 +1,4 @@
-global protocol Logging(role Controller, role Logs)
+timed global protocol Logging(role Controller, role Logs)
 {
     Start(int) from Controller to Logs within [0;1] using a and resetting ();
     rec Loop {

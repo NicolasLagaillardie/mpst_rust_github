@@ -1,4 +1,4 @@
-global protocol SimpleVoting(role Voter, role Server){
+timed global protocol SimpleVoting(role Voter, role Server){
     Authenticate(String) from Voter to Server within [0;1] using a and resetting ();
     choice at Server {
         Ok(String) from Server to Voter within [0;1] using a and resetting ();

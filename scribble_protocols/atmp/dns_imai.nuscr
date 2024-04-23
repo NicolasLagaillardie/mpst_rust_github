@@ -1,4 +1,4 @@
-explicit global protocol Dns(role Client, role Server, role Other)
+explicit timed global protocol Dns(role Client, role Server, role Other)
 {
     query(Addr, Packet) connect Client to Server within [0;1] using a and resetting ();
 

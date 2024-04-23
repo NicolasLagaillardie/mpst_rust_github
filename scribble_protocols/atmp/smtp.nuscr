@@ -1,4 +1,4 @@
-global protocol Smtp(role S, role C)
+timed global protocol Smtp(role S, role C)
 {
     220() from S to C within [0;1] using a and resetting ();
     choice at C // Choice 0

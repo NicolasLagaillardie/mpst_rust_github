@@ -1,4 +1,4 @@
-global protocol HTTP(role Client, role Proxy1, role Proxy2, role Server)
+timed global protocol HTTP(role Client, role Proxy1, role Proxy2, role Server)
 {
     OpenTCPConnection() from Client to Proxy1 within [0;1] using a and resetting ();
     OpenTCPConnection() from Proxy1 to Proxy2 within [0;1] using a and resetting ();

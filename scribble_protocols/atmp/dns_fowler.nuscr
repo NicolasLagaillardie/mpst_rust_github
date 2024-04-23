@@ -1,6 +1,6 @@
 //$ Original protocol
 
-//$ global protocol HandleDNSRequest(role Handler, role Regional) {
+//$ timed global protocol HandleDNSRequest(role Handler, role Regional) {
 //$     rec QueryResolution {
 //$         FindNearestZone(DomainName) from Handler to Regional within [0;1] using a and resetting ();
 //$         choice at Regional {
@@ -15,14 +15,14 @@
 
 //$ }
 
-//$ global protocol GetZoneData(role Handler, role Data) {
+//$ timed global protocol GetZoneData(role Handler, role Data) {
 //$     ZoneDataRequest() from Handler to Data within [0;1] using a and resetting ();
 //$     ZoneDataResponse(RRTree) from Data to Handler within [0;1] using a and resetting ();
 //$ }
 
 //$ Modified protocol
 
-global protocol HandleDNSRequest(role Handler, role Regional, role Data) {
+timed global protocol HandleDNSRequest(role Handler, role Regional, role Data) {
     rec QueryResolution {
         FindNearestZone(DomainName) from Handler to Regional within [0;1] using a and resetting ();
         choice at Regional {

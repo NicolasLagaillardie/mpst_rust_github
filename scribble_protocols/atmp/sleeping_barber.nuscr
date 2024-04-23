@@ -1,4 +1,4 @@
-global protocol SleepingBarber(role barber as B, role selector as S, role room as R) {
+timed global protocol SleepingBarber(role barber as B, role selector as S, role room as R) {
     rec Loop {
         choice at S {
             par {

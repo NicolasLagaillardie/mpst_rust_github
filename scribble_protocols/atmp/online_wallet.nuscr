@@ -1,4 +1,4 @@
-global protocol OnlineWallet(role S, role C, role A) {
+timed global protocol OnlineWallet(role S, role C, role A) {
     login(id: string, pw: string) from C to A within [0;1] using a and resetting ();
     choice  at A {
         login_ok () from A to C within [0;1] using a and resetting ();

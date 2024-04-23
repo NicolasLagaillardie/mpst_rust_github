@@ -399,6 +399,21 @@ name = "test"
 path = "examples/test.rs"
 required-features = ["top_down_nuscr"]
 
+[[example]]
+name = "generated_servo"
+path = "examples/artifact_atmp/generated_files/Servo.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "generated_three_buyers"
+path = "examples/artifact_atmp/generated_files/ThreeBuyers.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "generated_remote_data"
+path = "examples/artifact_atmp/generated_files/RemoteData.rs"
+required-features = ["baking_atmp"]
+
 ################################### Profil
 
 [profile.release]

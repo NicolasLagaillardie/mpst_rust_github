@@ -1,4 +1,4 @@
-global protocol oAuth(role Auth, role Client, role Server) {
+timed global protocol oAuth(role Auth, role Client, role Server) {
     Authorization(Approval) from Client to Auth within [0;1] using a and resetting (); // Request Authorization Approval
     choice at A
     {

@@ -1,4 +1,4 @@
-global protocol Fibonacci(role A, role B)
+timed global protocol Fibonacci(role A, role B)
 {
     rec Fib
     {

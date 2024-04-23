@@ -146,6 +146,16 @@ pub(crate) fn process_line(
                 return Ok(());
             }
 
+            if line.is_empty() {
+                return process_line(
+                    lines_iter,
+                    global_elements,
+                    parent_tree,
+                    main_tree,
+                    bracket_offset,
+                );
+            }
+
             if check_global(&line) && line_number == 0 {
                 let captured_fields = GLOBAL_PROTOCOL.captures(&line).unwrap();
 
@@ -488,8 +498,9 @@ pub(crate) fn process_line(
                         }
                     } else {
                         return Err(format!(
-                            "There is a continue loop without an initialisation. See line: {}",
-                            line_number
+                            "There is a continue loop without an initialisation. See line: {}.\nFaulty line: {}",
+                            line_number,
+                            line
                         )
                         .into());
                     }

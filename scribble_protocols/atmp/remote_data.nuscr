@@ -1,4 +1,4 @@
-global protocol RemoteData(role Sensor, role Satellite, role Server) {
+timed global protocol RemoteData(role Sensor, role Satellite, role Server) {
     rec Loop {
         choice at Server
         {

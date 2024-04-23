@@ -1,4 +1,4 @@
-global protocol Servo(role C, role L, role S)
+timed global protocol Servo(role C, role L, role S)
 {
     GetWebPageLoadState(bool) from C to L within [0;1] using a and resetting ();
     OutstandingWebFonts(bool) from L to C within [0;1] using a and resetting ();

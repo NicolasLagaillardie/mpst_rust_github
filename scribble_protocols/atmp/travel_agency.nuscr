@@ -1,4 +1,4 @@
-global protocol Booking(role C, role A, role S)
+timed global protocol Booking(role C, role A, role S)
 {
     rec Loop {
         choice at C
