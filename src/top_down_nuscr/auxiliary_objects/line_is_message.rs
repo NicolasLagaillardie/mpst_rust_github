@@ -1,4 +1,4 @@
-use super::regex::{
+use super::regex_nuscr::{
     check_message_with_payload, check_message_with_payload_and_resetting_clock,
     check_message_with_resetting_clock, MESSAGE, MESSAGE_WITH_PAYLOAD,
     MESSAGE_WITH_PAYLOAD_AND_RESET, MESSAGE_WITH_RESET,

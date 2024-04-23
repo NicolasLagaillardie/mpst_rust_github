@@ -1,7 +1,7 @@
 use {once_cell::sync::Lazy, regex::Regex};
 
 pub(crate) static GLOBAL_PROTOCOL: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"timed( +)global( +)protocol( +)(?P<name>\w+)\(((role( +)\w+( *),?( *))+)\)( *)\{")
+    Regex::new(r"timed( +)global( +)protocol( +)(?P<name>\w+)\(((role( +)\w+( *),?( *))+)\)( *)\{?")
         .unwrap()
 });
 
@@ -10,7 +10,7 @@ pub(crate) static ROLE: Lazy<Regex> = Lazy::new(|| Regex::new(r"role (?P<name>\w
 pub(crate) static CHOICE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"choice( +)at( +)(?P<choice>\w+)( *)\{?").unwrap());
 
-pub(crate) static OR: Lazy<Regex> = Lazy::new(|| Regex::new(r"\}( *)or( *)\{?").unwrap());
+pub(crate) static OR: Lazy<Regex> = Lazy::new(|| Regex::new(r"\}( *)or( *)\{").unwrap());
 
 pub(crate) static MESSAGE: Lazy<Regex> = Lazy::new(|| {
     Regex::new(r"(?P<message>\w+)\(\w*\)( +)from( +)(?P<sender>\w+)( +)to( +)(?P<receiver>\w+)( +)within( +)(?P<left_bracket>(\[|\]))( *)(?P<left_bound>\d+)( *);( *)(?P<right_bound>\d+)( *)(?P<right_bracket>(\[|\]))( +)using( +)(?P<clock>\w+)( +)and( +)resetting( +)\(\w*\)( *);").unwrap()

@@ -5,7 +5,7 @@ use std::io::{BufReader, Error, Lines};
 use std::collections::HashMap;
 use std::iter::{Enumerate, Map};
 
-use super::{line_is_message::update_messages, regex::*, GlobalElements, Tree};
+use super::{line_is_message::update_messages, regex_nuscr::*, GlobalElements, Tree};
 
 fn init_messages(
     global_elements: &mut GlobalElements,

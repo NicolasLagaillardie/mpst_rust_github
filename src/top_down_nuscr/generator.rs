@@ -13,14 +13,11 @@ use std::collections::{HashMap, HashSet};
 use super::auxiliary_objects::{
     code_generate::*, process_line::process_line, GlobalElements, Tree,
 };
+use super::generate_regular_protocol::check_fsm;
 
 /// Generate endpoints from a nuscr file
 /// with timed global protocol
 pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::error::Error>> {
-    // Open the nuscr file
-    let file = File::open(filepath)?;
-    let reader = BufReader::new(file);
-
     // Global elements
     let mut global_elements = GlobalElements {
         output_path: output_path.to_string(),
@@ -49,7 +46,12 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
         sub_trees: vec![],
     };
 
-    // Iterator over the lines of the input file
+    check_fsm(filepath)?;
+
+    // Generate the Rust file
+    let file = File::open(filepath)?;
+    let reader = BufReader::new(file);
+
     let mut lines_iter = reader
         .lines()
         .enumerate()
