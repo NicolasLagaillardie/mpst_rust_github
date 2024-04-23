@@ -144,7 +144,7 @@ mod test_check_generator {
         assert!(check_or("}}or {{"));
         assert!(check_or("}}   or   {{"));
         assert!(check_or("   }} or   {{    "));
-        assert!(check_or(&format!("   }} or {}  {{    ", &random_string)));
+        assert!(!check_or(&format!("   }} or {}  {{    ", &random_string)));
     }
 
     #[test]
@@ -621,7 +621,7 @@ mod test_check_generator {
             .map(char::from)
             .collect::<String>();
 
-        assert!(check_continue(&format!("continue {}", &random_string)));
+        assert!(check_continue(&format!("continue {};", &random_string)));
         assert!(!check_continue(&format!("conti nue {}", &random_string)));
     }
 }

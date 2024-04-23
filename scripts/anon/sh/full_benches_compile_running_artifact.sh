@@ -12,8 +12,7 @@ date
 cat Cargo.toml > scripts/anon/toml/save_cargo.toml
 
 # Increase the sample size to 100,000
-# find ./benches/ -type f | xargs sed -i 's/10000)/100000)/g'
-find ./benches/ -type f | xargs sed -i 's/100000)/100)/g'
+find ./benches/ -type f | xargs sed -i 's/10000)/100000)/g'
 
 # Updating Cargo.toml
 cat scripts/anon/toml/full_cargo.toml > Cargo.toml

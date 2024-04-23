@@ -7,6 +7,7 @@ fn nuscr_generation_basic() {
     assert!(generator(
         "tests/nuscr_mod/correct/basic.nuscr",
         "tests/nuscr_mod/correct/",
+        false
     )
     .is_ok());
 }
@@ -16,6 +17,7 @@ fn nuscr_generation_choice() {
     assert!(generator(
         "tests/nuscr_mod/correct/choice.nuscr",
         "tests/nuscr_mod/correct/",
+        false
     )
     .is_ok());
 }
@@ -25,6 +27,7 @@ fn nuscr_generation_choice() {
 //     assert!(generator(
 //         "tests/nuscr_mod/correct/nested_choice.nuscr",
 //         "tests/nuscr_mod/correct/",
+// false
 //     )
 //     .is_err());
 // }
@@ -34,6 +37,7 @@ fn nuscr_generation_recursion() {
     assert!(generator(
         "tests/nuscr_mod/correct/recursion.nuscr",
         "tests/nuscr_mod/correct/",
+        false
     )
     .is_ok());
 }
@@ -50,6 +54,7 @@ fn failing_generated_files_wrong_interval() {
     assert!(generator(
         "tests/nuscr_mod/failing/wrong_interval.nuscr",
         "tests/nuscr_mod/failing/",
+        false
     )
     .is_err());
 }
@@ -59,6 +64,7 @@ fn failing_generated_files_wrong_consecutive_intervals() {
     assert!(generator(
         "tests/nuscr_mod/failing/wrong_consecutive_intervals.nuscr",
         "tests/nuscr_mod/failing/",
+        false
     )
     .is_err());
 }

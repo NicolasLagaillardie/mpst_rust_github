@@ -17,7 +17,11 @@ use super::generate_regular_protocol::check_fsm;
 
 /// Generate endpoints from a nuscr file
 /// with timed global protocol
-pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::error::Error>> {
+pub fn generator(
+    filepath: &str,
+    output_path: &str,
+    nuscr_check: bool,
+) -> Result<(), Box<dyn std::error::Error>> {
     // Global elements
     let mut global_elements = GlobalElements {
         output_path: output_path.to_string(),
@@ -46,7 +50,9 @@ pub fn generator(filepath: &str, output_path: &str) -> Result<(), Box<dyn std::e
         sub_trees: vec![],
     };
 
-    check_fsm(filepath)?;
+    if nuscr_check {
+        check_fsm(filepath)?;
+    }
 
     // Generate the Rust file
     let file = File::open(filepath)?;

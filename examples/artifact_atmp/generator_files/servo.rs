@@ -4,6 +4,7 @@ fn main() {
     generator(
         "scribble_protocols/atmp/servo.nuscr",
         "examples/artifact_atmp/generated_files/",
+        true,
     )
     .unwrap();
 }
