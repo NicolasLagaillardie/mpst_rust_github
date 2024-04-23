@@ -806,25 +806,6 @@ name = "test"
 path = "examples/test.rs"
 required-features = ["top_down_nuscr"]
 
-[[example]]
-name = "generator_basic"
-path = "tests/nuscr/correct/BasicCorrect.rs"
-required-features = ["baking_atmp"]
-
-[[example]]
-name = "generator_choice"
-path = "tests/nuscr/correct/ChoiceCorrect.rs"
-required-features = ["baking_atmp"]
-
-# [[example]]
-# name = "generator_nested_choice"
-# path = "tests/nuscr/correct/NestedChoice.rs"
-
-[[example]]
-name = "generator_recursion"
-path = "tests/nuscr/correct/RecursionCorrect.rs"
-required-features = ["baking_atmp"]
-
 ################################### Profil
 
 [profile.release]

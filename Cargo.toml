@@ -168,6 +168,13 @@ name = "readme"
 path = "examples/readme_example.rs"
 required-features = ["mpst"]
 
+################################### Test
+
+[[example]]
+name = "test"
+path = "examples/test.rs"
+required-features = ["top_down_nuscr"]
+
 ################################### Ping-Pong
 
 ######### Ping-Pong start

@@ -20,6 +20,15 @@ fn nuscr_generation_choice() {
     .is_ok());
 }
 
+// #[test]
+// fn nuscr_generation_nested_choice() {
+//     assert!(generator(
+//         "tests/nuscr_mod/correct/nested_choice.nuscr",
+//         "tests/nuscr_mod/correct/",
+//     )
+//     .is_err());
+// }
+
 #[test]
 fn nuscr_generation_recursion() {
     assert!(generator(
