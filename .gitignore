@@ -91,7 +91,6 @@ scripts/curl/
 
 # Do not include push
 push.sh
-scripts/stderr/
 
 tests/nuscr/correct/CorrectBasic.rs
 tests/nuscr/correct/CorrectChoice.rs
