@@ -1,5 +1,3 @@
-#![allow(clippy::type_complexity)]
-
 mod http;
 
 use ntest::timeout;

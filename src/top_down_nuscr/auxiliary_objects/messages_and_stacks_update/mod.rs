@@ -31,13 +31,7 @@ pub(crate) fn messages_and_stacks(
         last_message,
         elts,
     )?;
-    receiver_messages::receiver_messages(
-        &current_index_string,
-        messages,
-        previous_message_wrt_clocks,
-        last_message,
-        elts,
-    )?;
+    receiver_messages::receiver_messages(&current_index_string, messages, last_message, elts)?;
     sender_stacks::sender_stacks(&current_index_string, stacks, last_stack, elts)?;
     receiver_stacks::receiver_stacks(&current_index_string, stacks, last_stack, elts)?;
 

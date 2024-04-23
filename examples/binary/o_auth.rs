@@ -1,5 +1,3 @@
-#![allow(clippy::type_complexity)]
-
 use mpstthree::binary::close::close;
 use mpstthree::binary::fork::fork_with_thread_id;
 use mpstthree::binary::recv::recv;

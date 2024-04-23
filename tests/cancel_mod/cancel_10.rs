@@ -1,3 +1,5 @@
+#![allow(clippy::type_complexity)]
+
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
@@ -96,7 +98,7 @@ type RecursCtoD = Recv<(End, Branching0fromDtoC), End>;
 
 // D
 type Choose0fromDtoA = End;
-type Choose0fromDtoB = Send<(End, Branching0fromDtoB), End>; // TODO: Remove the need of tuple with End
+type Choose0fromDtoB = Send<(End, Branching0fromDtoB), End>;
 type Choose0fromDtoC = Send<(End, Branching0fromDtoC), End>; // which is forwaded to A
 
 // Creating the MP sessions

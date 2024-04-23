@@ -1,5 +1,3 @@
-#![allow(clippy::type_complexity)]
-
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 use mpstthree::generate;

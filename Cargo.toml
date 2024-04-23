@@ -133,9 +133,9 @@ path = "tests/baking_message.rs"
 required-features = ["baking", "checking"]
 
 [[test]]
-name = "main"
-path = "tests/main.rs"
-required-features = []
+name = "nuscr"
+path = "tests/nuscr.rs"
+required-features = ["baking_atmp", "top_down_nuscr"]
 
 ################################### Artifact examples
 
@@ -167,29 +167,6 @@ required-features = ["baking_atmp"]
 name = "readme"
 path = "examples/readme_example.rs"
 required-features = ["mpst"]
-
-################################### Test TODO: To remove
-
-[[example]]
-name = "test"
-path = "examples/test.rs"
-required-features = ["top_down_nuscr"]
-
-[[example]]
-name = "generator_basic"
-path = "tests/generator/BasicCorrect.rs"
-
-[[example]]
-name = "generator_choice"
-path = "tests/generator/ChoiceCorrect.rs"
-
-# [[example]]
-# name = "generator_nested_choice"
-# path = "tests/generator/NestedChoice.rs"
-
-[[example]]
-name = "generator_recursion"
-path = "tests/generator/RecursionCorrect.rs"
 
 ################################### Ping-Pong
 

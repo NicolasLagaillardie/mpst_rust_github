@@ -1,11 +1,10 @@
-use super::{previous_message_wrt_clocks::fn_previous_message_wrt_clocks, MessageParameters};
+use super::MessageParameters;
 use std::collections::HashMap;
 
 /// Update messages for the receiver
 pub(crate) fn receiver_messages(
     current_index_string: &str,
     messages: &mut HashMap<String, HashMap<String, Vec<String>>>,
-    previous_message_wrt_clocks: &mut HashMap<String, HashMap<String, (String, String)>>,
     last_message: &mut HashMap<String, HashMap<String, String>>,
     elts: &MessageParameters,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -44,8 +43,6 @@ pub(crate) fn receiver_messages(
         elts.receiver,
         elts.sender,
     );
-
-    fn_previous_message_wrt_clocks(previous_message_wrt_clocks, elts, &elts.receiver)?;
 
     Ok(())
 }

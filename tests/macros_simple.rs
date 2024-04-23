@@ -1,5 +1,3 @@
-#![allow(clippy::type_complexity)]
-
 mod macros_simple_mod;
 
 #[test]

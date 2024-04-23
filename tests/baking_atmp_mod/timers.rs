@@ -189,9 +189,6 @@ fn authenticator(
                 s.close()
             },
             Branches0AtoD::Video(s) => {
-
-                println!("Here {:?}", all_clocks.get(&'a').unwrap().elapsed().as_millis());
-
                 sleep(Duration::from_secs(1));
                 let (request, s) = s.recv(all_clocks)?;
                 sleep(Duration::from_secs(2));
@@ -201,8 +198,6 @@ fn authenticator(
                 sleep(Duration::from_secs(2));
                 let s = s.send(video + 1, all_clocks)?;
                 sleep(Duration::from_secs(2));
-
-                println!("Here {:?}", all_clocks.get(&'a').unwrap().elapsed().as_millis());
 
                 authenticator_recurs(s, all_clocks)
             },

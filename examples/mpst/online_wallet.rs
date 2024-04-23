@@ -1,5 +1,3 @@
-#![allow(clippy::type_complexity)]
-
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;

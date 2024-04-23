@@ -1,5 +1,3 @@
-#![allow(clippy::type_complexity)]
-
 use ntest::timeout;
 
 mod binary_atmp_mod;

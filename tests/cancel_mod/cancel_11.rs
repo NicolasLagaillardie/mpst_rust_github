@@ -62,7 +62,7 @@ type RecursBtoD = Recv<(End, Branching0fromCtoB), End>;
 
 // D
 type Choose0fromCtoA = End;
-type Choose0fromCtoB = Send<(End, Branching0fromCtoB), End>; // TODO: Remove the need of tuple with an End which is forwaded to A
+type Choose0fromCtoB = Send<(End, Branching0fromCtoB), End>;
 
 // Creating the MP sessions
 type EndpointCentral = MeshedChannels<End, End, RoleEnd, NameA>;

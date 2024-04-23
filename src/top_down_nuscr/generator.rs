@@ -1,6 +1,8 @@
-// #![allow(dead_code, unused_variables, clippy::needless_borrows_for_generic_args)]
-
-//! TODO
+//! This module is focused on the generation
+//! of Rust protocols from *nuscr* protocols.
+//! It is **NOT** a parser,
+//! it needs to have a correctly formatted
+//! *nuscr* protocol.
 
 use std::fs::File;
 

@@ -1,5 +1,3 @@
-#![allow(clippy::type_complexity)]
-
 use std::thread::spawn;
 
 use crossbeam_channel::{bounded, Receiver};

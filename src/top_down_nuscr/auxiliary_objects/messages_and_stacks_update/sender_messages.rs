@@ -45,7 +45,7 @@ pub(crate) fn sender_messages(
         elts.receiver
     );
 
-    fn_previous_message_wrt_clocks(previous_message_wrt_clocks, elts, &elts.sender)?;
+    fn_previous_message_wrt_clocks(previous_message_wrt_clocks, elts)?;
 
     Ok(())
 }

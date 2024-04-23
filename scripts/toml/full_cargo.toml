@@ -132,11 +132,6 @@ name = "baking_message"
 path = "tests/baking_message.rs"
 required-features = ["baking", "checking"]
 
-[[test]]
-name = "main"
-path = "tests/main.rs"
-required-features = []
-
 ################################### Benches
 
 ################################### Ping-Pong

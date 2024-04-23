@@ -93,11 +93,11 @@ scripts/curl/
 push.sh
 scripts/stderr/
 
-tests/generator/CorrectBasic.rs
-tests/generator/CorrectChoice.rs
-tests/generator/CorrectNestedChoice.rs
-tests/generator/CorrectRecursion.rs
-tests/generator/Basic.rs
-tests/generator/Choice.rs
-tests/generator/NestedChoice.rs
-tests/generator/Recursion.rs
+tests/nuscr/correct/CorrectBasic.rs
+tests/nuscr/correct/CorrectChoice.rs
+tests/nuscr/correct/CorrectNestedChoice.rs
+tests/nuscr/correct/CorrectRecursion.rs
+tests/nuscr/correct/Basic.rs
+tests/nuscr/correct/Choice.rs
+tests/nuscr/correct/NestedChoice.rs
+tests/nuscr/correct/Recursion.rs

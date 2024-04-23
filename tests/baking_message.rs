@@ -1,5 +1,3 @@
-#![allow(clippy::type_complexity)]
-
 mod baking_message_mod;
 
 // Tests for baking_mod with more than three participants

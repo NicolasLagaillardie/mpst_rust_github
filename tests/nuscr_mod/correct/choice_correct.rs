@@ -594,7 +594,7 @@ fn endpoint_c_0_0_v_0(
     Ok(())
 }
 
-fn main() {
+pub fn main() {
     let (thread_a, thread_b, thread_c) =
         fork_mpst(endpoint_a_0_v_0, endpoint_b_0_v_0, endpoint_c_0_v_0);
 
