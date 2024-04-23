@@ -455,6 +455,9 @@ protobuf-codegen = "3.4.0"
 protoc-bin-vendored = "3.0.0"
 # Parser for Top-Down
 once_cell = {version = "1.19.0", optional = true}
+Inflector = "0.11.4"
+# Rand
+rand = "0.8.5"
 
 ################################### Dev-dependencies for tests/benches
 
@@ -462,7 +465,6 @@ once_cell = {version = "1.19.0", optional = true}
 criterion = { version = "0.5.1", features = ["html_reports"] }
 trybuild = "1.0.85"
 ntest = "0.9.0"
-rand = "0.8.5"
 
 ################################### Features
 
@@ -474,7 +476,7 @@ macros_simple = ["mpst"]
 macros_multiple = ["mpst", "macros_simple"]
 checking = ["mpst", "regex", "petgraph"]
 baking = ["mpst", "macros_multiple"]
-interleaved = ["baking"] # For interleaved sessions
+interleaved = ["baking"]                                   # For interleaved sessions
 baking_atmp = ["binary_atmp", "mpst"]
 baking_interleaved = ["baking", "interleaved"]
 baking_checking = ["baking", "checking"]
