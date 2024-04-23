@@ -12,7 +12,7 @@ date
 cat Cargo.toml > scripts/anon/toml/save_cargo.toml
 
 # Increase the sample size to 100,000
-find ./benches/ -type f | xargs sed -i 's/100000)/10000)/g'
+find ./benches/ -type f | xargs sed -i 's/100000)/100)/g'
 
 # Updating Cargo.toml
 cat scripts/anon/toml/light_cargo.toml > Cargo.toml
@@ -54,7 +54,7 @@ python3 scripts/anon/python/light/ring_bench.py
 cargo clean
 
 # Reverse sample size
-find ./benches/ -type f | xargs sed -i 's/10000)/100000)/g'
+find ./benches/ -type f | xargs sed -i 's/100)/100000)/g'
 
 # Resetting Cargo.toml
 cat scripts/anon/toml/save_cargo.toml > Cargo.toml

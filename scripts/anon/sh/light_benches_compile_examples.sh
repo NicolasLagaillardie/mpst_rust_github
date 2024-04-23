@@ -9,14 +9,14 @@ set -eou pipefail
 date
 
 ## Compile ampst examples
-bash ./scripts/create_files/compile_normal.sh remote_data_ampst 5 baking
-bash ./scripts/create_files/compile_normal.sh http_ampst 5 baking
-bash ./scripts/create_files/compile_normal.sh pinetime_heart_rate_ampst 5 baking
+bash ./scripts/create_files/compile_normal.sh remote_data_ampst 1 baking
+bash ./scripts/create_files/compile_normal.sh http_ampst 1 baking
+bash ./scripts/create_files/compile_normal.sh pinetime_heart_rate_ampst 1 baking
 
 ## Compile timed examples
-bash ./scripts/create_files/compile_normal.sh remote_data_atmp 5 baking_atmp
-bash ./scripts/create_files/compile_normal.sh http_atmp 5 baking_atmp
-bash ./scripts/create_files/compile_normal.sh pinetime_heart_rate_atmp 5 baking_atmp
+bash ./scripts/create_files/compile_normal.sh remote_data_atmp 1 baking_atmp
+bash ./scripts/create_files/compile_normal.sh http_atmp 1 baking_atmp
+bash ./scripts/create_files/compile_normal.sh pinetime_heart_rate_atmp 1 baking_atmp
 
 ## Run and save benchmarks
 cargo clean
