@@ -12,6 +12,11 @@ pub(crate) fn generate_imports(
             // Generate the imports of necessary crates
             writeln!(
                 generated_file,
+                "#![allow(dead_code, non_camel_case_types, unused_variables)]"
+            )?;
+            writeln!(generated_file)?;
+            writeln!(
+                generated_file,
                 "use mpstthree::binary::struct_trait::end::End;"
             )?;
             writeln!(

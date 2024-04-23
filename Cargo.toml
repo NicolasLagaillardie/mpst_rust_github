@@ -177,19 +177,19 @@ required-features = ["top_down_nuscr"]
 
 [[example]]
 name = "generator_basic"
-path = "tests/generator/Basic.rs"
+path = "tests/generator/BasicCorrect.rs"
 
 [[example]]
 name = "generator_choice"
-path = "tests/generator/Choice.rs"
+path = "tests/generator/ChoiceCorrect.rs"
+
+# [[example]]
+# name = "generator_nested_choice"
+# path = "tests/generator/NestedChoice.rs"
 
 [[example]]
-name = "generator_nested_choice"
-path = "tests/generator/NestedChoice.rs"
-
-[[example]]
-name = "generator_recursive"
-path = "tests/generator/Recursive.rs"
+name = "generator_recursion"
+path = "tests/generator/RecursionCorrect.rs"
 
 ################################### Ping-Pong
 

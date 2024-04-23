@@ -1,3 +1,5 @@
+#![allow(dead_code, non_camel_case_types, unused_variables)]
+
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary_atmp::struct_trait::{recv::RecvTimed, send::SendTimed};
 use mpstthree::generate_atmp;

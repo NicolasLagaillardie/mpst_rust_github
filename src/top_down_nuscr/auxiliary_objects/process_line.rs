@@ -107,18 +107,6 @@ fn init_sub_tree(
     Ok(sub_tree)
 }
 
-// fn update_choice(
-//     lines_iter: &mut Map<
-//         Enumerate<Lines<BufReader<File>>>,
-//         impl FnMut((usize, Result<String, Error>)) -> (usize, String),
-//     >,
-//     global_elements: &mut GlobalElements,
-//     parent_tree: &mut Tree,
-//     main_tree: &mut Tree,
-//     bracket_offset: &mut usize,
-// ) -> Result<(), Box<dyn std::error::Error>> {
-// }
-
 pub(crate) fn process_line(
     lines_iter: &mut Map<
         Enumerate<Lines<BufReader<File>>>,
@@ -163,8 +151,6 @@ pub(crate) fn process_line(
 
                 let name = &captured_fields["name"];
 
-                println!("{:?}", name);
-
                 if global_elements.output.is_none() {
                     global_elements.output = Some(File::create(format!(
                         "{}{}.rs",
@@ -202,7 +188,7 @@ pub(crate) fn process_line(
             } else if !check_global(&line) && line_number > 0 {
                 if check_message(&line) {
                     for (_index, saved_lines) in global_elements.loops.iter_mut() {
-                        saved_lines.push(line.to_string());
+                        saved_lines.1.push(line.to_string());
                     }
 
                     update_messages(
@@ -215,7 +201,7 @@ pub(crate) fn process_line(
                     )?;
                 } else if check_choice(&line) {
                     for (_index, saved_lines) in global_elements.loops.iter_mut() {
-                        saved_lines.push(line.to_string());
+                        saved_lines.1.push(line.to_string());
                     }
 
                     let captured_fields = CHOICE.captures(&line).unwrap();
@@ -370,19 +356,27 @@ pub(crate) fn process_line(
 
                     parent_tree.sub_trees.push(sub_tree);
                 } else if check_rec(&line) {
+                    let current_index_string = main_tree
+                        .index
+                        .iter()
+                        .map(|&id| id.to_string())
+                        .collect::<Vec<_>>()
+                        .join("_");
+
                     let captured_fields = REC.captures(&line).unwrap();
 
-                    global_elements
-                        .loops
-                        .insert(captured_fields["loop"].to_string(), vec![]);
+                    global_elements.loops.insert(
+                        captured_fields["loop"].to_string(),
+                        (current_index_string.to_string(), vec![]),
+                    );
 
                     for (_index, saved_lines) in global_elements.loops.iter_mut() {
-                        saved_lines.push(line.to_string());
+                        saved_lines.1.push(line.to_string());
                     }
                 } else if check_continue(&line) {
                     let captured_fields = CONTINUE.captures(&line).unwrap();
 
-                    if let Some(looping_messages) = global_elements
+                    if let Some((index, looping_messages)) = global_elements
                         .loops
                         .get_mut(&(captured_fields["loop"].to_string()))
                     {
@@ -407,13 +401,6 @@ pub(crate) fn process_line(
 
                                 let sender = &captured_fields["choice"];
 
-                                let previous_index_string = parent_tree
-                                    .index
-                                    .iter()
-                                    .map(|&id| id.to_string())
-                                    .collect::<Vec<_>>()
-                                    .join("_");
-
                                 for receiver in global_elements.roles.iter() {
                                     if receiver != sender {
                                         // The sender must send the choice to each other role (receiver)
@@ -432,7 +419,7 @@ pub(crate) fn process_line(
                                             format!(
                                                 "type {} = SendTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
                                                 last_messages_sender,
-                                                previous_index_string,
+                                                index,
                                                 sender,
                                                 receiver,
                                             )
@@ -456,7 +443,7 @@ pub(crate) fn process_line(
                                             format!(
                                                 "type {} = RecvTimed<Choice_{}_From{}To{}, ' ', -2, false, -1, false, ' ', End>;",
                                                 last_messages_receiver,
-                                                previous_index_string,
+                                                index,
                                                 sender,
                                                 receiver,
                                             )

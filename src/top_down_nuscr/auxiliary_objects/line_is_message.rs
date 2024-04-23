@@ -1,5 +1,3 @@
-#![warn(clippy::too_many_arguments)]
-
 use super::regex::{
     check_message_with_payload, check_message_with_payload_and_resetting_clock,
     check_message_with_resetting_clock, MESSAGE, MESSAGE_WITH_PAYLOAD,

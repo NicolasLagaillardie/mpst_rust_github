@@ -12,10 +12,7 @@ pub(crate) mod sender_stacks;
 pub(crate) fn messages_and_stacks(
     index: &[i32],
     messages: &mut HashMap<String, HashMap<String, Vec<String>>>,
-    previous_message_wrt_clocks: &mut HashMap<
-        String,
-        HashMap<String, (String, String, String, String)>,
-    >,
+    previous_message_wrt_clocks: &mut HashMap<String, HashMap<String, (String, String)>>,
     last_message: &mut HashMap<String, HashMap<String, String>>,
     stacks: &mut HashMap<String, Vec<String>>,
     last_stack: &mut HashMap<String, String>,
