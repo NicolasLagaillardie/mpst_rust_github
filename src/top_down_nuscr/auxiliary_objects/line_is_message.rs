@@ -4,7 +4,10 @@ use super::regex_nuscr::{
     MESSAGE_WITH_PAYLOAD_AND_RESET, MESSAGE_WITH_RESET,
 };
 use super::{messages_and_stacks_update::messages_and_stacks, MessageParameters, Tree};
+
 use std::collections::{HashMap, HashSet};
+
+use inflector::Inflector;
 
 /// Check when the current line is a message
 pub(crate) fn update_messages(
@@ -73,7 +76,11 @@ pub(crate) fn update_messages(
     let mut message_parameters = MessageParameters {
         sender: sender.to_string(),
         receiver: receiver.to_string(),
-        message: message.to_string(),
+        message: message
+            .to_title_case()
+            .chars()
+            .filter(|c| !c.is_whitespace())
+            .collect::<String>(),
         clock: clock.to_string(),
         left_bound: left_bound.to_string(),
         left_bracket: left_bracket.to_string(),

@@ -1,4 +1,4 @@
-timed global protocol ThreeBuyer(role A, role C, role S) {
+timed global protocol ThreeBuyers(role A, role C, role S) {
     empty1(int) from A to S within [0;1] using a and resetting ();
     empty2(int) from S to A within [0;1] using a and resetting ();
     empty3(int) from S to C within [0;1] using a and resetting ();

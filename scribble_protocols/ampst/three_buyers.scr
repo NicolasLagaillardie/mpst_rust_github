@@ -1,4 +1,4 @@
-global protocol ThreeBuyer(role A, role C, role S)
+global protocol ThreeBuyers(role A, role C, role S)
 {
     empty1(int) from A to S;
     empty2(int) from S to A;
