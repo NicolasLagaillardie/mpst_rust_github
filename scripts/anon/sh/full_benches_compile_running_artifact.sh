@@ -28,7 +28,7 @@ cargo clean
 bash ./scripts/anon/sh/full_benches_compile_examples.sh
 
 # Create graph for the compile and run benchmarks for the example protocols
-python3 scripts/anon/python/full/examples_extra_literature_affine_atmp_check_build_release_atmp_ampst.py
+python3 scripts/anon/python/full/examples_extra_literature_check_build_release_atmp_ampst.py
 
 cargo clean
 

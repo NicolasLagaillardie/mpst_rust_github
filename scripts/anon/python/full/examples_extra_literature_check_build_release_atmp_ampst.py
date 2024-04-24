@@ -77,8 +77,8 @@ reverse_translate = {}
 
 for key, value in index_compile.items():
     if 'atmp' in key:
-        translate['Timed ' + bench_files[value]] = key
-        reverse_translate[key] = 'Timed ' + bench_files[value]
+        translate['ATMP ' + bench_files[value]] = key
+        reverse_translate[key] = 'ATMP ' + bench_files[value]
     elif 'ampst' in key:
         translate[bench_files[value] + ' AMPST'] = key
         reverse_translate[key] = bench_files[value] + ' AMPST'
