@@ -23,4 +23,4 @@ include = [
 [dependencies]
 proc-macro-hack = "0.5"
 # mpst-seq-proc = { path = "../mpst_seq_proc" }
-mpst-seq-proc = "0.1.14"
+mpst-seq-proc = "0.1.13"
