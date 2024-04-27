@@ -9,18 +9,3 @@ homepage = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/
 repository = "https://github.com/NicolasLagaillardie/mpst_rust_github/tree/master/mpst_seq/"
 license = "MIT OR Apache-2.0"
 autotests = false
-include = [
-    "/benches/**",
-    "/build.rs",
-    "/Cargo.toml",
-    "/LICENSE-APACHE",
-    "/LICENSE-MIT",
-    "/README.md",
-    "/src/**",
-    "/tests/**",
-]
-
-[dependencies]
-proc-macro-hack = "0.5"
-# mpst-seq-proc = { path = "../mpst_seq_proc" }
-mpst-seq-proc = "0.1.13"
