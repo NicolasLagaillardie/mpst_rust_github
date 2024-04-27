@@ -217,8 +217,8 @@ debug = true
 ################################### Dependencies
 
 [dependencies]
-mpst-seq-proc = { path = "mpst_seq_proc" }
-# mpst-seq-proc = "0.1"
+# mpst-seq-proc = { path = "mpst_seq_proc" }
+mpst-seq-proc = "0.1.14"
 crossbeam-channel = "0.5.12"
 either = "1.11.0"
 # For HTTP
