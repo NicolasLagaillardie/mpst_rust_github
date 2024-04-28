@@ -1,6 +1,6 @@
 [package]
 name = "mpstthree"
-version = "0.1.17"
+version = "0.1.18"
 authors = ["NicolasLagaillardie <nicolas.lagaillardie@tutanota.com>"]
 edition = "2021"
 rust-version = "1.77"
@@ -217,8 +217,8 @@ debug = true
 ################################### Dependencies
 
 [dependencies]
-# mpst-seq-proc = { path = "mpst_seq_proc" }
-mpst-seq-proc = "0.1.14"
+mpst-seq-proc = { path = "mpst_seq_proc" }
+# mpst-seq-proc = "0.1.14"
 crossbeam-channel = "0.5.12"
 either = "1.11.0"
 # For HTTP
