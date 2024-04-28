@@ -14,7 +14,7 @@ pub(crate) fn branching_variants(input: syn::Item) -> Result<(), syn::Error> {
                 let next_lex_i = names.binary_search(&name).unwrap_err();
                 return Err(syn::Error::new(
                     variant.span(),
-                    format!("{} should sort before {}", name, names[next_lex_i]),
+                    format!("{name} should sort before {}", names[next_lex_i]),
                 ));
             }
             names.push(name);

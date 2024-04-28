@@ -1,5 +1,3 @@
-#![allow(clippy::type_complexity)]
-
 mod checking_mod;
 mod graph_mod;
 

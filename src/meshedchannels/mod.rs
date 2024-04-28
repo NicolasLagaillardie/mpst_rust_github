@@ -1,5 +1,3 @@
-#![cfg(feature = "meshedchannels")]
-
 //! The main structure used for representing a participant,
 //! also named a party, within a protocol.
 //!
@@ -9,17 +7,19 @@
 //! - **session2**: contains the second binary session type, which links the participant to the
 //!   second participant in the alphanumerical order. It contains [`Session`].
 //! - **stack**: contains the ordering of the interactions between the participant and the others.
-//!   It contains [`Role`].
-//! - **name**: contains the name of the participant. It should look like `RoleA<RoleEnd>` or
-//!   `RoleB<RoleEnd>`.
+//!   It contains a [`Role`].
+//! - **name**: contains the name of the participant. It should look like `NameA` or `NameB`. It
+//!   contains a [`Name`].
 //!
 //! [`Session`]: crate::binary::struct_trait::session::Session
 //! [`Role`]: crate::role::Role
+//! [`Role`]: crate::name::Name
 
 use crate::binary::struct_trait::session::Session;
+use crate::name::Name;
 use crate::role::Role;
 
-use std::mem::drop;
+// use std::mem::drop;
 
 pub mod impl_a;
 pub mod impl_b;
@@ -50,15 +50,15 @@ pub mod impl_c;
 /// # Example
 ///
 /// ```
-/// use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
+/// use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 ///
 /// use mpstthree::meshedchannels::MeshedChannels;
 ///
-/// use mpstthree::binary::struct_trait::session::Session; // Only used for example
-/// use mpstthree::role::a::RoleA;
 /// use mpstthree::role::b::RoleB;
 /// use mpstthree::role::c::RoleC;
 /// use mpstthree::role::end::RoleEnd;
+///
+/// use mpstthree::name::a::NameA;
 ///
 /// // Creating the binary sessions
 /// type AtoB<N> = Send<N, End>;
@@ -68,7 +68,7 @@ pub mod impl_c;
 /// type StackA = RoleB<RoleC<RoleEnd>>;
 ///
 /// // Creating the MP sessions
-/// type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+/// type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
 ///
 /// let _ = EndpointA::<i32>::new(); // Only used for example
 /// ```
@@ -79,7 +79,7 @@ where
     S1: Session,
     S2: Session,
     R: Role,
-    N: Role,
+    N: Name,
 {
     #[doc(hidden)]
     pub session1: S1,
@@ -91,22 +91,16 @@ where
     pub name: N,
 }
 
-#[doc(hidden)]
-impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, S2, R, N> {
-    type Dual = MeshedChannels<
-        <S1 as Session>::Dual,
-        <S2 as Session>::Dual,
-        <R as Role>::Dual,
-        <N as Role>::Dual,
-    >;
+impl<S1: Session, S2: Session, R: Role, N: Name> Session for MeshedChannels<S1, S2, R, N> {
+    type Dual = MeshedChannels<<S1 as Session>::Dual, <S2 as Session>::Dual, <R as Role>::Dual, N>;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender_one, receiver_one) = S1::new();
         let (sender_two, receiver_two) = S2::new();
 
         let (role_one, role_two) = R::new();
-        let (name_one, name_two) = N::new();
+        let (name_one, _) = N::new();
+        let (name_two, _) = N::new();
 
         (
             MeshedChannels {
@@ -124,18 +118,16 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
         )
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         format!(
             "{}\n{}\n{}\n{}",
             <S1 as Session>::head_str(),
             <S2 as Session>::head_str(),
             <R as Role>::head_str(),
-            <N as Role>::head_str()
+            <N as Name>::head_str()
         )
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         format!(
             "{}<{}>\n{}<{}>\n{}<{}>\n{}<{}>",
@@ -145,23 +137,21 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
             <S2 as Session>::tail_str(),
             <R as Role>::head_str(),
             <R as Role>::tail_str(),
-            <N as Role>::head_str(),
-            <N as Role>::tail_str(),
+            <N as Name>::head_str(),
+            <N as Name>::tail_str(),
         )
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         format!(
             "{}\n{}\n{}\n{}",
             <S1 as Session>::head_str(),
             <S2 as Session>::head_str(),
             <R as Role>::head_str(),
-            <N as Role>::head_str()
+            <N as Name>::head_str()
         )
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         format!(
             "{}<{}>\n{}<{}>\n{}<{}>\n{}<{}>",
@@ -171,21 +161,13 @@ impl<S1: Session, S2: Session, R: Role, N: Role> Session for MeshedChannels<S1, 
             <S2 as Session>::tail_str(),
             <R as Role>::head_str(),
             <R as Role>::tail_str(),
-            <N as Role>::head_str(),
-            <N as Role>::tail_str(),
+            <N as Name>::head_str(),
+            <N as Name>::tail_str(),
         )
     }
 }
 
-#[doc(hidden)]
-impl<S1: Session, S2: Session, R: Role, N: Role> MeshedChannels<S1, S2, R, N> {
-    #[doc(hidden)]
-    pub fn field_names(self) -> (&'static [&'static str], MeshedChannels<S1, S2, R, N>) {
-        (&["session1", "session2"], self)
-    }
-}
-
-impl<S1: Session, S2: Session, R: Role, N: Role> MeshedChannels<S1, S2, R, N> {
+impl<S1: Session, S2: Session, R: Role, N: Name> MeshedChannels<S1, S2, R, N> {
     /// Cancel the session
     pub fn cancel(self) {
         drop(self);

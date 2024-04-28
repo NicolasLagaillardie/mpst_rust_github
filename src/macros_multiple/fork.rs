@@ -31,6 +31,6 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! fork_mpst_multi {
     ($func_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
-        mpst_seq::fork_mpst_multi!($func_name, $meshedchannels_name, $n_sessions);
+        mpst_seq_proc::fork_mpst_multi!($func_name, $meshedchannels_name, $n_sessions);
     };
 }

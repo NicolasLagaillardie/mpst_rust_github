@@ -3,7 +3,9 @@
 # clean all workspace
 
 # Exit if error
-set -e
+set -eou pipefail
+
+cargo clean
 
 for d in *; do
   if [ -d "$d" ]; then         # or:  if test -d "$d"; then

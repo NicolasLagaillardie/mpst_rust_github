@@ -28,7 +28,7 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_type_multi {
     ($type_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
-        mpst_seq::create_choose_type_multi!($type_name, $meshedchannels_name, $n_sessions);
+        mpst_seq_proc::create_choose_type_multi!($type_name, $meshedchannels_name, $n_sessions);
     };
 }
 
@@ -51,11 +51,13 @@ macro_rules! create_choose_type_multi {
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_choose_mpst_session_multi_left, create_choose_type_multi,
-///     create_meshedchannels, create_normal_role,
+///     create_meshedchannels, create_normal_name, create_normal_role,
 /// };
 ///
 /// create_normal_role!(RoleD, RoleDDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
+///
+/// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 /// create_choose_type_multi!(ChooseMpstThree, MeshedChannels, 3);
@@ -64,7 +66,7 @@ macro_rules! create_choose_type_multi {
 ///     choose_left_mpst_session_d_to_all,
 ///     ChooseMpstThree,
 ///     RoleDtoAll,
-///     RoleD,
+///     NameD,
 ///     MeshedChannels,
 ///     3
 /// );
@@ -83,7 +85,7 @@ macro_rules! create_choose_mpst_session_multi_left {
         $meshedchannels_name:ident,
         $n_sessions:literal
     ) => {
-        mpst_seq::create_choose_mpst_session_multi_left!(
+        mpst_seq_proc::create_choose_mpst_session_multi_left!(
             $func_name,
             $type_name,
             $role_dual,
@@ -113,11 +115,13 @@ macro_rules! create_choose_mpst_session_multi_left {
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_choose_mpst_session_multi_right, create_choose_type_multi,
-///     create_meshedchannels, create_normal_role,
+///     create_meshedchannels, create_normal_name, create_normal_role,
 /// };
 ///
 /// create_normal_role!(RoleD, RoleDDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
+///
+/// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 /// create_choose_type_multi!(ChooseMpstThree, MeshedChannels, 3);
@@ -126,7 +130,7 @@ macro_rules! create_choose_mpst_session_multi_left {
 ///     choose_right_mpst_session_d_to_all,
 ///     ChooseMpstThree,
 ///     RoleDtoAll,
-///     RoleD,
+///     NameD,
 ///     MeshedChannels,
 ///     3
 /// );
@@ -145,7 +149,7 @@ macro_rules! create_choose_mpst_session_multi_right {
         $meshedchannels_name:ident,
         $n_sessions:literal
     ) => {
-        mpst_seq::create_choose_mpst_session_multi_right!(
+        mpst_seq_proc::create_choose_mpst_session_multi_right!(
             $func_name,
             $type_name,
             $role_dual,
@@ -176,11 +180,13 @@ macro_rules! create_choose_mpst_session_multi_right {
 /// ```
 /// use mpstthree::{
 ///     create_broadcast_role, create_choose_mpst_session_multi_both, create_choose_type_multi,
-///     create_meshedchannels, create_normal_role,
+///     create_meshedchannels, create_normal_name, create_normal_role,
 /// };
 ///
 /// create_normal_role!(RoleD, RoleDDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
+///
+/// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 /// create_choose_type_multi!(ChooseMpstThree, MeshedChannels, 3);
@@ -190,7 +196,7 @@ macro_rules! create_choose_mpst_session_multi_right {
 ///     choose_right_mpst_session_d_to_all,
 ///     ChooseMpstThree,
 ///     RoleDtoAll,
-///     RoleD,
+///     NameD,
 ///     MeshedChannels,
 ///     3
 /// );
@@ -253,9 +259,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///            s,
 ///            CBranchesAtoC::Video,
 ///            CBranchesBtoC::Video, =>
-///            RoleA,
-///            RoleB, =>
-///            RoleD,
+///            NameD,
 ///            MeshedChannels,
 ///            3
 ///        );
@@ -263,14 +267,13 @@ macro_rules! create_choose_mpst_session_multi_both {
 ///        let (_, s) = recv_mpst_d_from_a(s)?;
 ///        client_recurs(s, xs, index + 1)
 ///    }
+
 ///    Option::None => {
 ///        let s = choose_mpst_multi_to_all!(
 ///            s,
 ///            CBranchesAtoC::End,
 ///            CBranchesBtoC::End, =>
-///            RoleA,
-///            RoleB, =>
-///            RoleD,
+///            NameD,
 ///            MeshedChannels,
 ///            3
 ///        );
@@ -287,15 +290,13 @@ macro_rules! choose_mpst_multi_to_all {
     (
         $session: expr,
         $( $label: path , )+ =>
-        $( $receiver: ident , )+ =>
         $sender: ident,
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::choose_mpst_multi_to_all!(
+        mpst_seq_proc::choose_mpst_multi_to_all!(
             $session ,
-            ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
+            ( $( ( $label ) )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion
@@ -320,8 +321,8 @@ macro_rules! choose_mpst_multi_to_all {
 /// ```ignore
 /// choose_mpst_create_multi_to_all!(
 ///     choose_mpst_client_to_all,
-///     RoleA, RoleB, =>
-///     RoleD, MeshedChannels,
+///     NameA, NameB, =>
+///     NameD, MeshedChannels,
 ///     3
 /// );
 ///
@@ -337,6 +338,7 @@ macro_rules! choose_mpst_multi_to_all {
 ///
 ///         client_recurs(s, xs, index + 1)
 ///     }
+
 ///     Option::None => {
 ///         let s = choose_mpst_client_to_all!(
 ///             s,
@@ -358,21 +360,14 @@ macro_rules! choose_mpst_multi_to_all {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! choose_mpst_create_multi_to_all {
-    (
-        $name: expr,
-        $( $receiver: ident , )+ =>
-        $sender: ident,
-        $meshedchannels_name: ident,
-        $exclusion: literal
-    ) => {
-        mpst_seq::choose_mpst_create_multi_to_all!(
-            $name ,
-            ( $( $receiver , )+ ) ,
-            $sender ,
-            $meshedchannels_name ,
+    ($name:expr, $sender:ident, $meshedchannels_name:ident, $exclusion:literal) => {
+        mpst_seq_proc::choose_mpst_create_multi_to_all!(
+            $name,
+            $sender,
+            $meshedchannels_name,
             $exclusion
         );
-    }
+    };
 }
 
 /// Choose among different sessions that are provided,
@@ -398,9 +393,9 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///        let s = choose_mpst_multi_cancel_to_all!(
 ///            s,
 ///            CBranchesBtoC::Video, =>
-///            RoleA,
-///            RoleB, =>
-///            RoleD,
+///            NameA,
+///            NameB, =>
+///            NameD,
 ///            MeshedChannels,
 ///            3
 ///        );
@@ -408,13 +403,14 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///        let (_, s) = recv_mpst_d_from_a(s)?;
 ///        client_recurs(s, xs, index + 1)
 ///    }
+
 ///    Option::None => {
 ///        let s = choose_mpst_multi_cancel_to_all!(
 ///            s,
 ///            CBranchesBtoC::End, =>
-///            RoleA,
-///            RoleB, =>
-///            RoleD,
+///            NameA,
+///            NameB, =>
+///            NameD,
 ///            MeshedChannels,
 ///            3
 ///        );
@@ -426,14 +422,20 @@ macro_rules! choose_mpst_create_multi_to_all {
 /// # Compile fail
 ///
 /// Available on the *cancel/cancel_8* test.
-///
 /// ```compile_fail
-/// use mpstthree::{create_multiple_normal_role, choose_mpst_multi_cancel_to_all};
+/// use mpstthree::{create_multiple_normal_role, choose_mpst_multi_cancel_to_all,
+/// create_multiple_normal_name};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
+/// );
+///
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameD
 /// );
 ///
 /// bundle_struct_fork_close_multi!(close_mpst, fork_mpst, MeshedChannels, 3);
@@ -444,22 +446,23 @@ macro_rules! choose_mpst_create_multi_to_all {
 ///            s,
 ///            CBranchesAtoC::Video,
 ///            CBranchesBtoC::Video, =>
-///            RoleA,
-///            RoleB, =>
-///            RoleD,
+///            NameA,
+///            NameB, =>
+///            NameD,
 ///            MeshedChannels,
 ///            3
 ///        );
 ///        client_recurs(s, xs, index + 1)
 ///    }
+
 ///    Option::None => {
 ///        let s = choose_mpst_multi_cancel_to_all!(
 ///            s,
 ///            CBranchesAtoC::End,
 ///            CBranchesBtoC::End, =>
-///            RoleA,
-///            RoleB, =>
-///            RoleD,
+///            NameA,
+///            NameB, =>
+///            NameD,
 ///            MeshedChannels,
 ///            3
 ///        );
@@ -482,10 +485,10 @@ macro_rules! choose_mpst_multi_cancel_to_all {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::choose_mpst_multi_cancel_to_all!(
+        mpst_seq_proc::choose_mpst_multi_cancel_to_all!(
             $session ,
-            ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
+            ( $( ( $label ) )+ ) ,
+            ( $( ( $receiver ) )+ ) ,
             $broadcaster ,
             $sender ,
             $meshedchannels_name ,
@@ -512,8 +515,8 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 /// Available on the *long_simple_three_mpst_short* examples.
 ///
 /// ```ignore
-/// type EndpointDoneC = MeshedChannelsThree<End, End, RoleEnd, NameC>;
-/// type EndpointMoreC = MeshedChannelsThree<
+/// type EndpointDoneC = MeshedChannels<End, End, RoleEnd, NameC>;
+/// type EndpointMoreC = MeshedChannels<
 ///     Send<(), Recv<(), Choose0fromCtoA>>,
 ///     Send<(), Recv<(), Choose0fromCtoB>>,
 ///     R2A<R2B<RoleA<RoleB<RoleEnd>>>>,
@@ -524,8 +527,8 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 ///     Done, More, =>
 ///     EndpointDoneC, EndpointMoreC, =>
 ///     Branching0fromCtoA, Branching0fromCtoB, =>
-///     RoleA, RoleB, =>
-///     RoleC, MeshedChannelsThree, 3
+///     NameA, NameB, =>
+///     NameC, MeshedChannels, 3
 /// );
 /// ```
 ///
@@ -544,12 +547,12 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::create_fn_choose_mpst_multi_to_all_bundle!(
-            ( $( $fn_name , )+ ) ,
-            ( $( $branch , )+ ) ,
-            ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
-            ( $( $new_type , )+ ) ,
+        mpst_seq_proc::create_fn_choose_mpst_multi_to_all_bundle!(
+            ( $( ( $fn_name ) )+ ) ,
+            ( $( ( $branch ) )+ ) ,
+            ( $( ( $label ) )+ ) ,
+            ( $( ( $receiver ) )+ ) ,
+            ( $( ( $new_type ) )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion
@@ -576,8 +579,8 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 /// Available on the *long_simple_three_mpst_short* examples.
 ///
 /// ```ignore
-/// type EndpointDoneC = MeshedChannelsThree<End, End, RoleEnd, NameC>;
-/// type EndpointMoreC = MeshedChannelsThree<
+/// type EndpointDoneC = MeshedChannels<End, End, RoleEnd, NameC>;
+/// type EndpointMoreC = MeshedChannels<
 ///     End,
 ///     Send<(), Recv<(), Choose0fromCtoB>>,
 ///     R2A<R2B<RoleB<RoleEnd>>>,
@@ -588,8 +591,8 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 ///     Done, More, =>
 ///     EndpointDoneC, EndpointMoreC, =>
 ///     Branching0fromCtoA, Branching0fromCtoB, =>
-///     RoleB, =>
-///     RoleA, RoleC, MeshedChannelsThree, 3
+///     NameB, =>
+///     NameA, NameC, MeshedChannels, 3
 /// );
 /// ```
 ///
@@ -609,12 +612,12 @@ macro_rules! create_fn_choose_mpst_cancel_multi_to_all_bundle {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::create_fn_choose_mpst_cancel_multi_to_all_bundle!(
-            ( $( $fn_name , )+ ) ,
-            ( $( $branch , )+ ) ,
-            ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
-            ( $( $new_type , )+ ) ,
+        mpst_seq_proc::create_fn_choose_mpst_cancel_multi_to_all_bundle!(
+            ( $( ( $fn_name ) )+ ) ,
+            ( $( ( $branch ) )+ ) ,
+            ( $( ( $label ) )+ ) ,
+            ( $( ( $receiver ) )+ ) ,
+            ( $( ( $new_type ) )+ ) ,
             $sender ,
             $broadcaster ,
             $meshedchannels_name ,

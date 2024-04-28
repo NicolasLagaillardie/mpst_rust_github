@@ -1,10 +1,15 @@
+#![allow(dead_code, clippy::type_complexity)]
+
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary::struct_trait::recv::Recv;
 use mpstthree::binary::struct_trait::send::Send;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_role};
+use mpstthree::{
+    checker_concat, checker_concat_impl, create_meshedchannels, create_multiple_normal_name,
+    create_multiple_normal_role,
+};
 
 use petgraph::dot::Dot;
 
@@ -20,17 +25,15 @@ create_multiple_normal_role!(
     RoleC, RoleCDual |
 );
 
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameC);
+
 // The new types
 
 struct Haggle;
 struct Price;
 struct Happy;
 struct Info;
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
 
 // Types
 
@@ -84,6 +87,12 @@ type EndpointBFull = MeshedChannels<Recurs0BfromA, End, RoleA<RoleEnd>, NameB>;
 type EndpointCFull = MeshedChannels<Recurs0CfromA, End, RoleA<RoleEnd>, NameC>;
 
 /////////////////////////////////////////
+
+checker_concat_impl!(
+    [Branches0BfromA, Happy, Branches0CfromA, Happy],
+    [Branches0BfromA, Haggle, Branches0CfromA, Haggle],
+    [Branches0BfromA, End, Branches0CfromA, End]
+);
 
 pub fn main() {
     let (graphs, kmc) = checker_concat!(

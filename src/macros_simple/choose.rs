@@ -16,9 +16,9 @@ macro_rules! create_choose_from_1_to_2_3 {
         $role_1:ty,
         $role_2:ty,
         $role_3:ty,
-        $receiver_1:ident,
-        $receiver_2:ident,
-        $sender:ident,
+        $name_receiver_1:ident,
+        $name_receiver_2:ident,
+        $name_sender:ident,
         $session:expr,
         $pat:path
     ) => {{
@@ -31,11 +31,9 @@ macro_rules! create_choose_from_1_to_2_3 {
         let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
-        let (name_1, _) =
-            <$receiver_1<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
-        let (name_2, _) =
-            <$receiver_2<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
-        let (name_3, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+        let (name_1, _) = <$name_receiver_1 as mpstthree::name::Name>::new();
+        let (name_2, _) = <$name_receiver_2 as mpstthree::name::Name>::new();
+        let (name_3, _) = <$name_sender as mpstthree::name::Name>::new();
 
         let choice_1 = mpstthree::meshedchannels::MeshedChannels {
             session1: session_2_1,
@@ -82,9 +80,9 @@ macro_rules! create_choose_from_2_to_1_3 {
         $role_1:ty,
         $role_2:ty,
         $role_3:ty,
-        $receiver_1:ident,
-        $receiver_2:ident,
-        $sender:ident,
+        $name_receiver_1:ident,
+        $name_receiver_2:ident,
+        $name_sender:ident,
         $session:expr,
         $pat:path
     ) => {{
@@ -97,11 +95,9 @@ macro_rules! create_choose_from_2_to_1_3 {
         let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
-        let (name_1, _) =
-            <$receiver_1<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
-        let (name_2, _) =
-            <$receiver_2<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
-        let (name_3, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+        let (name_1, _) = <$name_receiver_1 as mpstthree::name::Name>::new();
+        let (name_2, _) = <$name_receiver_2 as mpstthree::name::Name>::new();
+        let (name_3, _) = <$name_sender as mpstthree::name::Name>::new();
 
         let choice_1 = mpstthree::meshedchannels::MeshedChannels {
             session1: session_1_2,
@@ -148,9 +144,9 @@ macro_rules! create_choose_from_3_to_1_2 {
         $role_1:ty,
         $role_2:ty,
         $role_3:ty,
-        $receiver_1:ident,
-        $receiver_2:ident,
-        $sender:ident,
+        $name_receiver_1:ident,
+        $name_receiver_2:ident,
+        $name_sender:ident,
         $session:expr,
         $pat:path
     ) => {{
@@ -163,11 +159,9 @@ macro_rules! create_choose_from_3_to_1_2 {
         let (_, role_1) = <$role_1 as mpstthree::role::Role>::new();
         let (_, role_2) = <$role_2 as mpstthree::role::Role>::new();
         let (role_3, _) = <$role_3 as mpstthree::role::Role>::new();
-        let (name_1, _) =
-            <$receiver_1<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
-        let (name_2, _) =
-            <$receiver_2<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::Dual::new();
-        let (name_3, _) = <$sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+        let (name_1, _) = <$name_receiver_1 as mpstthree::name::Name>::new();
+        let (name_2, _) = <$name_receiver_2 as mpstthree::name::Name>::new();
+        let (name_3, _) = <$name_sender as mpstthree::name::Name>::new();
 
         let choice_1 = mpstthree::meshedchannels::MeshedChannels {
             session1: session_1_2,
@@ -222,10 +216,9 @@ macro_rules! create_choose_from_3_to_1_2 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_right_from_3_to_1_and_2
+///     create_choose_right_from_3_to_1_and_2, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -234,14 +227,20 @@ macro_rules! create_choose_from_3_to_1_2 {
 ///     RoleC, RoleCDual |
 /// );
 ///
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
+///
 /// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 ///
 /// create_choose_right_from_3_to_1_and_2!(
 ///     choose_right_mpst_session_c_to_all,
-///     RoleADual,
-///     RoleBDual,
+///     NameA,
+///     NameB,
 ///     RoleCtoAll,
-///     RoleC
+///     NameC
 /// );
 /// ```
 ///
@@ -252,18 +251,16 @@ macro_rules! create_choose_from_3_to_1_2 {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_right_from_3_to_1_and_2 {
-    ($func_name:ident, $dual_1:ident, $dual_2:ident, $role_broadcast:ident, $sender:ident) => {
+    (
+        $func_name:ident,
+        $name_receiver_1:ident,
+        $name_receiver_2:ident,
+        $role_broadcast:ident,
+        $name_sender:ident
+    ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
-                mpstthree::functionmpst::ChooseMpst<
-                    S0,
-                    S2,
-                    S1,
-                    S4,
-                    R0,
-                    R1,
-                    $dual_1<mpstthree::role::end::RoleEnd>,
-                >,
+                mpstthree::functionmpst::ChooseMpst<S0, S2, S1, S4, R0, R1, $name_receiver_1>,
                 mpstthree::functionmpst::ChooseMpst<
                     <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S3,
@@ -271,17 +268,12 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
                     S5,
                     R2,
                     R3,
-                    $dual_2<mpstthree::role::end::RoleEnd>,
+                    $name_receiver_2,
                 >,
                 $role_broadcast<R4, R5>,
-                $sender<mpstthree::role::end::RoleEnd>,
+                $name_sender,
             >,
-        ) -> mpstthree::meshedchannels::MeshedChannels<
-            S4,
-            S5,
-            R5,
-            $sender<mpstthree::role::end::RoleEnd>,
-        >
+        ) -> mpstthree::meshedchannels::MeshedChannels<S4, S5, R5, $name_sender>
         where
             S0: mpstthree::binary::struct_trait::session::Session + 'a,
             S1: mpstthree::binary::struct_trait::session::Session + 'a,
@@ -303,9 +295,9 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
                 R1,
                 R3,
                 R5,
-                $dual_1,
-                $dual_2,
-                $sender,
+                $name_receiver_1,
+                $name_receiver_2,
+                $name_sender,
                 s,
                 either::Either::Right
             )
@@ -329,10 +321,9 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_left_from_3_to_1_and_2
+///     create_choose_left_from_3_to_1_and_2, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -341,14 +332,20 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 ///     RoleC, RoleCDual |
 /// );
 ///
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
+///
 /// create_broadcast_role!(RoleAlltoC, RoleCtoAll);
 ///
 /// create_choose_left_from_3_to_1_and_2!(
 ///     choose_right_mpst_session_c_to_all,
-///     RoleADual,
-///     RoleBDual,
+///     NameA,
+///     NameB,
 ///     RoleCtoAll,
-///     RoleC
+///     NameC
 /// );
 /// ```
 ///
@@ -359,18 +356,16 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_left_from_3_to_1_and_2 {
-    ($func_name:ident, $dual_1:ident, $dual_2:ident, $role_broadcast:ident, $sender:ident) => {
+    (
+        $func_name:ident,
+        $name_receiver_1:ident,
+        $name_receiver_2:ident,
+        $role_broadcast:ident,
+        $name_sender:ident
+    ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
-                mpstthree::functionmpst::ChooseMpst<
-                    S0,
-                    S2,
-                    S1,
-                    S4,
-                    R0,
-                    R1,
-                    $dual_1<mpstthree::role::end::RoleEnd>,
-                >,
+                mpstthree::functionmpst::ChooseMpst<S0, S2, S1, S4, R0, R1, $name_receiver_1>,
                 mpstthree::functionmpst::ChooseMpst<
                     <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S3,
@@ -378,17 +373,12 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
                     S5,
                     R2,
                     R3,
-                    $dual_2<mpstthree::role::end::RoleEnd>,
+                    $name_receiver_2,
                 >,
                 $role_broadcast<R4, R5>,
-                $sender<mpstthree::role::end::RoleEnd>,
+                $name_sender,
             >,
-        ) -> mpstthree::meshedchannels::MeshedChannels<
-            S2,
-            S3,
-            R4,
-            $sender<mpstthree::role::end::RoleEnd>,
-        >
+        ) -> mpstthree::meshedchannels::MeshedChannels<S2, S3, R4, $name_sender>
         where
             S0: mpstthree::binary::struct_trait::session::Session + 'a,
             S1: mpstthree::binary::struct_trait::session::Session + 'a,
@@ -410,9 +400,9 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
                 R0,
                 R2,
                 R4,
-                $dual_1,
-                $dual_2,
-                $sender,
+                $name_receiver_1,
+                $name_receiver_2,
+                $name_sender,
                 s,
                 either::Either::Left
             )
@@ -436,10 +426,9 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_left_from_1_to_2_and_3
+///     create_choose_left_from_1_to_2_and_3, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -448,14 +437,20 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 ///     RoleC, RoleCDual |
 /// );
 ///
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
+///
 /// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
 ///
 /// create_choose_left_from_1_to_2_and_3!(
 ///     choose_right_mpst_session_a_to_all,
-///     RoleBDual,
-///     RoleCDual,
+///     NameA,
+///     NameC,
 ///     RoleAtoAll,
-///     RoleA
+///     NameA
 /// );
 /// ```
 ///
@@ -466,18 +461,16 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_left_from_1_to_2_and_3 {
-    ($func_name:ident, $dual_1:ident, $dual_2:ident, $role_broadcast:ident, $sender:ident) => {
+    (
+        $func_name:ident,
+        $name_receiver_1:ident,
+        $name_receiver_2:ident,
+        $role_broadcast:ident,
+        $name_sender:ident
+    ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
-                mpstthree::functionmpst::ChooseMpst<
-                    S2,
-                    S0,
-                    S4,
-                    S1,
-                    R0,
-                    R1,
-                    $dual_1<mpstthree::role::end::RoleEnd>,
-                >,
+                mpstthree::functionmpst::ChooseMpst<S2, S0, S4, S1, R0, R1, $name_receiver_1>,
                 mpstthree::functionmpst::ChooseMpst<
                     S3,
                     <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
@@ -485,17 +478,12 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
                     <S1 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     R2,
                     R3,
-                    $dual_2<mpstthree::role::end::RoleEnd>,
+                    $name_receiver_2,
                 >,
                 $role_broadcast<R4, R5>,
-                $sender<mpstthree::role::end::RoleEnd>,
+                $name_sender,
             >,
-        ) -> mpstthree::meshedchannels::MeshedChannels<
-            S2,
-            S3,
-            R4,
-            $sender<mpstthree::role::end::RoleEnd>,
-        >
+        ) -> mpstthree::meshedchannels::MeshedChannels<S2, S3, R4, $name_sender>
         where
             S0: mpstthree::binary::struct_trait::session::Session + 'a,
             S1: mpstthree::binary::struct_trait::session::Session + 'a,
@@ -517,9 +505,9 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
                 R0,
                 R2,
                 R4,
-                $dual_1,
-                $dual_2,
-                $sender,
+                $name_receiver_1,
+                $name_receiver_2,
+                $name_sender,
                 s,
                 either::Either::Left
             )
@@ -543,10 +531,9 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_right_from_1_to_2_and_3
+///     create_choose_right_from_1_to_2_and_3, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -555,14 +542,20 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 ///     RoleC, RoleCDual |
 /// );
 ///
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
+///
 /// create_broadcast_role!(RoleAlltoA, RoleAtoAll);
 ///
 /// create_choose_right_from_1_to_2_and_3!(
 ///     choose_right_mpst_session_a_to_all,
-///     RoleBDual,
-///     RoleCDual,
+///     NameB,
+///     NameC,
 ///     RoleAtoAll,
-///     RoleA
+///     NameA
 /// );
 /// ```
 ///
@@ -573,18 +566,16 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_right_from_1_to_2_and_3 {
-    ($func_name:ident, $dual_1:ident, $dual_2:ident, $role_broadcast:ident, $sender:ident) => {
+    (
+        $func_name:ident,
+        $name_receiver_1:ident,
+        $name_receiver_2:ident,
+        $role_broadcast:ident,
+        $name_sender:ident
+    ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
-                mpstthree::functionmpst::ChooseMpst<
-                    S2,
-                    S0,
-                    S4,
-                    S1,
-                    R0,
-                    R1,
-                    $dual_1<mpstthree::role::end::RoleEnd>,
-                >,
+                mpstthree::functionmpst::ChooseMpst<S2, S0, S4, S1, R0, R1, $name_receiver_1>,
                 mpstthree::functionmpst::ChooseMpst<
                     S3,
                     <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
@@ -592,17 +583,12 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
                     <S1 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     R2,
                     R3,
-                    $dual_2<mpstthree::role::end::RoleEnd>,
+                    $name_receiver_2,
                 >,
                 $role_broadcast<R4, R5>,
-                $sender<mpstthree::role::end::RoleEnd>,
+                $name_sender,
             >,
-        ) -> mpstthree::meshedchannels::MeshedChannels<
-            S4,
-            S5,
-            R5,
-            $sender<mpstthree::role::end::RoleEnd>,
-        >
+        ) -> mpstthree::meshedchannels::MeshedChannels<S4, S5, R5, $name_sender>
         where
             S0: mpstthree::binary::struct_trait::session::Session + 'a,
             S1: mpstthree::binary::struct_trait::session::Session + 'a,
@@ -624,9 +610,9 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
                 R1,
                 R3,
                 R5,
-                $dual_1,
-                $dual_2,
-                $sender,
+                $name_receiver_1,
+                $name_receiver_2,
+                $name_sender,
                 s,
                 either::Either::Right
             )
@@ -650,10 +636,9 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_left_from_2_to_1_and_3
+///     create_choose_left_from_2_to_1_and_3, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -662,14 +647,20 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 ///     RoleC, RoleCDual |
 /// );
 ///
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
+///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_choose_left_from_2_to_1_and_3!(
 ///     choose_right_mpst_session_b_to_all,
-///     RoleADual,
-///     RoleCDual,
+///     NameA,
+///     NameC,
 ///     RoleBtoAll,
-///     RoleB
+///     NameB
 /// );
 /// ```
 ///
@@ -680,18 +671,16 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_left_from_2_to_1_and_3 {
-    ($func_name:ident, $dual_1:ident, $dual_2:ident, $role_broadcast:ident, $sender:ident) => {
+    (
+        $func_name:ident,
+        $name_receiver_1:ident,
+        $name_receiver_2:ident,
+        $role_broadcast:ident,
+        $name_sender:ident
+    ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
-                mpstthree::functionmpst::ChooseMpst<
-                    S2,
-                    S0,
-                    S4,
-                    S1,
-                    R0,
-                    R1,
-                    $dual_1<mpstthree::role::end::RoleEnd>,
-                >,
+                mpstthree::functionmpst::ChooseMpst<S2, S0, S4, S1, R0, R1, $name_receiver_1>,
                 mpstthree::functionmpst::ChooseMpst<
                     <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S3,
@@ -699,17 +688,12 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
                     S5,
                     R2,
                     R3,
-                    $dual_2<mpstthree::role::end::RoleEnd>,
+                    $name_receiver_2,
                 >,
                 $role_broadcast<R4, R5>,
-                $sender<mpstthree::role::end::RoleEnd>,
+                $name_sender,
             >,
-        ) -> mpstthree::meshedchannels::MeshedChannels<
-            S2,
-            S3,
-            R4,
-            $sender<mpstthree::role::end::RoleEnd>,
-        >
+        ) -> mpstthree::meshedchannels::MeshedChannels<S2, S3, R4, $name_sender>
         where
             S0: mpstthree::binary::struct_trait::session::Session + 'a,
             S1: mpstthree::binary::struct_trait::session::Session + 'a,
@@ -731,9 +715,9 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
                 R0,
                 R2,
                 R4,
-                $dual_1,
-                $dual_2,
-                $sender,
+                $name_receiver_1,
+                $name_receiver_2,
+                $name_sender,
                 s,
                 either::Either::Left
             )
@@ -757,10 +741,9 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_right_from_2_to_1_and_3
+///     create_choose_right_from_2_to_1_and_3, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -769,14 +752,20 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 ///     RoleC, RoleCDual |
 /// );
 ///
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
+///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_choose_right_from_2_to_1_and_3!(
 ///     choose_right_mpst_session_b_to_all,
-///     RoleADual,
-///     RoleCDual,
+///     NameA,
+///     NameC,
 ///     RoleBtoAll,
-///     RoleB
+///     NameB
 /// );
 /// ```
 ///
@@ -787,18 +776,16 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 #[macro_export]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_right_from_2_to_1_and_3 {
-    ($func_name:ident, $dual_1:ident, $dual_2:ident, $role_broadcast:ident, $sender:ident) => {
+    (
+        $func_name:ident,
+        $name_receiver_1:ident,
+        $name_receiver_2:ident,
+        $role_broadcast:ident,
+        $name_sender:ident
+    ) => {
         fn $func_name<'a, S0, S1, S2, S3, S4, S5, R0, R1, R2, R3, R4, R5>(
             s: mpstthree::meshedchannels::MeshedChannels<
-                mpstthree::functionmpst::ChooseMpst<
-                    S2,
-                    S0,
-                    S4,
-                    S1,
-                    R0,
-                    R1,
-                    $dual_1<mpstthree::role::end::RoleEnd>,
-                >,
+                mpstthree::functionmpst::ChooseMpst<S2, S0, S4, S1, R0, R1, $name_receiver_1>,
                 mpstthree::functionmpst::ChooseMpst<
                     <S0 as mpstthree::binary::struct_trait::session::Session>::Dual,
                     S3,
@@ -806,17 +793,12 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
                     S5,
                     R2,
                     R3,
-                    $dual_2<mpstthree::role::end::RoleEnd>,
+                    $name_receiver_2,
                 >,
                 $role_broadcast<R4, R5>,
-                $sender<mpstthree::role::end::RoleEnd>,
+                $name_sender,
             >,
-        ) -> mpstthree::meshedchannels::MeshedChannels<
-            S4,
-            S5,
-            R5,
-            $sender<mpstthree::role::end::RoleEnd>,
-        >
+        ) -> mpstthree::meshedchannels::MeshedChannels<S4, S5, R5, $name_sender>
         where
             S0: mpstthree::binary::struct_trait::session::Session + 'a,
             S1: mpstthree::binary::struct_trait::session::Session + 'a,
@@ -838,9 +820,9 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
                 R1,
                 R3,
                 R5,
-                $dual_1,
-                $dual_2,
-                $sender,
+                $name_receiver_1,
+                $name_receiver_2,
+                $name_sender,
                 s,
                 either::Either::Right
             )
@@ -865,10 +847,9 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_both_from_2_to_1_and_3
+///     create_choose_both_from_2_to_1_and_3, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -877,15 +858,21 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 ///     RoleC, RoleCDual |
 /// );
 ///
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
+///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_choose_both_from_2_to_1_and_3!(
 ///     choose_right_mpst_session_b_to_all,
 ///     choose_left_mpst_session_b_to_all,
-///     RoleADual,
-///     RoleCDual,
+///     NameA,
+///     NameC,
 ///     RoleBtoAll,
-///     RoleB
+///     NameB
 /// );
 /// ```
 ///
@@ -901,24 +888,24 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
     (
         $func_name_right:ident,
         $func_name_left:ident,
-        $dual_1:ident,
-        $dual_2:ident,
+        $name_receiver_1:ident,
+        $name_receiver_2:ident,
         $role_broadcast:ident,
-        $sender:ident
+        $name_sender:ident
     ) => {
         mpstthree::create_choose_right_from_2_to_1_and_3!(
             $func_name_right,
-            $dual_1,
-            $dual_2,
+            $name_receiver_1,
+            $name_receiver_2,
             $role_broadcast,
-            $sender
+            $name_sender
         );
         mpstthree::create_choose_left_from_2_to_1_and_3!(
             $func_name_left,
-            $dual_1,
-            $dual_2,
+            $name_receiver_1,
+            $name_receiver_2,
             $role_broadcast,
-            $sender
+            $name_sender
         );
     };
 }
@@ -940,10 +927,9 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
 /// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_both_from_1_to_2_and_3
+///     create_choose_both_from_1_to_2_and_3, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -952,15 +938,21 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 ///     RoleC, RoleCDual |
 /// );
 ///
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
+///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_choose_both_from_1_to_2_and_3!(
 ///     choose_right_mpst_session_b_to_all,
 ///     choose_left_mpst_session_b_to_all,
-///     RoleADual,
-///     RoleCDual,
+///     NameA,
+///     NameC,
 ///     RoleBtoAll,
-///     RoleB
+///     NameB
 /// );
 /// ```
 ///
@@ -976,24 +968,24 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
     (
         $func_name_right:ident,
         $func_name_left:ident,
-        $dual_1:ident,
-        $dual_2:ident,
+        $name_receiver_1:ident,
+        $name_receiver_2:ident,
         $role_broadcast:ident,
-        $sender:ident
+        $name_sender:ident
     ) => {
         mpstthree::create_choose_right_from_1_to_2_and_3!(
             $func_name_right,
-            $dual_1,
-            $dual_2,
+            $name_receiver_1,
+            $name_receiver_2,
             $role_broadcast,
-            $sender
+            $name_sender
         );
         mpstthree::create_choose_left_from_1_to_2_and_3!(
             $func_name_left,
-            $dual_1,
-            $dual_2,
+            $name_receiver_1,
+            $name_receiver_2,
             $role_broadcast,
-            $sender
+            $name_sender
         );
     };
 }
@@ -1015,10 +1007,9 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 /// # Example
 ///
 /// ```
-/// use mpstthree::role::Role;
-/// use mpstthree::{  
+/// use mpstthree::{
 ///     create_multiple_normal_role, create_broadcast_role,
-///     create_choose_both_from_3_to_1_and_2
+///     create_choose_both_from_3_to_1_and_2, create_multiple_normal_name
 /// };
 ///
 /// create_multiple_normal_role!(
@@ -1027,15 +1018,21 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 ///     RoleC, RoleCDual |
 /// );
 ///
+/// create_multiple_normal_name!(
+///     NameA,
+///     NameB,
+///     NameC
+/// );
+///
 /// create_broadcast_role!(RoleAlltoB, RoleBtoAll);
 ///
 /// create_choose_both_from_3_to_1_and_2!(
 ///     choose_right_mpst_session_b_to_all,
 ///     choose_left_mpst_session_b_to_all,
-///     RoleADual,
-///     RoleCDual,
+///     NameA,
+///     NameC,
 ///     RoleBtoAll,
-///     RoleB
+///     NameB
 /// );
 /// ```
 ///
@@ -1051,24 +1048,24 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
     (
         $func_name_right:ident,
         $func_name_left:ident,
-        $dual_1:ident,
-        $dual_2:ident,
+        $name_receiver_1:ident,
+        $name_receiver_2:ident,
         $role_broadcast:ident,
-        $sender:ident
+        $name_sender:ident
     ) => {
         mpstthree::create_choose_right_from_3_to_1_and_2!(
             $func_name_right,
-            $dual_1,
-            $dual_2,
+            $name_receiver_1,
+            $name_receiver_2,
             $role_broadcast,
-            $sender
+            $name_sender
         );
         mpstthree::create_choose_left_from_3_to_1_and_2!(
             $func_name_left,
-            $dual_1,
-            $dual_2,
+            $name_receiver_1,
+            $name_receiver_2,
             $role_broadcast,
-            $sender
+            $name_sender
         );
     };
 }
@@ -1103,6 +1100,7 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 ///         let (_, s) = recv_mpst_c_from_a(s)?;
 ///         client_recurs(s, xs, index + 1)
 ///     }
+
 ///     Option::None => {
 ///         let s = choose_mpst_to_all!(
 ///             s,
@@ -1127,16 +1125,14 @@ macro_rules! choose_mpst_to_all {
     (
         $session: expr ,
         $( $label: path , )+ =>
-        $( $receiver: ident , )+ =>
-        $sender: ident
+        $name_sender: ident
     ) => {{
         use mpstthree::meshedchannels::MeshedChannels;
 
         mpstthree::choose_mpst_multi_to_all!(
-            $session,
+            $session ,
             $( $label , )+ =>
-            $( $receiver , )+ =>
-            $sender,
+            $name_sender,
             MeshedChannels,
             3
         )

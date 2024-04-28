@@ -8,11 +8,14 @@ use mpstthree::role::a::RoleA;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
 
+use mpstthree::name::a::NameA;
+use mpstthree::name::b::NameB;
+use mpstthree::name::c::NameC;
+
 /////////////////////////////////////////
 
 use rand::{thread_rng, Rng};
 
-use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::functionmpst::close::close_mpst;
@@ -36,11 +39,11 @@ use mpstthree::offer_mpst_b_to_c;
 type ADDAtoB<N> = Recv<N, End>;
 
 type OrderingA6Full = RoleB<RoleEnd>;
-type EndpointA7<N> = MeshedChannels<ADDAtoB<N>, End, OrderingA6Full, RoleA<RoleEnd>>;
+type EndpointA7<N> = MeshedChannels<ADDAtoB<N>, End, OrderingA6Full, NameA>;
 type BYEAtoB = Recv<(), End>;
 
 type OrderingA8Full = RoleB<RoleEnd>;
-type EndpointA9 = MeshedChannels<BYEAtoB, End, OrderingA8Full, RoleA<RoleEnd>>;
+type EndpointA9 = MeshedChannels<BYEAtoB, End, OrderingA8Full, NameA>;
 
 enum Branches0AtoC<N: marker::Send> {
     Add(EndpointA7<N>),
@@ -52,18 +55,18 @@ type TestAtoC<N> = Recv<N, Recv<Branches0AtoC<N>, End>>;
 
 type OrderingA10 = RoleC<RoleEnd>;
 type OrderingA11Full = RoleC<OrderingA10>;
-type EndpointA12<N> = MeshedChannels<End, TestAtoC<N>, OrderingA11Full, RoleA<RoleEnd>>;
+type EndpointA12<N> = MeshedChannels<End, TestAtoC<N>, OrderingA11Full, NameA>;
 
 type ADDBtoA<N> = Send<N, End>;
 type ADDBtoC<N> = Recv<N, End>;
 
 type OrderingB8Full = RoleC<RoleA<RoleEnd>>;
-type EndpointB9<N> = MeshedChannels<ADDBtoA<N>, ADDBtoC<N>, OrderingB8Full, RoleB<RoleEnd>>;
+type EndpointB9<N> = MeshedChannels<ADDBtoA<N>, ADDBtoC<N>, OrderingB8Full, NameB>;
 type BYEBtoA = Send<(), End>;
 type BYEBtoC = Recv<(), End>;
 
 type OrderingB10Full = RoleC<RoleA<RoleEnd>>;
-type EndpointB11 = MeshedChannels<BYEBtoA, BYEBtoC, OrderingB10Full, RoleB<RoleEnd>>;
+type EndpointB11 = MeshedChannels<BYEBtoA, BYEBtoC, OrderingB10Full, NameB>;
 
 enum Branches0BtoC<N: marker::Send> {
     Add(EndpointB9<N>),
@@ -73,13 +76,12 @@ type Choose0forBtoC<N> = Send<Branches0BtoC<N>, End>;
 
 type OrderingB12 = RoleC<RoleEnd>;
 type OrderingB13Full = OrderingB12;
-type EndpointB14<N> =
-    MeshedChannels<End, Recv<Branches0BtoC<N>, End>, OrderingB13Full, RoleB<RoleEnd>>;
+type EndpointB14<N> = MeshedChannels<End, Recv<Branches0BtoC<N>, End>, OrderingB13Full, NameB>;
 
 type TestCtoA<N> = Send<N, Choose0forAtoC<N>>;
 
 type OrderingC2Full = RoleA<RoleBroadcast>;
-type EndpointC3<N> = MeshedChannels<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Full, RoleC<RoleEnd>>;
+type EndpointC3<N> = MeshedChannels<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Full, NameC>;
 
 ///////////////////////////////////////// END
 
@@ -136,17 +138,11 @@ fn client(s: EndpointC3<i32>) -> Result<(), Box<dyn Error>> {
 /////////////////////////////////////////
 
 pub fn top_down_approach() {
-    for _i in 0..200 {
-        assert!(|| -> Result<(), Box<dyn Error>> {
-            {
-                let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
+    for _ in 0..200 {
+        let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
-                assert!(thread_a.join().is_ok());
-                assert!(thread_b.join().is_ok());
-                assert!(thread_c.join().is_ok());
-            }
-            Ok(())
-        }()
-        .is_ok());
+        assert!(thread_a.join().is_ok());
+        assert!(thread_b.join().is_ok());
+        assert!(thread_c.join().is_ok());
     }
 }

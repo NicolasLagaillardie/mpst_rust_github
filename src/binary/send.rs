@@ -3,7 +3,7 @@
 
 use crate::binary::cancel::cancel;
 use crate::binary::struct_trait::{send::Send, session::Session};
-use std::boxed::Box;
+
 use std::error::Error;
 use std::marker;
 use std::panic;

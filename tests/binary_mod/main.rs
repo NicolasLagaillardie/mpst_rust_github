@@ -15,10 +15,8 @@ use mpstthree::choose;
 use mpstthree::offer;
 
 use rand::{thread_rng, Rng};
-use std::boxed::Box;
 use std::error::Error;
 use std::marker;
-use std::mem;
 use std::sync::mpsc;
 use std::thread::sleep;
 use std::time::Duration;
@@ -35,75 +33,95 @@ pub fn tail_str() {
     assert_eq!(Recv::<i32, End>::tail_str(), "End<>".to_string());
 }
 
+pub fn self_head_str() {
+    let (end_here, end_there) = End::new();
+    assert_eq!(end_here.self_head_str(), "End".to_string());
+    assert_eq!(end_there.self_head_str(), "End".to_string());
+
+    let (send, recv) = Send::<i32, End>::new();
+    assert_eq!(send.self_head_str(), "Send".to_string());
+    assert_eq!(recv.self_head_str(), "Recv".to_string());
+}
+
+pub fn self_tail_str() {
+    let (end_here, end_there) = End::new();
+    assert!(end_here.self_tail_str().is_empty());
+    assert!(end_there.self_tail_str().is_empty());
+
+    let (send, recv) = Send::<i32, End>::new();
+    assert_eq!(send.self_tail_str(), "End<>".to_string());
+    assert_eq!(recv.self_tail_str(), "End<>".to_string());
+}
+
 pub fn new_types() {
     let (session_end_1, session_end_2) = End::new();
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_1.sender.send(Signal::Stop) {
-            Ok(()) => Ok(()),
+            Ok(()) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_2.sender.send(Signal::Stop) {
-            Ok(()) => Ok(()),
+            Ok(()) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_1.receiver.recv() {
-            Ok(Signal::Stop) => Ok(()),
+            Ok(Signal::Stop) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_2.receiver.recv() {
-            Ok(Signal::Stop) => Ok(()),
+            Ok(Signal::Stop) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 }
 
 pub fn new_types_cancel() {
     let (session_end_1, session_end_2) = End::new();
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_1.sender.send(Signal::Cancel) {
-            Ok(()) => Ok(()),
+            Ok(()) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_2.sender.send(Signal::Cancel) {
-            Ok(()) => Ok(()),
+            Ok(()) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_1.receiver.recv() {
-            Ok(Signal::Cancel) => Ok(()),
+            Ok(Signal::Cancel) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         match session_end_2.receiver.recv() {
-            Ok(Signal::Cancel) => Ok(()),
+            Ok(Signal::Cancel) => Ok::<(), Box<dyn Error>>(()),
             _ => unreachable!(),
         }
-    }()
+    }
     .is_ok());
 }
 
@@ -124,16 +142,18 @@ pub fn ping_works() {
 // Test writing a program which duplicates a session.
 //
 // ```compile_fail
-// assert!(|| -> Result<(), Box<dyn Error>> {
+// assert!({
 //     let r1 = fork(move |s1: Se
 //         let s2 = se
 //         close(s2)?;
+
 //         let s3 =
 //
 //     });
+
 //     let ((),
 //
-// }()
+// }
 // .is_ok());
 /// ```
 
@@ -264,10 +284,10 @@ pub fn nice_calc_works() {
 pub fn cancel_recv_works() {
     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         cancel(s);
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 
     assert!(other_thread.join().is_err());
@@ -279,10 +299,10 @@ pub fn cancel_send_works() {
         Ok(())
     });
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         let s = send((), s);
         close(s)
-    }()
+    }
     .is_err());
 
     assert!(other_thread.join().is_ok());
@@ -297,10 +317,10 @@ pub fn delegation_works() {
         Ok(())
     });
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         let u = send(s, u);
         close(u)
-    }()
+    }
     .is_err());
 
     assert!(other_thread1.join().is_err());
@@ -312,7 +332,7 @@ pub fn delegation_works() {
 pub fn closure_works() {
     let (other_thread, s) = fork_with_thread_id(nice_calc_server);
 
-    assert!(|| -> Result<i32, Box<dyn Error>> {
+    assert!({
         // Create a closure which uses the session.
         let _f = move |x: i32| -> Result<i32, Box<dyn Error>> {
             let s = choose!(CalcOp::Neg, s);
@@ -323,9 +343,9 @@ pub fn closure_works() {
         };
 
         // Let the closure go out of scope.
-        Err(Box::new(mpsc::RecvError))
+        Err::<i32, Box<mpsc::RecvError>>(Box::new(mpsc::RecvError))
         // f(5)
-    }()
+    }
     .is_err());
 
     assert!(other_thread.join().is_err());
@@ -399,10 +419,10 @@ pub fn cancel_recursion() {
 
     let (other_thread, s) = fork_with_thread_id(nice_sum_server);
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         cancel(s);
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 
     assert!(other_thread.join().is_err());
@@ -444,60 +464,7 @@ pub fn selection_works() {
     );
 
     for other_thread in other_threads {
-        let msg = format!("Thread {:?} crashed.", other_thread);
+        let msg = format!("Thread {other_thread:?} crashed.");
         assert!(other_thread.join().is_ok(), "{}", msg);
     }
-}
-
-#[allow(dead_code)]
-fn deadlock_loop() {
-    let s = fork(move |s: Send<(), End>| {
-        loop {
-            // Let's trick the reachability checker
-            if false {
-                break;
-            }
-        }
-        let s = send((), s);
-        close(s)
-    });
-
-    || -> Result<(), Box<dyn Error>> {
-        let ((), s) = recv(s)?;
-        close(s)
-    }()
-    .unwrap();
-}
-
-#[allow(dead_code)]
-fn deadlock_forget() {
-    let s = fork(move |s: Send<(), End>| {
-        mem::forget(s);
-        Ok(())
-    });
-
-    || -> Result<(), Box<dyn Error>> {
-        let ((), s) = recv(s)?;
-        close(s)
-    }()
-    .unwrap();
-}
-
-#[allow(dead_code)]
-fn deadlock_new() {
-    let (s1, r1) = <Send<(), End>>::new();
-    let r2 = fork(move |s2: Send<(), End>| {
-        let (x, r1) = recv(r1)?;
-        let s2 = send(x, s2);
-        close(r1)?;
-        close(s2)
-    });
-
-    || -> Result<(), Box<dyn Error>> {
-        let (x, r2) = recv(r2)?;
-        let s1 = send(x, s1);
-        close(r2)?;
-        close(s1)
-    }()
-    .unwrap();
 }

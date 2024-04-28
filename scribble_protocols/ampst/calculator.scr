@@ -1,0 +1,14 @@
+global protocol Calc(role A, role C, role S)
+{
+    element_1(int) from C to S;
+    element_2(int) from C to S;
+
+    choice at C
+    {
+        sum(int) from S to C;
+    }
+    or
+    {
+        diff(int) from S to C;
+    }
+}

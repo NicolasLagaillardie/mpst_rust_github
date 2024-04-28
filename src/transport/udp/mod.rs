@@ -1,5 +1,3 @@
-#![cfg(feature = "transport_udp")]
-
 //! This module contains the functions
 //! and macros for handling a UDP connection.
 //!

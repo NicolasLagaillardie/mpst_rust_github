@@ -1,4 +1,3 @@
-use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::functionmpst::close::close_mpst;
@@ -11,13 +10,15 @@ use mpstthree::role::Role;
 use mpstthree::checker_concat;
 
 use mpstthree::role::a::RoleA;
-use mpstthree::role::a_dual::RoleADual;
 use mpstthree::role::all_to_b::RoleAlltoB;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::b_to_all::RoleBtoAll;
 use mpstthree::role::c::RoleC;
-use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
+
+use mpstthree::name::a::NameA;
+use mpstthree::name::b::NameB;
+use mpstthree::name::c::NameC;
 
 use mpstthree::functionmpst::recv::recv_mpst_a_from_b;
 use mpstthree::functionmpst::recv::recv_mpst_c_from_a;
@@ -64,19 +65,12 @@ type StackFullC = RoleAlltoB<RoleEnd, RoleEnd>;
 
 // Creating the MP sessions
 // For A
-type EndpointAAdd<N> = MeshedChannels<AtoBAdd<N>, AtoCAdd<N>, StackOfferA, RoleA<RoleEnd>>;
-type EndpointANeg<N> = MeshedChannels<AtoBNeg<N>, AtoCNeg<N>, StackOfferA, RoleA<RoleEnd>>;
+type EndpointAAdd<N> = MeshedChannels<AtoBAdd<N>, AtoCAdd<N>, StackOfferA, NameA>;
+type EndpointANeg<N> = MeshedChannels<AtoBNeg<N>, AtoCNeg<N>, StackOfferA, NameA>;
 
-type OfferA<N> = OfferMpst<
-    AtoBAdd<N>,
-    AtoCAdd<N>,
-    AtoBNeg<N>,
-    AtoCNeg<N>,
-    StackOfferA,
-    StackOfferA,
-    RoleA<RoleEnd>,
->;
-type EndpointChoiceA<N> = MeshedChannels<OfferA<N>, End, StackFullA, RoleA<RoleEnd>>;
+type OfferA<N> =
+    OfferMpst<AtoBAdd<N>, AtoCAdd<N>, AtoBNeg<N>, AtoCNeg<N>, StackOfferA, StackOfferA, NameA>;
+type EndpointChoiceA<N> = MeshedChannels<OfferA<N>, End, StackFullA, NameA>;
 
 // For B
 type ChooseBtoA<N> = ChooseMpst<
@@ -86,26 +80,18 @@ type ChooseBtoA<N> = ChooseMpst<
     CtoANeg<N>,
     StackOfferADual,
     StackOfferADual,
-    RoleADual<RoleEnd>,
+    NameA,
 >;
-type ChooseBtoC<N> = ChooseMpst<
-    AtoCAdd<N>,
-    End,
-    AtoCNeg<N>,
-    End,
-    StackOfferCDual,
-    StackOfferCDual,
-    RoleCDual<RoleEnd>,
->;
-type EndpointChoiceB<N> = MeshedChannels<ChooseBtoA<N>, ChooseBtoC<N>, StackFullB, RoleB<RoleEnd>>;
+type ChooseBtoC<N> =
+    ChooseMpst<AtoCAdd<N>, End, AtoCNeg<N>, End, StackOfferCDual, StackOfferCDual, NameC>;
+type EndpointChoiceB<N> = MeshedChannels<ChooseBtoA<N>, ChooseBtoC<N>, StackFullB, NameB>;
 
 // For C
-type EndpointCAdd<N> = MeshedChannels<CtoAAdd<N>, End, StackOfferC, RoleC<RoleEnd>>;
-type EndpointCNeg<N> = MeshedChannels<CtoANeg<N>, End, StackOfferC, RoleC<RoleEnd>>;
+type EndpointCAdd<N> = MeshedChannels<CtoAAdd<N>, End, StackOfferC, NameC>;
+type EndpointCNeg<N> = MeshedChannels<CtoANeg<N>, End, StackOfferC, NameC>;
 
-type OfferC<N> =
-    OfferMpst<CtoAAdd<N>, End, CtoANeg<N>, End, StackOfferC, StackOfferC, RoleC<RoleEnd>>;
-type EndpointChoiceC<N> = MeshedChannels<End, OfferC<N>, StackFullC, RoleC<RoleEnd>>;
+type OfferC<N> = OfferMpst<CtoAAdd<N>, End, CtoANeg<N>, End, StackOfferC, StackOfferC, NameC>;
+type EndpointChoiceC<N> = MeshedChannels<End, OfferC<N>, StackFullC, NameC>;
 
 // Functions related to endpoints
 fn simple_store_server(s: EndpointChoiceA<i32>) -> Result<(), Box<dyn Error>> {
@@ -190,41 +176,35 @@ fn simple_store_pawn(s: EndpointChoiceC<i32>) -> Result<(), Box<dyn Error>> {
 
 /////////////////////////////////////////
 
-pub fn double_choice() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        // Test the left branch.
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(
-                simple_store_server,
-                simple_store_client_left,
-                simple_store_pawn,
-            );
+pub fn double_choice_left() {
+    // Test the left branch.
+    let (thread_a, thread_b, thread_c) = fork_mpst(
+        simple_store_server,
+        simple_store_client_left,
+        simple_store_pawn,
+    );
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
+}
 
-        // Test the right branch.
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(
-                simple_store_server,
-                simple_store_client_right,
-                simple_store_pawn,
-            );
+pub fn double_choice_right() {
+    // Test the right branch.
+    let (thread_a, thread_b, thread_c) = fork_mpst(
+        simple_store_server,
+        simple_store_client_right,
+        simple_store_pawn,
+    );
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
-
-        Ok(())
-    }()
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }
 
 pub fn double_choice_checker() {
     let (graphs, kmc) = checker_concat!(
+        "",
         EndpointChoiceB<i32>,
         EndpointChoiceC<i32>,
         EndpointChoiceA<i32>

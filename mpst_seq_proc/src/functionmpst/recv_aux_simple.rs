@@ -13,7 +13,7 @@
 //! // and A is the receiver.
 //! // Then the binary channel of A with B is the first
 //! // one.
-//! mpst_seq::recv_aux_simple!(s, 1)()
+//! mpst_seq_proc::recv_aux_simple!(s, 1)()
 //! ```
 
 use proc_macro2::TokenStream;
@@ -22,7 +22,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Expr, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct RecvAuxSimple {
+pub(crate) struct RecvAuxSimple {
     session: Expr,
     exclusion: u64,
 }
@@ -46,7 +46,7 @@ impl From<RecvAuxSimple> for TokenStream {
 
 impl RecvAuxSimple {
     fn expand(&self) -> TokenStream {
-        let session = self.session.clone();
+        let session = &self.session;
         let recv_session = format_ident!("session{}", self.exclusion);
 
         let mut new_sessions = Vec::new();

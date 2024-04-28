@@ -1,41 +1,46 @@
 #![allow(clippy::type_complexity, clippy::too_many_arguments, clippy::large_enum_variant)]
-    
+
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_struct_fork_close_multi,
     create_fn_choose_mpst_cancel_multi_to_all_bundle, create_multiple_normal_role_short,
-    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, offer_cancel_mpst,
+    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, offer_cancel_mpst, create_multiple_normal_name_short
 };
 
 use std::error::Error;
 
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsFour, 4);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 4);
 
 // Create new roles
 // normal
 create_multiple_normal_role_short!(Central, A, B, C);
+
+// Create new names
+create_multiple_normal_name_short!(Central, A, B, C);
 
 // Create new send functions
 // A
 create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 |
     send_mpst_a_to_c, RoleC, 3 | =>
-    RoleA, MeshedChannelsFour, 4
+    NameA, MeshedChannels, 4
 );
+
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 |
     send_mpst_b_to_c, RoleC, 3 | =>
-    RoleB, MeshedChannelsFour, 4
+    NameB, MeshedChannels, 4
 );
+
 // C
 create_send_check_cancel_bundle!(
     send_mpst_c_to_a, RoleA, 2 |
     send_mpst_c_to_b, RoleB, 3 | =>
-    RoleC, MeshedChannelsFour, 4
+    NameC, MeshedChannels, 4
 );
 
 // Create new recv functions and related types
@@ -43,51 +48,52 @@ create_send_check_cancel_bundle!(
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 2 |
     recv_mpst_a_from_c, RoleC, 3 | =>
-    RoleA, MeshedChannelsFour, 4
+    NameA, MeshedChannels, 4
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 |
     recv_mpst_b_from_c, RoleC, 3 | =>
-    RoleB, MeshedChannelsFour, 4
+    NameB, MeshedChannels, 4
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_a, RoleA, 2 |
     recv_mpst_c_from_b, RoleB, 3 | =>
-    RoleC, MeshedChannelsFour, 4
+    NameC, MeshedChannels, 4
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
 
 // Types
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;
 type SR = Send<(), Recv<(), End>>;
+
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
 type R2C<R> = RoleC<RoleC<R>>;
+
 // A
 enum Branching0fromCtoA {
-    More(MeshedChannelsFour<End, RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
-    Done(MeshedChannelsFour<End, End, End, RoleEnd, NameA>),
+    More(MeshedChannels<End, RS, Recv<(), Send<(), RecursAtoC>>, R2C<R2B<RoleC<RoleEnd>>>, NameA>),
+    Done(MeshedChannels<End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = Recv<(End, Branching0fromCtoA), End>;
+
 // B
 enum Branching0fromCtoB {
-    More(MeshedChannelsFour<End, SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
-    Done(MeshedChannelsFour<End, End, End, RoleEnd, NameB>),
+    More(MeshedChannels<End, SR, Recv<(), Send<(), RecursBtoC>>, R2C<R2A<RoleC<RoleEnd>>>, NameB>),
+    Done(MeshedChannels<End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoC = Recv<(End, Branching0fromCtoB), End>;
+
 // C
 type Choose0fromCtoA = <RecursAtoC as Session>::Dual;
 type Choose0fromCtoB = <RecursBtoC as Session>::Dual;
-type EndpointDoneC = MeshedChannelsFour<End, End, End, RoleEnd, NameC>;
-type EndpointMoreC = MeshedChannelsFour<
+type EndpointDoneC = MeshedChannels<End, End, End, RoleEnd, NameC>;
+type EndpointMoreC = MeshedChannels<
     End,
     Send<(), Recv<(), Choose0fromCtoA>>,
     Send<(), Recv<(), Choose0fromCtoB>>,
@@ -96,18 +102,18 @@ type EndpointMoreC = MeshedChannelsFour<
 >;
 
 // Creating the MP sessions
-type EndpointCentral = MeshedChannelsFour<End, End, End, RoleEnd, RoleCentral<RoleEnd>>;
-type EndpointA = MeshedChannelsFour<End, End, RecursAtoC, RoleC<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsFour<End, End, RecursBtoC, RoleC<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsFour<End, Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
+type EndpointCentral = MeshedChannels<End, End, End, RoleEnd, NameCentral>;
+type EndpointA = MeshedChannels<End, End, RecursAtoC, RoleC<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, End, RecursBtoC, RoleC<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<End, Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
 create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     done_from_c_to_all, more_from_c_to_all, =>
     Done, More, =>
     EndpointDoneC, EndpointMoreC, =>
     Branching0fromCtoA, Branching0fromCtoB, =>
-    RoleA, RoleB, =>
-    RoleCentral, RoleC, MeshedChannelsFour, 4
+    NameA, NameB, =>
+    NameCentral, NameC, MeshedChannels, 4
 );
 
 fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {
@@ -172,8 +178,8 @@ fn main() {
     let (thread_central, thread_a, thread_b, thread_c) =
         fork_mpst(endpoint_central, endpoint_a, endpoint_b, endpoint_c);
 
-    assert!(thread_central.join().is_ok());
-    assert!(thread_a.join().is_ok());
-    assert!(thread_b.join().is_ok());
-    assert!(thread_c.join().is_ok());
+    thread_central.join().unwrap();
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
+    thread_c.join().unwrap();
 }

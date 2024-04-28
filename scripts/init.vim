@@ -1,3 +1,5 @@
+set number
+
 call plug#begin('~/.data/plugged')
 
 Plug 'neovim/nvim-lspconfig'
@@ -114,5 +116,5 @@ lua <<EOF
   require('lspconfig')['rust_analyzer'].setup {
     capabilities = capabilities
   }
-  
+
 EOF

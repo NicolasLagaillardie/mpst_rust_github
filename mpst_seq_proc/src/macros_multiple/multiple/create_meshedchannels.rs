@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct CreateMeshedChannels {
+pub(crate) struct CreateMeshedChannels {
     meshedchannels_name: Ident,
     n_sessions: u64,
 }
@@ -31,11 +31,11 @@ impl From<CreateMeshedChannels> for TokenStream {
 
 impl CreateMeshedChannels {
     fn expand(&self) -> TokenStream {
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -44,7 +44,7 @@ impl CreateMeshedChannels {
 
         let sessions_dual: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     <
                         #temp_ident as mpstthree::binary::struct_trait::session::Session
@@ -55,7 +55,7 @@ impl CreateMeshedChannels {
 
         let sessions_struct: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session,
                 }
@@ -64,8 +64,8 @@ impl CreateMeshedChannels {
 
         let sessions_pub: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
-                let temp_field = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
+                let temp_field = Ident::new(&format!("session{i}"), Span::call_site());
                 quote! {
                     pub #temp_field :  #temp_ident,
                 }
@@ -74,19 +74,19 @@ impl CreateMeshedChannels {
 
         let senders_receivers: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_sender = Ident::new(&format!("sender{}", i), Span::call_site());
-                let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_sender = Ident::new(&format!("sender{i}"), Span::call_site());
+                let temp_receiver = Ident::new(&format!("receiver{i}"), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
-                    let ( #temp_sender , #temp_receiver ) = #temp_ident::new();
+                    let ( #temp_sender , #temp_receiver ) = < #temp_ident as mpstthree::binary::struct_trait::session::Session >::new();
                 }
             })
             .collect();
 
         let senders_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_sender = Ident::new(&format!("sender{}", i), Span::call_site());
-                let temp_field = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_sender = Ident::new(&format!("sender{i}"), Span::call_site());
+                let temp_field = Ident::new(&format!("session{i}"), Span::call_site());
                 quote! {
                     #temp_field : #temp_sender ,
                 }
@@ -95,8 +95,8 @@ impl CreateMeshedChannels {
 
         let receivers_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
-                let temp_field = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_receiver = Ident::new(&format!("receiver{i}"), Span::call_site());
+                let temp_field = Ident::new(&format!("session{i}"), Span::call_site());
                 quote! {
                     #temp_field : #temp_receiver ,
                 }
@@ -106,7 +106,7 @@ impl CreateMeshedChannels {
         let head_str: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                    Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     if result.is_empty() {
                         result = format!(
@@ -127,7 +127,7 @@ impl CreateMeshedChannels {
         let tail_str: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
+                    Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     if result.is_empty() {
                         result = format!(
@@ -147,19 +147,10 @@ impl CreateMeshedChannels {
             })
             .collect();
 
-        let stringify: Vec<TokenStream> = (1..self.n_sessions)
-            .map(|i| {
-                let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
-                quote! {
-                    stringify!(#temp_ident),
-                }
-            })
-            .collect();
-
         quote! {
             #[must_use]
             #[derive(Debug)]
-            pub struct #meshedchannels_name<
+            struct #meshedchannels_name<
                 #(
                     #sessions
                 )*
@@ -171,7 +162,7 @@ impl CreateMeshedChannels {
                     #sessions_struct
                 )*
                 R: mpstthree::role::Role,
-                N: mpstthree::role::Role
+                N: mpstthree::name::Name
             {
                 #(
                     #sessions_pub
@@ -186,7 +177,7 @@ impl CreateMeshedChannels {
                     #sessions_struct
                 )*
                 R: mpstthree::role::Role,
-                N: mpstthree::role::Role
+                N: mpstthree::name::Name
             > mpstthree::binary::struct_trait::session::Session for #meshedchannels_name<
                 #(
                     #sessions
@@ -200,7 +191,7 @@ impl CreateMeshedChannels {
                         #sessions_dual
                     )*
                     <R as mpstthree::role::Role>::Dual,
-                    <N as mpstthree::role::Role>::Dual,
+                    N,
                 >;
 
                 #[doc(hidden)]
@@ -209,8 +200,9 @@ impl CreateMeshedChannels {
                         #senders_receivers
                     )*
 
-                    let (role_one, role_two) = R::new();
-                    let (name_one, name_two) = N::new();
+                    let (role_one, role_two) = < R  as mpstthree::role::Role >::new();
+                    let (name_one, _) = < N as mpstthree::name::Name >::new();
+                    let (name_two, _) = < N as mpstthree::name::Name >::new();
 
                     (
                         #meshedchannels_name {
@@ -240,7 +232,7 @@ impl CreateMeshedChannels {
                         "{}\n{}\n{}",
                         result,
                         <R as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::head_str()
+                        <N as mpstthree::name::Name>::head_str()
                     )
                 }
 
@@ -255,8 +247,8 @@ impl CreateMeshedChannels {
                         result,
                         <R as mpstthree::role::Role>::head_str(),
                         <R as mpstthree::role::Role>::tail_str(),
-                        <N as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::tail_str()
+                        <N as mpstthree::name::Name>::head_str(),
+                        <N as mpstthree::name::Name>::tail_str()
                     )
                 }
 
@@ -270,7 +262,7 @@ impl CreateMeshedChannels {
                         "{}\n{}\n{}",
                         result,
                         <R as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::head_str()
+                        <N as mpstthree::name::Name>::head_str()
                     )
                 }
 
@@ -285,45 +277,8 @@ impl CreateMeshedChannels {
                         result,
                         <R as mpstthree::role::Role>::head_str(),
                         <R as mpstthree::role::Role>::tail_str(),
-                        <N as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::tail_str()
-                    )
-                }
-            }
-
-            #[doc(hidden)]
-            impl<
-                #(
-                    #sessions_struct
-                )*
-                R: mpstthree::role::Role,
-                N: mpstthree::role::Role
-            > #meshedchannels_name<
-                #(
-                    #sessions
-                )*
-                R,
-                N
-            > {
-                #[doc(hidden)]
-                pub fn field_names(self) ->
-                    (
-                        &'static [&'static str],
-                        #meshedchannels_name<
-                            #(
-                                #sessions
-                            )*
-                            R,
-                            N
-                        >
-                    ) {
-                    (
-                        &[
-                            #(
-                                #stringify
-                            )*
-                        ],
-                        self
+                        <N as mpstthree::name::Name>::head_str(),
+                        <N as mpstthree::name::Name>::tail_str()
                     )
                 }
             }

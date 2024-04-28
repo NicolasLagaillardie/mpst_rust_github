@@ -1,35 +1,21 @@
-use proc_macro2::{Span, TokenStream, TokenTree};
+use proc_macro2::{Span, TokenStream};
 use quote::quote;
-use std::convert::TryFrom;
+// use std::convert::TryFrom;
 use syn::parse::{Parse, ParseStream};
 use syn::{Expr, Ident, LitInt, Result, Token};
 
-type VecOfTuple = Vec<(u64, u64, u64)>;
+use crate::common_functions::expand::parenthesised::parenthesised_groups;
+use crate::common_functions::maths::{diag, get_tuple_diag};
 
 #[derive(Debug)]
-pub struct ChooseTypeMultiCancelToAll {
+pub(crate) struct ChooseTypeMultiCancelToAll {
     session: Expr,
     labels: Vec<TokenStream>,
-    receivers: Vec<TokenStream>,
     broadcaster: Ident,
     sender: Ident,
     meshedchannels_name: Ident,
     n_sessions: u64,
     exclusion: u64,
-}
-
-fn expand_parenthesized(stream: &TokenStream) -> Vec<TokenStream> {
-    let mut out: Vec<TokenStream> = Vec::new();
-    for tt in stream.clone().into_iter() {
-        let elt = match tt {
-            TokenTree::Group(g) => Some(g.stream()),
-            _ => None,
-        };
-        if let Some(elt_tt) = elt {
-            out.push(elt_tt)
-        }
-    }
-    out
 }
 
 impl Parse for ChooseTypeMultiCancelToAll {
@@ -41,20 +27,22 @@ impl Parse for ChooseTypeMultiCancelToAll {
         // The labels
         let content_labels;
         let _parentheses = syn::parenthesized!(content_labels in input);
-        let labels = TokenStream::parse(&content_labels)?;
-
-        let all_labels: Vec<TokenStream> = expand_parenthesized(&labels);
-
+        let all_labels: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_labels)?);
         <Token![,]>::parse(input)?;
 
         // The receivers
         let content_receivers;
         let _parentheses = syn::parenthesized!(content_receivers in input);
-        let receivers = TokenStream::parse(&content_receivers)?;
-
-        let all_receivers: Vec<TokenStream> = expand_parenthesized(&receivers);
-
+        let all_receivers: Vec<TokenStream> =
+            parenthesised_groups(TokenStream::parse(&content_receivers)?);
         <Token![,]>::parse(input)?;
+
+        assert_eq!(
+            all_receivers.len(),
+            all_labels.len(),
+            "We are comparing number of receivers and labels in choose_mpst_multi_cancel_to_all"
+        );
 
         // The broadcaster
         let broadcaster = Ident::parse(input)?;
@@ -74,16 +62,9 @@ impl Parse for ChooseTypeMultiCancelToAll {
         // The number of receivers
         let n_sessions = u64::try_from(all_receivers.len()).unwrap() + 2;
 
-        assert_eq!(
-            all_receivers.len(),
-            all_labels.len(),
-            "We are comparing number of receivers and labels in choose_mpst_multi_cancel_to_all"
-        );
-
         Ok(ChooseTypeMultiCancelToAll {
             session,
             labels: all_labels,
-            receivers: all_receivers,
             broadcaster,
             sender,
             meshedchannels_name,
@@ -100,58 +81,21 @@ impl From<ChooseTypeMultiCancelToAll> for TokenStream {
 }
 
 impl ChooseTypeMultiCancelToAll {
-    /// Create the whole matrix of index according to line and column
-    fn diag(&self) -> VecOfTuple {
-        let diff = self.n_sessions - 1;
-
-        let mut column = 0;
-        let mut line = 0;
-
-        // Create the upper diag
-        (0..(diff * (diff + 1) / 2))
-            .map(|i| {
-                if line == column {
-                    column += 1;
-                } else if column >= (self.n_sessions - 1) {
-                    line += 1;
-                    column = line + 1;
-                } else {
-                    column += 1;
-                }
-                (line + 1, column + 1, i + 1)
-            })
-            .collect()
-    }
-
-    /// Return (line, column, index) of diag
-    fn get_tuple_diag(&self, diag: &[(u64, u64, u64)], i: u64) -> (u64, u64, u64) {
-        if let Some((line, column, index)) = diag.get(usize::try_from(i - 1).unwrap()) {
-            (*line, *column, *index)
-        } else {
-            panic!(
-                "Error at get_tuple_diag for i = {:?} / diag = {:?}",
-                i, diag
-            )
-        }
-    }
-
     fn expand(&self) -> TokenStream {
-        let session = self.session.clone();
-        let all_labels = self.labels.clone();
-        let all_receivers = self.receivers.clone();
-        let broadcaster = self.broadcaster.clone();
-        let sender = self.sender.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let session = &self.session;
+        let broadcaster = &self.broadcaster;
+        let sender = &self.sender;
+        let meshedchannels_name = &self.meshedchannels_name;
         let diff = self.n_sessions - 1;
-        let diag = self.diag();
+        let diag = diag(self.n_sessions);
 
         let new_channels: Vec<TokenStream> = (1..=(diff * (diff + 1) / 2))
             .map(|i| {
-                let (line, column, _) = self.get_tuple_diag(&diag, i);
+                let (line, column, _) = get_tuple_diag(&diag, i);
                 let channel_left =
-                    Ident::new(&format!("channel_{}_{}", line, column), Span::call_site());
+                    Ident::new(&format!("channel_{line}_{column}"), Span::call_site());
                 let channel_right =
-                    Ident::new(&format!("channel_{}_{}", column, line), Span::call_site());
+                    Ident::new(&format!("channel_{column}_{line}"), Span::call_site());
                 if i < self.n_sessions {
                     quote! {
                         let ( #channel_left , #channel_right ) =
@@ -171,7 +115,7 @@ impl ChooseTypeMultiCancelToAll {
 
         let new_roles: Vec<TokenStream> = (2..=self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("stack_{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("stack_{i}"), Span::call_site());
                 quote! {
                     let ( #temp_ident , _) = <_ as mpstthree::role::Role>::new();
                 }
@@ -180,16 +124,9 @@ impl ChooseTypeMultiCancelToAll {
 
         let new_names: Vec<TokenStream> = (2..self.n_sessions)
             .map(|i| {
-                let temp_name =
-                    Ident::new(&format!("name_{}", i), Span::call_site());
-                let temp_role = if let Some(elt) = all_receivers.get(usize::try_from(i - 2).unwrap()) {
-                    elt
-                } else {
-                    panic!("Not enough receivers")
-                };
+                let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
                 quote! {
-                    let ( #temp_name , _) =
-                        <#temp_role::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                    let ( #temp_name , _) = < _ as mpstthree::name::Name >::new();
                 }
             })
             .collect();
@@ -204,12 +141,12 @@ impl ChooseTypeMultiCancelToAll {
                     .map(|j| {
                         let temp = if i >= self.exclusion { i + 1 } else { i };
 
-                        let temp_ident = Ident::new(&format!("session{}", j), Span::call_site());
+                        let temp_ident = Ident::new(&format!("session{j}"), Span::call_site());
 
                         let temp_channel = if j < temp {
-                            Ident::new(&format!("channel_{}_{}", temp, j), Span::call_site())
+                            Ident::new(&format!("channel_{temp}_{j}"), Span::call_site())
                         } else {
-                            Ident::new(&format!("channel_{}_{}", temp, j + 1), Span::call_site())
+                            Ident::new(&format!("channel_{temp}_{}", j + 1), Span::call_site())
                         };
 
                         quote! {
@@ -218,13 +155,13 @@ impl ChooseTypeMultiCancelToAll {
                     })
                     .collect();
 
-                let temp_name = Ident::new(&format!("name_{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("name_{i}"), Span::call_site());
 
-                let temp_stack = Ident::new(&format!("stack_{}", i), Span::call_site());
+                let temp_stack = Ident::new(&format!("stack_{i}"), Span::call_site());
 
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
 
-                let temp_label = if let Some(elt) = all_labels.get(usize::try_from(i - 2).unwrap())
+                let temp_label = if let Some(elt) = self.labels.get(usize::try_from(i - 2).unwrap())
                 {
                     elt
                 } else {
@@ -256,10 +193,10 @@ impl ChooseTypeMultiCancelToAll {
 
         let new_meshedchannels: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("session{i}"), Span::call_site());
                 let temp_channel = if i < self.exclusion {
                     Ident::new(
-                        &format!("channel_{}_{}", self.exclusion, i),
+                        &format!("channel_{}_{i}", self.exclusion),
                         Span::call_site(),
                     )
                 } else {
@@ -291,14 +228,14 @@ impl ChooseTypeMultiCancelToAll {
                 )*
 
                 let (name_1, _) =
-                    <#broadcaster<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                    < #broadcaster as mpstthree::name::Name >::new();
 
                 #(
                     #new_names
                 )*
 
                 let ( #new_name_sender , _) =
-                    <#sender<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
+                    < #sender as mpstthree::name::Name >::new();
 
                 let mut s = #session;
 

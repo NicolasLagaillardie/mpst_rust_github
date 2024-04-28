@@ -1,5 +1,9 @@
 #![cfg(feature = "transport_http")]
 
+//! !!!! THIS MODULE DOES NOT WORK FOR THE MOMENT !!!!
+//!
+//! TODO: FIX IT
+//!
 //! This module contains the functions
 //! and macros for handling an HTTP connection.
 //!

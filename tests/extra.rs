@@ -1,5 +1,3 @@
-#![allow(clippy::type_complexity)]
-
 mod infinite_type;
 mod scribble;
 
@@ -20,6 +18,9 @@ fn infinite_type_fail() {
     let t = trybuild::TestCases::new();
 
     // Infinite types
+    t.compile_fail("tests/infinite_type/infinite_size.rs");
+    t.compile_fail("tests/infinite_type/overflow_evaluation.rs");
+    t.compile_fail("tests/infinite_type/overflow_evaluation_with_box.rs");
     t.compile_fail("tests/infinite_type/fail_0.rs");
     t.compile_fail("tests/infinite_type/fail_1.rs");
     t.compile_fail("tests/infinite_type/fail_2.rs");

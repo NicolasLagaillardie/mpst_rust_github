@@ -1,0 +1,14 @@
+timed global protocol Calc(role A, role C, role S)
+{
+    element_1(int) from C to S within [0;1] using a and resetting ();
+    element_2(int) from C to S within [0;1] using a and resetting ();
+
+    choice at C
+    {
+        sum(int) from S to C within [0;1] using a and resetting ();
+    }
+    or
+    {
+        diff(int) from S to C within [0;1] using a and resetting ();
+    }
+}

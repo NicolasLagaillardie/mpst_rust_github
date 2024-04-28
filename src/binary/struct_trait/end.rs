@@ -2,10 +2,8 @@
 //! for the End structure.
 
 use crate::binary::struct_trait::session::Session;
+
 use crossbeam_channel::{bounded, Receiver, Sender};
-use std::error::Error;
-use std::fmt;
-use std::str::FromStr;
 
 /// End of communication.
 #[must_use]
@@ -31,7 +29,6 @@ pub enum Signal {
 impl Session for End {
     type Dual = End;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender1, receiver1) = bounded::<Signal>(1);
         let (sender2, receiver2) = bounded::<Signal>(1);
@@ -48,60 +45,19 @@ impl Session for End {
         )
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         "End".to_string()
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         "".to_string()
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         "End".to_string()
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         "".to_string()
-    }
-}
-
-#[doc(hidden)]
-#[derive(Debug, Clone)]
-pub struct EndError {
-    details: String,
-}
-
-impl EndError {
-    fn new(details: &str) -> EndError {
-        EndError {
-            details: details.to_string(),
-        }
-    }
-}
-
-impl fmt::Display for EndError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Expected `End`, found {:?}", self.details)
-    }
-}
-
-impl Error for EndError {
-    fn description(&self) -> &str {
-        &self.details
-    }
-}
-
-impl FromStr for End {
-    type Err = EndError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "End" => Ok(End::new().0),
-            result => Err(EndError::new(result)),
-        }
     }
 }

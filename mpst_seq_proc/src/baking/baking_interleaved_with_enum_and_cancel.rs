@@ -1,49 +1,88 @@
-use proc_macro2::{Span, TokenStream, TokenTree};
-use quote::quote;
-use std::convert::TryFrom;
-use syn::parse::{Parse, ParseStream};
-use syn::{Ident, Result, Token};
+//! Implementation for generate!("interleaved", ...)
 
-type VecOfTuple = Vec<(u64, u64, u64)>;
+use proc_macro2::TokenStream;
+use quote::quote;
+// use std::convert::TryFrom;
+use syn::parse::{Parse, ParseStream};
+use syn::{Ident, LitInt, Result, Token};
+
+use crate::common_functions::expand::aux_baking::{
+    create_name_structs, create_role_structs, create_session_type_structs, create_session_types,
+};
+use crate::common_functions::expand::cancel::cancel;
+use crate::common_functions::expand::choose::{choose, choose_mpst_create_multi_to_all};
+use crate::common_functions::expand::close::close;
+use crate::common_functions::expand::fork::fork_interleaved_mpst;
+use crate::common_functions::expand::meshedchannels::meshedchannels;
+use crate::common_functions::expand::offer::offer;
+use crate::common_functions::expand::parenthesised::parenthesised_groups;
+use crate::common_functions::expand::recv::{recv, recv_from_all};
+use crate::common_functions::expand::send::send_canceled;
 
 #[derive(Debug)]
-pub struct BakingInterleavedWithEnumAndCancel {
-    meshedchannels_name: Ident,
-    all_roles: Vec<TokenStream>,
-    number_roles: u64,
-}
-
-fn expand_token_stream(input: ParseStream) -> Result<Vec<TokenStream>> {
-    let content;
-    let _parentheses = syn::parenthesized!(content in input);
-    let token_stream = TokenStream::parse(&content)?;
-
-    let mut result: Vec<TokenStream> = Vec::new();
-    for tt in token_stream.into_iter() {
-        let elt = match tt {
-            TokenTree::Group(g) => Some(g.stream()),
-            _ => None,
-        };
-        if let Some(elt_tt) = elt {
-            result.push(elt_tt)
-        }
-    }
-
-    Ok(result)
+pub(crate) struct BakingInterleavedWithEnumAndCancel {
+    // For the first session
+    meshedchannels_name_one: Ident,
+    all_roles_one: Vec<TokenStream>,
+    number_roles_one: u64,
+    index_tuple_one: u64,
+    // For the second session
+    meshedchannels_name_two: Ident,
+    all_roles_two: Vec<TokenStream>,
+    number_roles_two: u64,
+    index_tuple_two: u64,
+    // For the fork function
+    func_name: Ident,
 }
 
 impl Parse for BakingInterleavedWithEnumAndCancel {
     fn parse(input: ParseStream) -> Result<Self> {
-        let meshedchannels_name = Ident::parse(input)?;
+        // Get name of the first MeshedChannels
+        let meshedchannels_name_one = Ident::parse(input)?;
         <Token![,]>::parse(input)?;
-        let all_roles = expand_token_stream(<&syn::parse::ParseBuffer>::clone(&input))?;
 
-        let number_roles = u64::try_from(all_roles.len()).unwrap();
+        // Get name of the first Roles
+        let content_all_roles_one;
+        let _parentheses = syn::parenthesized!(content_all_roles_one in input);
+        let all_roles_one = parenthesised_groups(TokenStream::parse(&content_all_roles_one)?);
+        <Token![,]>::parse(input)?;
+
+        // Compute number of the first Roles
+        let number_roles_one = u64::try_from(all_roles_one.len()).unwrap();
+
+        // Get index of first central role
+        let index_tuple_one = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        <Token![,]>::parse(input)?;
+
+        // Get name of the second MeshedChannels
+        let meshedchannels_name_two = Ident::parse(input)?;
+        <Token![,]>::parse(input)?;
+
+        // Get name of the second Roles
+        let content_all_roles_two;
+        let _parentheses = syn::parenthesized!(content_all_roles_two in input);
+        let all_roles_two = parenthesised_groups(TokenStream::parse(&content_all_roles_two)?);
+        <Token![,]>::parse(input)?;
+
+        // Compute number of the second Roles
+        let number_roles_two = u64::try_from(all_roles_two.len()).unwrap();
+
+        // Get index of second central role
+        let index_tuple_two = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        <Token![,]>::parse(input)?;
+
+        let func_name = Ident::parse(input)?;
 
         Ok(BakingInterleavedWithEnumAndCancel {
-            meshedchannels_name,
-            all_roles,
-            number_roles,
+            meshedchannels_name_one,
+            all_roles_one,
+            number_roles_one,
+            index_tuple_one,
+            meshedchannels_name_two,
+            all_roles_two,
+            number_roles_two,
+            index_tuple_two,
+            func_name,
         })
     }
 }
@@ -55,1655 +94,32 @@ impl From<BakingInterleavedWithEnumAndCancel> for TokenStream {
 }
 
 impl BakingInterleavedWithEnumAndCancel {
-    /// Create the whole matrix of index according to line and column
-    fn diag(&self) -> VecOfTuple {
-        let diff = self.number_roles - 1;
-
-        let mut column = 0;
-        let mut line = 0;
-
-        // Create the upper diag
-        (0..(diff * (diff + 1) / 2))
-            .map(|i| {
-                if line == column {
-                    column += 1;
-                } else if column >= (self.number_roles - 1) {
-                    line += 1;
-                    column = line + 1;
-                } else {
-                    column += 1;
-                }
-                (line + 1, column + 1, i + 1)
-            })
-            .collect()
-    }
-
-    /// Create the whole matrix of index according to line and column
-    fn diag_and_matrix(&self) -> (VecOfTuple, Vec<VecOfTuple>) {
-        let diag = self.diag();
-
-        // Create the whole matrix
-        (
-            self.diag(),
-            (1..=self.number_roles)
-                .map(|i| {
-                    diag.iter()
-                        .filter_map(|(line, column, index)| {
-                            if i == *line || i == *column {
-                                Some((*line, *column, *index))
-                            } else {
-                                None
-                            }
-                        })
-                        .collect()
-                })
-                .collect(),
-        )
-    }
-
-    /// Return (line, column, index) of matrix
-    fn get_tuple_matrix(&self, matrix: &[VecOfTuple], i: u64, j: u64) -> (u64, u64, u64) {
-        let list: VecOfTuple = if let Some(temp) = matrix.get(usize::try_from(i - 1).unwrap()) {
-            temp.to_vec()
-        } else {
-            panic!(
-                "Error at get_tuple_matrix for i = {:?} / matrix = {:?}",
-                i, matrix
-            )
-        };
-
-        if let Some((line, column, index)) = list.get(usize::try_from(j - 1).unwrap()) {
-            (*line, *column, *index)
-        } else {
-            panic!("Error at get_tuple_matrix for i = {:?} and j = {:?} with list = {:?} / matrix = {:?}", i, j, list, matrix)
-        }
-    }
-
-    /// Return (line, column) of diag from index
-    fn get_line_column_from_diag(&self, diag: &[(u64, u64, u64)], index: u64) -> (u64, u64) {
-        for i in diag {
-            if i.2 == index {
-                return (i.0, i.1);
-            }
-        }
-        panic!("Error at get_line_column_from_diag for index = {:?}", index)
-    }
-
-    /// Expand send methods
-    fn expand_send(
-        &self,
-        all_roles: Vec<TokenStream>,
-        sender: u64,
-        receiver: u64,
-        session_types: Vec<Ident>,
-        session_types_struct: Vec<TokenStream>,
-    ) -> TokenStream {
-        let meshedchannels_name = self.meshedchannels_name.clone();
-
-        let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            Ident::new(&format!("Role{}", elt), Span::call_site())
-        } else {
-            panic!("Not enough arguments for sender_ident in expand_send")
-        };
-
-        let receiver_ident =
-            if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-                Ident::new(&format!("Role{}", elt), Span::call_site())
-            } else {
-                panic!("Not enough arguments for receiver_ident in expand_send")
-            };
-
-        let send_sessions: Vec<TokenStream> = (1..self.number_roles)
-            .map(|k| {
-                let cond = if k >= sender { receiver - 1 } else { receiver };
-
-                let temp_type = Ident::new(&format!("S{}", k), Span::call_site());
-
-                if k == cond {
-                    quote! { mpstthree::binary::struct_trait::send::Send<T, #temp_type > ,}
-                } else {
-                    quote! { #temp_type , }
-                }
-            })
-            .collect();
-
-        let new_sessions: Vec<TokenStream> = (1..self.number_roles)
-            .map(|k| {
-                let cond = if k >= sender { receiver - 1 } else { receiver };
-
-                let temp_session = Ident::new(&format!("session{}", k), Span::call_site());
-
-                if k == cond {
-                    quote! { #temp_session : new_session , }
-                } else {
-                    quote! { #temp_session : self.#temp_session , }
-                }
-            })
-            .collect();
-
-        let index = if receiver >= sender {
-            receiver - 1
-        } else {
-            receiver
-        };
-
-        let new_session = Ident::new(&format!("session{}", index), Span::call_site());
-
-        quote! {
-            impl<#( #session_types_struct )* R: mpstthree::role::Role, T: std::marker::Send>
-                #meshedchannels_name<
-                    #( #send_sessions )*
-                    #receiver_ident<R>,
-                    #sender_ident<mpstthree::role::end::RoleEnd>
-                >
-            {
-                pub fn send(self, payload: T) -> Result<
-                    #meshedchannels_name<
-                        #( #session_types , )*
-                        R,
-                        #sender_ident<mpstthree::role::end::RoleEnd>
-                    >,
-                    Box<dyn std::error::Error>
-                > {
-                    let new_session = mpstthree::binary::send::send_canceled(payload, self.#new_session)?;
-                    let new_stack = self.stack.continuation();
-                    Ok(
-                        #meshedchannels_name {
-                            #( #new_sessions )*
-                            stack: new_stack,
-                            name: self.name,
-                        }
-                    )
-                }
-            }
-        }
-    }
-
-    /// Expand receive methods
-    fn expand_recv(
-        &self,
-        all_roles: Vec<TokenStream>,
-        receiver: u64,
-        sender: u64,
-        session_types: Vec<Ident>,
-        session_types_struct: Vec<TokenStream>,
-    ) -> TokenStream {
-        let meshedchannels_name = self.meshedchannels_name.clone();
-
-        let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            Ident::new(&format!("Role{}", elt), Span::call_site())
-        } else {
-            panic!("Not enough arguments for sender_ident in expand_recv")
-        };
-
-        let receiver_ident =
-            if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-                Ident::new(&format!("Role{}", elt), Span::call_site())
-            } else {
-                panic!("Not enough arguments for receiver_ident in expand_recv")
-            };
-
-        let send_sessions: Vec<TokenStream> = (1..self.number_roles)
-            .map(|k| {
-                let cond = if k >= receiver { sender - 1 } else { sender };
-
-                let temp_type = Ident::new(&format!("S{}", k), Span::call_site());
-
-                if k == cond {
-                    quote! { mpstthree::binary::struct_trait::recv::Recv<T, #temp_type > ,}
-                } else {
-                    quote! { #temp_type ,}
-                }
-            })
-            .collect();
-
-        let new_sessions: Vec<TokenStream> = (1..self.number_roles)
-            .map(|k| {
-                let cond = if k >= receiver { sender - 1 } else { sender };
-
-                let temp_session = Ident::new(&format!("session{}", k), Span::call_site());
-
-                if k == cond {
-                    quote! { #temp_session : new_session , }
-                } else {
-                    quote! { #temp_session : self.#temp_session , }
-                }
-            })
-            .collect();
-
-        let index = if sender >= receiver {
-            sender - 1
-        } else {
-            sender
-        };
-
-        let new_session = Ident::new(&format!("session{}", index), Span::call_site());
-
-        quote! {
-            impl<#( #session_types_struct )* R: mpstthree::role::Role, T: std::marker::Send>
-                #meshedchannels_name<
-                    #( #send_sessions )*
-                    #sender_ident<R>,
-                    #receiver_ident<mpstthree::role::end::RoleEnd>
-                >
-            {
-                pub fn recv(self) -> Result<(
-                    T,
-                    #meshedchannels_name<
-                        #( #session_types , )*
-                        R,
-                        #receiver_ident<mpstthree::role::end::RoleEnd>
-                    >),
-                    Box<dyn std::error::Error>
-                > {
-                    let (v, new_session) = mpstthree::binary::recv::recv(self.#new_session)?;
-                    let new_stack = self.stack.continuation();
-                    Ok((
-                        v,
-                        #meshedchannels_name {
-                            #( #new_sessions )*
-                            stack: new_stack,
-                            name: self.name,
-                        }
-                    ))
-                }
-            }
-        }
-    }
-
-    /// Expand receive from all methods
-    fn expand_recv_from_all(
-        &self,
-        all_roles: Vec<TokenStream>,
-        receiver: u64,
-        sender: u64,
-        session_types: Vec<Ident>,
-        session_types_struct: Vec<TokenStream>,
-    ) -> TokenStream {
-        let meshedchannels_name = self.meshedchannels_name.clone();
-
-        let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            Ident::new(&format!("RoleAllto{}", elt), Span::call_site())
-        } else {
-            panic!("Not enough arguments for sender_ident in expand_recv_from_all")
-        };
-
-        let receiver_ident =
-            if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-                Ident::new(&format!("Role{}", elt), Span::call_site())
-            } else {
-                panic!("Not enough arguments for receiver_ident in expand_recv_from_all")
-            };
-
-        let send_sessions: Vec<TokenStream> = (1..self.number_roles)
-            .map(|k| {
-                let cond = if k >= receiver { sender - 1 } else { sender };
-
-                let temp_type = Ident::new(&format!("S{}", k), Span::call_site());
-
-                if k == cond {
-                    quote! { mpstthree::binary::struct_trait::recv::Recv<T, #temp_type > ,}
-                } else {
-                    quote! { #temp_type ,}
-                }
-            })
-            .collect();
-
-        let new_sessions: Vec<TokenStream> = (1..self.number_roles)
-            .map(|k| {
-                let cond = if k >= receiver { sender - 1 } else { sender };
-
-                let temp_session = Ident::new(&format!("session{}", k), Span::call_site());
-
-                if k == cond {
-                    quote! { #temp_session : new_session , }
-                } else {
-                    quote! { #temp_session : self.#temp_session , }
-                }
-            })
-            .collect();
-
-        let index = if sender >= receiver {
-            sender - 1
-        } else {
-            sender
-        };
-
-        let new_session = Ident::new(&format!("session{}", index), Span::call_site());
-
-        quote! {
-            impl<#( #session_types_struct )* T: std::marker::Send>
-                #meshedchannels_name<
-                    #( #send_sessions )*
-                    #sender_ident<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
-                    #receiver_ident<mpstthree::role::end::RoleEnd>
-                >
-            {
-                pub fn recv_from_all(self) -> Result<(
-                    T,
-                    #meshedchannels_name<
-                        #( #session_types , )*
-                        mpstthree::role::end::RoleEnd,
-                        #receiver_ident<mpstthree::role::end::RoleEnd>
-                    >),
-                    Box<dyn std::error::Error>
-                > {
-                    let (v, new_session) = mpstthree::binary::recv::recv(self.#new_session)?;
-
-                    let new_stack = self.stack.continuation_left();
-
-                    Ok((
-                        v,
-                        #meshedchannels_name {
-                            #( #new_sessions )*
-                            stack: new_stack,
-                            name: self.name,
-                        }
-                    ))
-                }
-            }
-        }
-    }
-
-    /// Expand offer methods
-    fn expand_offer(&self, all_roles: Vec<TokenStream>, sender: u64, receiver: u64) -> TokenStream {
-        let meshedchannels_name = self.meshedchannels_name.clone();
-
-        let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            Ident::new(&format!("RoleAllto{}", elt), Span::call_site())
-        } else {
-            panic!("Not enough arguments for sender_ident in expand_offer")
-        };
-
-        let receiver_ident =
-            if let Some(elt) = all_roles.get(usize::try_from(receiver - 1).unwrap()) {
-                Ident::new(&format!("Role{}", elt), Span::call_site())
-            } else {
-                panic!("Not enough arguments for receiver_ident in expand_offer")
-            };
-
-        let offer_session_types_struct: Vec<TokenStream> = (1..(2 * self.number_roles - 1))
-            .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
-            })
-            .collect();
-
-        let left_sessions: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { #temp_ident , }
-            })
-            .collect();
-
-        let right_sessions: Vec<TokenStream> = (self.number_roles..(2 * self.number_roles - 1))
-            .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { #temp_ident , }
-            })
-            .collect();
-
-        let offer_sessions: Vec<TokenStream> = (1..self.number_roles)
-            .map(|k| {
-                let cond = if k >= receiver { sender - 1 } else { sender };
-                if k == cond {
-                    quote! {
-                        mpstthree::binary::struct_trait::recv::Recv<
-                            either::Either<
-                                #meshedchannels_name<
-                                    #( #left_sessions )*
-                                    R1,
-                                    #receiver_ident<mpstthree::role::end::RoleEnd>
-                                >,
-                                #meshedchannels_name<
-                                    #( #right_sessions )*
-                                    R2,
-                                    #receiver_ident<mpstthree::role::end::RoleEnd>
-                                >
-                            >,
-                            mpstthree::binary::struct_trait::end::End
-                        >,
-                    }
-                } else {
-                    quote! { mpstthree::binary::struct_trait::end::End, }
-                }
-            })
-            .collect();
-
-        quote! {
-            impl<
-                'a,
-                #( #offer_session_types_struct )*
-                R1: mpstthree::role::Role,
-                R2: mpstthree::role::Role,
-            >
-                #meshedchannels_name<
-                    #( #offer_sessions )*
-                    #sender_ident<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
-                    #receiver_ident<mpstthree::role::end::RoleEnd>,
-                >
-            {
-                pub fn offer<F, G, U>(self, f: F, g: G) -> Result<U, Box<dyn std::error::Error + 'a>>
-                where
-                    F: FnOnce(
-                        #meshedchannels_name<
-                            #( #left_sessions )*
-                            R1,
-                            #receiver_ident<mpstthree::role::end::RoleEnd>,
-                        >,
-                    ) -> Result<U, Box<dyn std::error::Error + 'a>>,
-                    G: FnOnce(
-                        #meshedchannels_name<
-                            #( #right_sessions )*
-                            R2,
-                            #receiver_ident<mpstthree::role::end::RoleEnd>,
-                        >,
-                    ) -> Result<U, Box<dyn std::error::Error + 'a>>,
-                {
-                    let (e, s) = self.recv_from_all()?;
-                    mpstthree::binary::cancel::cancel(s);
-                    e.either(f, g)
-                }
-            }
-        }
-    }
-
-    /// Expand choose methods
-    fn expand_choose(&self, all_roles: Vec<TokenStream>, sender: u64) -> TokenStream {
-        let (diag, matrix) = self.diag_and_matrix();
-        let meshedchannels_name = self.meshedchannels_name.clone();
-
-        let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            Ident::new(&format!("Role{}", elt), Span::call_site())
-        } else {
-            panic!("Not enough arguments for sender_ident in expand_choose")
-        };
-
-        let sender_stack = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            Ident::new(&format!("Role{}toAll", elt), Span::call_site())
-        } else {
-            panic!("Not enough arguments for sender_stack in expand_choose")
-        };
-
-        let choose_session_types_struct: Vec<TokenStream> = (1..=((self.number_roles - 1)
-            * self.number_roles))
-            .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
-            })
-            .collect();
-
-        let choose_roles_struct: Vec<TokenStream> = (1..=(2 * self.number_roles))
-            .map(|i| {
-                let temp_ident = Ident::new(&format!("R{}", i), Span::call_site());
-                quote! { #temp_ident : mpstthree::role::Role , }
-            })
-            .collect();
-
-        let choose_sessions: Vec<TokenStream> = (1..=self.number_roles)
-            .map(|j| {
-                if sender != j {
-                    let left_sessions: Vec<TokenStream> = (1..self.number_roles)
-                        .map(|k| {
-
-                            let (l, _, _) = self.get_tuple_matrix(&matrix, j, k);
-
-                            if l == 0 {
-                                panic!("Erratum choose_sessions / left_sessions j = {:?}", j)
-                            };
-
-                            let (_, _, m1) = if j > sender {
-                                self.get_tuple_matrix(&matrix, sender, j - 1)
-                            } else {
-                                self.get_tuple_matrix(&matrix, sender, j)
-                            };
-                            let (_, _, m2) = self.get_tuple_matrix(&matrix, j, k);
-
-                            let (_, _, m) = self.get_tuple_matrix(&matrix, j, k);
-
-                            let temp_ident = Ident::new(
-                                &format!("S{}", m),
-                                Span::call_site(),
-                            );
-
-                            if l == j || m1 == m2 {
-                                quote! { #temp_ident , }
-                            } else {
-                                quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual , }
-                            }
-                        })
-                        .collect();
-
-                    let right_sessions: Vec<TokenStream> = (1..self.number_roles)
-                        .map(|k| {
-
-                            let (l, _, _) = self.get_tuple_matrix(&matrix, j, k);
-
-                            if l == 0 {
-                                panic!("Erratum choose_sessions / right_sessions j = {:?}", j)
-                            };
-
-                            let (_, _, m1) = if j > sender {
-                                self.get_tuple_matrix(&matrix, sender, j - 1)
-                            } else {
-                                self.get_tuple_matrix(&matrix, sender, j)
-                            };
-                            let (_, _, m2) = self.get_tuple_matrix(&matrix, j, k);
-
-                            let (_, _, m) = self.get_tuple_matrix(&matrix, j, k);
-
-                            let diff = self.number_roles - 1;
-
-                            let temp_ident = Ident::new(
-                                &format!("S{}", diff * (diff + 1) / 2 + m),
-                                Span::call_site(),
-                            );
-
-                            if l == j || m1 == m2 {
-                                quote! { #temp_ident , }
-                            } else {
-                                quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual , }
-                            }
-                        })
-                        .collect();
-
-                    let stack_left = if j > sender {
-                        let temp_ident = Ident::new(
-                            &format!("R{}", 2 * (j - 1) - 1),
-                            Span::call_site(),
-                        );
-                        quote! { #temp_ident , }
-                    } else {
-                        let temp_ident = Ident::new(
-                            &format!("R{}", 2 * (j - 1) + 1),
-                            Span::call_site(),
-                        );
-                        quote! { #temp_ident , }
-                    };
-
-                    let stack_right = if j > sender {
-                        let temp_ident = Ident::new(
-                            &format!("R{}", 2 * (j - 1)),
-                            Span::call_site(),
-                        );
-                        quote! { #temp_ident , }
-                    } else {
-                        let temp_ident = Ident::new(
-                            &format!("R{}", 2 * (j - 1) + 2),
-                            Span::call_site(),
-                        );
-                        quote! { #temp_ident , }
-                    };
-
-                    let receiver_ident =
-                        if let Some(elt) = all_roles.get(usize::try_from(j - 1).unwrap()) {
-                            Ident::new(&format!("Role{}", elt), Span::call_site())
-                        } else {
-                            panic!("Not enough arguments for receiver_ident in choose_sessions in expand_choose")
-                        };
-
-                    quote! {
-                        mpstthree::binary::struct_trait::send::Send<
-                            either::Either<
-                                #meshedchannels_name<
-                                    #(
-                                        #left_sessions
-                                    )*
-                                    #stack_left
-                                    #receiver_ident<mpstthree::role::end::RoleEnd>
-                                >,
-                                #meshedchannels_name<
-                                    #(
-                                        #right_sessions
-                                    )*
-                                    #stack_right
-                                    #receiver_ident<mpstthree::role::end::RoleEnd>
-                                >
-                            >,
-                            mpstthree::binary::struct_trait::end::End,
-                        >,
-                    }
-                } else {
-                    quote! {
-                        // Empty
-                    }
-                }
-            })
-            .collect();
-
-        let new_stack_sender_left = Ident::new(
-            &format!("R{}", 2 * self.number_roles - 1),
-            Span::call_site(),
-        );
-        let new_stack_sender_right =
-            Ident::new(&format!("R{}", 2 * self.number_roles), Span::call_site());
-        let new_stacks_sender = quote! { #new_stack_sender_left , #new_stack_sender_right };
-
-        let choose_left_session: Vec<TokenStream> = (1..=self.number_roles)
-            .filter_map(|j| {
-                if j == sender {
-                    None
-                } else {
-                    let (_, _, m) = if j > sender {
-                        self.get_tuple_matrix(&matrix, sender, j - 1)
-                    } else {
-                        self.get_tuple_matrix(&matrix, sender, j)
-                    };
-                    let temp_ident =
-                        Ident::new(&format!("S{}", m), Span::call_site());
-                    Some(
-                        quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual, },
-                    )
-                }
-            })
-            .collect();
-
-        let choose_right_session: Vec<TokenStream> = (1..=self.number_roles)
-            .filter_map(|j| {
-                if j == sender {
-                    None
-                } else {
-                    let (_, _, m) = if j > sender {
-                        self.get_tuple_matrix(&matrix, sender, j - 1)
-                    } else {
-                        self.get_tuple_matrix(&matrix, sender, j)
-                    };
-                    let diff = self.number_roles - 1;
-                    let temp_ident = Ident::new(
-                        &format!("S{}", diff * (diff + 1) / 2 + m),
-                        Span::call_site(),
-                    );
-                    Some(
-                        quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual, },
-                    )
-                }
-            })
-            .collect();
-        let choose_left_channels: Vec<TokenStream> =
-            (1..=((self.number_roles - 1) * self.number_roles / 2))
-                .map(|j| {
-                    let (line, column) = self.get_line_column_from_diag(&diag, j);
-
-                    let first_channel = if sender != line {
-                        Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
-                    } else {
-                        Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
-                    };
-
-                    let second_channel = if sender != line {
-                        Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
-                    } else {
-                        Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
-                    };
-
-                    let temp_session = Ident::new(&format!("S{}", j), Span::call_site());
-
-                    quote! { let ( #first_channel , #second_channel ) =
-                    <#temp_session as mpstthree::binary::struct_trait::session::Session>::new() ; }
-                })
-                .collect();
-
-        let choose_right_channels: Vec<TokenStream> =
-            (1..=((self.number_roles - 1) * self.number_roles / 2))
-                .map(|j| {
-                    let (line, column) = self.get_line_column_from_diag(&diag, j);
-                    let diff = self.number_roles - 1;
-
-                    let first_channel = if sender != line {
-                        Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
-                    } else {
-                        Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
-                    };
-
-                    let second_channel = if sender != line {
-                        Ident::new(&format!("channel_{}_{}", column, line), Span::call_site())
-                    } else {
-                        Ident::new(&format!("channel_{}_{}", line, column), Span::call_site())
-                    };
-
-                    let temp_session = Ident::new(
-                        &format!("S{}", diff * (diff + 1) / 2 + j),
-                        Span::call_site(),
-                    );
-
-                    quote! { let ( #first_channel , #second_channel ) = #temp_session::new() ; }
-                })
-                .collect();
-
-        let new_stacks_receivers_left: Vec<TokenStream> = (1..self.number_roles)
-            .map(|j| {
-                let temp_stack = Ident::new(&format!("stack_{}", j), Span::call_site());
-                let temp_role = Ident::new(&format!("R{}", 2 * (j - 1) + 1), Span::call_site());
-                quote! { let (#temp_stack, _) = <#temp_role as mpstthree::role::Role>::new(); }
-            })
-            .collect();
-
-        let new_stacks_receivers_right: Vec<TokenStream> = (1..self.number_roles)
-            .map(|j| {
-                let temp_stack = Ident::new(&format!("stack_{}", j), Span::call_site());
-                let temp_role = Ident::new(&format!("R{}", 2 * (j - 1) + 2), Span::call_site());
-                quote! { let (#temp_stack, _) = <#temp_role as mpstthree::role::Role>::new(); }
-            })
-            .collect();
-
-        let new_names: Vec<TokenStream> = (1..=self.number_roles)
-        .map(|j| {
-            if sender != j {
-
-                let receiver_ident =
-                    if let Some(elt) = all_roles.get(usize::try_from(j-1).unwrap()) {
-                        Ident::new(&format!("Role{}", elt), Span::call_site())
-                    } else {
-                        panic!("Not enough arguments for receiver_ident in new_names in expand_choose")
-                    };
-
-                    let new_name =
-                        if let Some(elt) = all_roles.get(usize::try_from(j-1).unwrap()) {
-                            Ident::new(&format!("name_{}", elt), Span::call_site())
-                        } else {
-                            panic!("Not enough arguments for new_name in new_names in expand_choose")
-                        };
-
-                quote! {
-                    let (#new_name, _) = <#receiver_ident<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-                }
-            } else {
-                quote! { }
-            }
-        })
-        .collect();
-
-        let new_meshedchannels_receivers: Vec<TokenStream> = (1..=self.number_roles)
-            .map(|j| {
-                if sender != j {
-                    let new_sessions_receiver: Vec<TokenStream> = (1..self
-                        .number_roles)
-                        .map(|k| {
-                            let new_session_receiver = Ident::new(
-                                &format!("session{}", k),
-                                Span::call_site(),
-                            );
-                            let new_channel_receiver = if j > k {
-                                Ident::new(
-                                    &format!("channel_{}_{}", j, k),
-                                    Span::call_site(),
-                                )
-                            } else {
-                                Ident::new(
-                                    &format!("channel_{}_{}", j, k + 1),
-                                    Span::call_site(),
-                                )
-                            };
-
-                            quote! { #new_session_receiver : #new_channel_receiver , }
-                        })
-                        .collect();
-
-                    let new_choice_receiver = if j > sender
-                    {
-                        Ident::new(&format!("choice_{}", j - 1), Span::call_site())
-                    } else {
-                        Ident::new(&format!("choice_{}", j), Span::call_site())
-                    };
-
-                    let new_stack_receiver = if j > sender
-                    {
-                        Ident::new(&format!("stack_{}", j - 1), Span::call_site())
-                    } else {
-                        Ident::new(&format!("stack_{}", j), Span::call_site())
-                    };
-
-                    let new_name_receiver = if let Some(elt) =
-                        all_roles.get(usize::try_from(j - 1).unwrap())
-                    {
-                        Ident::new(&format!("name_{}", elt), Span::call_site())
-                    } else {
-                        panic!("Not enough arguments for new_name_receiver in new_meshedchannels_receivers in expand_choose")
-                    };
-
-                    quote! {
-                        let #new_choice_receiver = #meshedchannels_name {
-                            #(
-                                #new_sessions_receiver
-                            )*
-                            stack: #new_stack_receiver,
-                            name: #new_name_receiver,
-                        };
-                    }
-                } else {
-                    quote! {
-                        // Empty
-                    }
-                }
-            })
-            .collect();
-
-        let new_sessions_sender_left: Vec<TokenStream> = (1..self.number_roles)
-            .map(|j| {
-                let new_session_sender =
-                    Ident::new(&format!("new_session_{}", j - 1), Span::call_site());
-
-                let new_choice_sender = Ident::new(&format!("choice_{}", j), Span::call_site());
-
-                let session_sender = Ident::new(&format!("session{}", j), Span::call_site());
-
-                quote! {
-                    let #new_session_sender = mpstthree::binary::send::send(
-                        either::Either::Left(#new_choice_sender),
-                        self.#session_sender
-                    );
-                }
-            })
-            .collect();
-
-        let new_sessions_sender_right: Vec<TokenStream> = (1..self.number_roles)
-            .map(|j| {
-                let new_session_sender =
-                    Ident::new(&format!("new_session_{}", j - 1), Span::call_site());
-
-                let new_choice_sender = Ident::new(&format!("choice_{}", j), Span::call_site());
-
-                let session_sender = Ident::new(&format!("session{}", j), Span::call_site());
-
-                quote! {
-                    let #new_session_sender = mpstthree::binary::send::send(
-                        either::Either::Right(#new_choice_sender),
-                        self.#session_sender
-                    );
-                }
-            })
-            .collect();
-
-        let old_meshedchannels_sender: Vec<TokenStream> = (1..self.number_roles)
-            .map(|j| {
-                let new_session_sender =
-                    Ident::new(&format!("new_session_{}", j - 1), Span::call_site());
-
-                let session_sender = Ident::new(&format!("session{}", j), Span::call_site());
-
-                quote! {
-                    #session_sender : #new_session_sender ,
-                }
-            })
-            .collect();
-
-        let new_meshedchannels_sender: Vec<TokenStream> = (1..=self.number_roles)
-            .map(|j| {
-                if sender != j {
-                    let new_choice_sender = if j < sender {
-                        Ident::new(&format!("session{}", j), Span::call_site())
-                    } else {
-                        Ident::new(&format!("session{}", j - 1), Span::call_site())
-                    };
-
-                    let new_channel_sender =
-                        Ident::new(&format!("channel_{}_{}", sender, j), Span::call_site());
-
-                    quote! {
-                        #new_choice_sender : #new_channel_sender,
-                    }
-                } else {
-                    quote! {
-                        // Empty
-                    }
-                }
-            })
-            .collect();
-
-        let new_stack_sender =
-            Ident::new(&format!("stack_{}", self.number_roles), Span::call_site());
-
-        let new_name_sender = Ident::new(&format!("name_{}", self.number_roles), Span::call_site());
-
-        quote! {
-            impl<
-                #(
-                    #choose_session_types_struct
-                )*
-                #(
-                    #choose_roles_struct
-                )*
-            >
-                #meshedchannels_name<
-                    #(
-                        #choose_sessions
-                    )*
-                    #sender_stack<
-                        #new_stacks_sender
-                    >,
-                    #sender_ident<mpstthree::role::end::RoleEnd>,
-                >
-            {
-                pub fn choose_left(self) -> #meshedchannels_name<
-                    #(
-                        #choose_left_session
-                    )*
-                    #new_stack_sender_left ,
-                    #sender_ident<mpstthree::role::end::RoleEnd>
-                >
-                {
-                    #(
-                        #choose_left_channels
-                    )*
-
-                    #(
-                        #new_stacks_receivers_left
-                    )*
-
-                    let (#new_stack_sender, _) = <#new_stack_sender_left as mpstthree::role::Role>::new();
-
-                    #(
-                        #new_names
-                    )*
-
-                    let (#new_name_sender, _) = <#sender_ident::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-
-                    #(
-                        #new_meshedchannels_receivers
-                    )*
-
-                    #(
-                        #new_sessions_sender_left
-                    )*
-
-                    let s = #meshedchannels_name {
-                        #(
-                            #old_meshedchannels_sender
-                        )*
-                        stack: self.stack,
-                        name: self.name,
-                    };
-
-                    mpstthree::binary::cancel::cancel(s);
-
-                    #meshedchannels_name {
-                        #(
-                            #new_meshedchannels_sender
-                        )*
-                        stack: #new_stack_sender,
-                        name: #new_name_sender,
-                    }
-                }
-                pub fn choose_right(self) -> #meshedchannels_name<
-                    #(
-                        #choose_right_session
-                    )*
-                    #new_stack_sender_right ,
-                    #sender_ident<mpstthree::role::end::RoleEnd>
-                >
-                {
-                    #(
-                        #choose_right_channels
-                    )*
-
-                    #(
-                        #new_stacks_receivers_right
-                    )*
-
-                    let (#new_stack_sender, _) = <#new_stack_sender_right as mpstthree::role::Role>::new();
-
-                    #(
-                        #new_names
-                    )*
-
-                    let (#new_name_sender, _) = <#sender_ident::<mpstthree::role::end::RoleEnd> as mpstthree::role::Role>::new();
-
-                    #(
-                        #new_meshedchannels_receivers
-                    )*
-
-                    #(
-                        #new_sessions_sender_right
-                    )*
-
-                    let s = #meshedchannels_name {
-                        #(
-                            #old_meshedchannels_sender
-                        )*
-                        stack: self.stack,
-                        name: self.name,
-                    };
-
-                    mpstthree::binary::cancel::cancel(s);
-
-                    #meshedchannels_name {
-                        #(
-                            #new_meshedchannels_sender
-                        )*
-                        stack: #new_stack_sender,
-                        name: #new_name_sender,
-                    }
-                }
-            }
-        }
-    }
-
-    fn expand_close(&self, all_roles: Vec<TokenStream>, sender: u64) -> TokenStream {
-        let meshedchannels_name = self.meshedchannels_name.clone();
-
-        let sender_ident = if let Some(elt) = all_roles.get(usize::try_from(sender - 1).unwrap()) {
-            let concatenated_elt = format!("Role{}", elt);
-            Ident::new(&concatenated_elt, Span::call_site())
-        } else {
-            panic!("Not enough arguments for sender_ident in expand_close")
-        };
-
-        let close_session_types: Vec<TokenStream> = (1..self.number_roles)
-            .map(|_i| {
-                quote! { mpstthree::binary::struct_trait::end::End, }
-            })
-            .collect();
-
-        let close_session_send: Vec<TokenStream> = (1..self.number_roles)
-                .map(|i| {
-                    let temp_session = Ident::new(
-                        &format!("session{}", i),
-                        Span::call_site(),
-                    );
-                    quote! { self.#temp_session.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop).unwrap_or(()); }
-                })
-                .collect();
-
-        let close_session_recv: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
-                quote! { self.#temp_session.receiver.recv()?; }
-            })
-            .collect();
-
-        quote! {
-            impl
-                #meshedchannels_name<
-                    #(
-                        #close_session_types
-                    )*
-                    mpstthree::role::end::RoleEnd,
-                    #sender_ident<mpstthree::role::end::RoleEnd>
-                >
-            {
-                pub fn close(self) -> Result<(), Box<dyn std::error::Error>> {
-
-                    #(
-                        #close_session_send
-                    )*
-
-                    #(
-                        #close_session_recv
-                    )*
-
-                    Ok(())
-                }
-            }
-        }
-    }
-
-    fn expand_cancel(&self) -> TokenStream {
-        let meshedchannels_name = self.meshedchannels_name.clone();
-
-        let temp_types: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_session = Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { #temp_session , }
-            })
-            .collect();
-
-        let temp_detail_types: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_session = Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { #temp_session : mpstthree::binary::struct_trait::session::Session , }
-            })
-            .collect();
-
-        quote! {
-            impl<
-                #(
-                    #temp_detail_types
-                )*
-                R: mpstthree::role::Role,
-                N: mpstthree::role::Role,
-            >
-                #meshedchannels_name<
-                    #(
-                        #temp_types
-                    )*
-                    R,
-                    N
-                >
-            {
-                /// Cancel the session
-                pub fn cancel(self) {
-                    std::mem::drop(self);
-                }
-            }
-        }
-    }
-
-    fn expand_role(&self, role: String) -> TokenStream {
-        // role
-        let role_name = Ident::new(&format!("Role{}", role), Span::call_site());
-        // dual
-        let dual_name = Ident::new(&format!("Role{}Dual", role), Span::call_site());
-        // role to all
-        let role_to_all_name = Ident::new(&format!("Role{}toAll", role), Span::call_site());
-        // dual to all
-        let dual_to_all_name = Ident::new(&format!("RoleAllto{}", role), Span::call_site());
-
-        quote! {
-            ////////////////////////////////////////////
-            /// The normal Role
-            #[derive(Debug)]
-            struct #role_name<R>
-            where
-                R: mpstthree::role::Role,
-                R::Dual: mpstthree::role::Role,
-            {
-                sender: crossbeam_channel::Sender<R::Dual>,
-            }
-            ////////////////////////////////////////////
-            /// The normal Dual
-            #[derive(Debug)]
-            struct #dual_name<R>
-            where
-                R: mpstthree::role::Role,
-                R::Dual: mpstthree::role::Role,
-            {
-                sender: crossbeam_channel::Sender<R::Dual>,
-            }
-            ////////////////////////////////////////////
-            /// The normal Role implementation of Role
-            impl<R: mpstthree::role::Role> mpstthree::role::Role for #role_name<R> {
-                type Dual = #dual_name<<R as mpstthree::role::Role>::Dual>;
-                #[doc(hidden)]
-                fn new() -> (Self, Self::Dual) {
-                    let (sender_normal, _) = crossbeam_channel::bounded::<R>(1);
-                    let (sender_dual, _) = crossbeam_channel::bounded::<R::Dual>(1);
-                    (
-                        #role_name {
-                            sender: sender_dual,
-                        },
-                        #dual_name {
-                            sender: sender_normal,
-                        },
-                    )
-                }
-
-                #[doc(hidden)]
-                fn head_str() -> String {
-                    String::from(stringify!(#role_name))
-                }
-
-                #[doc(hidden)]
-                fn tail_str() -> String {
-                    format!(
-                        "{}<{}>",
-                        <R as mpstthree::role::Role>::head_str(),
-                        <R as mpstthree::role::Role>::tail_str()
-                    )
-                }
-
-                #[doc(hidden)]
-                fn self_head_str(&self) -> String {
-                    String::from(stringify!(#role_name))
-                }
-
-                #[doc(hidden)]
-                fn self_tail_str(&self) -> String {
-                    format!(
-                        "{}<{}>",
-                        <R as mpstthree::role::Role>::head_str(),
-                        <R as mpstthree::role::Role>::tail_str()
-                    )
-                }
-            }
-            ////////////////////////////////////////////
-            /// The normal Dual implementation of Role
-            impl<R: mpstthree::role::Role> mpstthree::role::Role for #dual_name<R> {
-                type Dual = #role_name<<R as mpstthree::role::Role>::Dual>;
-                #[doc(hidden)]
-                fn new() -> (Self, Self::Dual) {
-                    let (sender_normal, _) = crossbeam_channel::bounded::<R>(1);
-                    let (sender_dual, _) = crossbeam_channel::bounded::<R::Dual>(1);
-                    (
-                        #dual_name {
-                            sender: sender_dual,
-                        },
-                        #role_name {
-                            sender: sender_normal,
-                        },
-                    )
-                }
-
-                #[doc(hidden)]
-                fn head_str() -> String {
-                    String::from(stringify!(#dual_name))
-                }
-
-                #[doc(hidden)]
-                fn tail_str() -> String {
-                    format!(
-                        "{}<{}>",
-                        <R as mpstthree::role::Role>::head_str(),
-                        <R as mpstthree::role::Role>::tail_str()
-                    )
-                }
-
-                #[doc(hidden)]
-                fn self_head_str(&self) -> String {
-                    String::from(stringify!(#dual_name))
-                }
-
-                #[doc(hidden)]
-                fn self_tail_str(&self) -> String {
-                    format!(
-                        "{}<{}>",
-                        <R as mpstthree::role::Role>::head_str(),
-                        <R as mpstthree::role::Role>::tail_str()
-                    )
-                }
-            }
-
-            ////////////////////////////////////////////
-            /// The associated functions for Role
-
-            impl<R: mpstthree::role::Role> #role_name<R> {
-                pub fn continuation(&self) -> R {
-                    let (here, there) = R::new();
-                    self.sender.send(there).unwrap_or(());
-                    here
-                }
-            }
-
-            ////////////////////////////////////////////
-            /// The associated functions for Dual
-
-            impl<R: mpstthree::role::Role> #dual_name<R> {
-                pub fn continuation(&self) -> R {
-                    let (here, there) = R::new();
-                    self.sender.send(there).unwrap_or(());
-                    here
-                }
-            }
-
-            ////////////////////////////////////////////
-            /// The all Role
-
-            #[derive(Debug)]
-            struct #role_to_all_name<R1, R2>
-            where
-                R1: mpstthree::role::Role,
-                R2: mpstthree::role::Role,
-                R1::Dual: mpstthree::role::Role,
-                R2::Dual: mpstthree::role::Role,
-            {
-                sender1: crossbeam_channel::Sender<R1::Dual>,
-                sender2: crossbeam_channel::Sender<R2::Dual>,
-            }
-
-            ////////////////////////////////////////////
-            /// The all Dual
-
-            #[derive(Debug)]
-            struct #dual_to_all_name<R1, R2>
-            where
-                R1: mpstthree::role::Role,
-                R2: mpstthree::role::Role,
-                R1::Dual: mpstthree::role::Role,
-                R2::Dual: mpstthree::role::Role,
-            {
-                sender1: crossbeam_channel::Sender<R1::Dual>,
-                sender2: crossbeam_channel::Sender<R2::Dual>,
-            }
-
-            ////////////////////////////////////////////
-            /// The all Role implementation of Role
-            impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> mpstthree::role::Role
-                for #role_to_all_name<R1, R2>
-            {
-                type Dual = #dual_to_all_name<
-                    <R1 as mpstthree::role::Role>::Dual,
-                    <R2 as mpstthree::role::Role>::Dual,
-                >;
-                #[doc(hidden)]
-                fn new() -> (Self, Self::Dual) {
-                    let (sender_normal_1, _) = crossbeam_channel::bounded::<R1>(1);
-                    let (sender_normal_2, _) = crossbeam_channel::bounded::<R2>(1);
-                    let (sender_dual_1, _) = crossbeam_channel::bounded::<R1::Dual>(1);
-                    let (sender_dual_2, _) = crossbeam_channel::bounded::<R2::Dual>(1);
-                    (
-                        #role_to_all_name {
-                            sender1: sender_dual_1,
-                            sender2: sender_dual_2,
-                        },
-                        #dual_to_all_name {
-                            sender1: sender_normal_1,
-                            sender2: sender_normal_2,
-                        },
-                    )
-                }
-
-                #[doc(hidden)]
-                fn head_str() -> String {
-                    String::from(stringify!(#role_to_all_name))
-                }
-
-                #[doc(hidden)]
-                fn tail_str() -> String {
-                    format!(
-                        "{}<{}> + {}<{}>",
-                        <R1 as mpstthree::role::Role>::head_str(),
-                        <R1 as mpstthree::role::Role>::tail_str(),
-                        <R2 as mpstthree::role::Role>::head_str(),
-                        <R2 as mpstthree::role::Role>::tail_str()
-                    )
-                }
-
-                #[doc(hidden)]
-                fn self_head_str(&self) -> String {
-                    String::from(stringify!(#role_to_all_name))
-                }
-
-                #[doc(hidden)]
-                fn self_tail_str(&self) -> String {
-                    format!(
-                        "{}<{}> + {}<{}>",
-                        <R1 as mpstthree::role::Role>::head_str(),
-                        <R1 as mpstthree::role::Role>::tail_str(),
-                        <R2 as mpstthree::role::Role>::head_str(),
-                        <R2 as mpstthree::role::Role>::tail_str()
-                    )
-                }
-            }
-
-            ////////////////////////////////////////////
-            /// The all Dual implementation of Role
-            impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> mpstthree::role::Role
-                for #dual_to_all_name<R1, R2>
-            {
-                type Dual = #role_to_all_name<
-                    <R1 as mpstthree::role::Role>::Dual,
-                    <R2 as mpstthree::role::Role>::Dual,
-                >;
-                #[doc(hidden)]
-                fn new() -> (Self, Self::Dual) {
-                    let (sender_normal_1, _) = crossbeam_channel::bounded::<R1>(1);
-                    let (sender_normal_2, _) = crossbeam_channel::bounded::<R2>(1);
-                    let (sender_dual_1, _) = crossbeam_channel::bounded::<R1::Dual>(1);
-                    let (sender_dual_2, _) = crossbeam_channel::bounded::<R2::Dual>(1);
-                    (
-                        #dual_to_all_name {
-                            sender1: sender_dual_1,
-                            sender2: sender_dual_2,
-                        },
-                        #role_to_all_name {
-                            sender1: sender_normal_1,
-                            sender2: sender_normal_2,
-                        },
-                    )
-                }
-
-                #[doc(hidden)]
-                fn head_str() -> String {
-                    String::from(stringify!(#dual_to_all_name))
-                }
-
-                #[doc(hidden)]
-                fn tail_str() -> String {
-                    format!(
-                        "{}<{}> + {}<{}>",
-                        <R1 as mpstthree::role::Role>::head_str(),
-                        <R1 as mpstthree::role::Role>::tail_str(),
-                        <R2 as mpstthree::role::Role>::head_str(),
-                        <R2 as mpstthree::role::Role>::tail_str()
-                    )
-                }
-
-                #[doc(hidden)]
-                fn self_head_str(&self) -> String {
-                    String::from(stringify!(#dual_to_all_name))
-                }
-
-                #[doc(hidden)]
-                fn self_tail_str(&self) -> String {
-                    format!(
-                        "{}<{}> + {}<{}>",
-                        <R1 as mpstthree::role::Role>::head_str(),
-                        <R1 as mpstthree::role::Role>::tail_str(),
-                        <R2 as mpstthree::role::Role>::head_str(),
-                        <R2 as mpstthree::role::Role>::tail_str()
-                    )
-                }
-            }
-
-            ////////////////////////////////////////////
-            /// The associated functions for Role
-
-            impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> #role_to_all_name<R1, R2> {
-                pub fn continuation_left(&self) -> R1 {
-                    let (here, there) = R1::new();
-                    self.sender1.send(there).unwrap_or(());
-                    here
-                }
-
-                pub fn continuation_right(&self) -> R2 {
-                    let (here, there) = R2::new();
-                    self.sender2.send(there).unwrap_or(());
-                    here
-                }
-            }
-
-            ////////////////////////////////////////////
-            /// The associated functions for Dual
-
-            impl<R1: mpstthree::role::Role, R2: mpstthree::role::Role> #dual_to_all_name<R1, R2> {
-                pub fn continuation_left(&self) -> R1 {
-                    let (here, there) = R1::new();
-                    self.sender1.send(there).unwrap_or(());
-                    here
-                }
-                pub fn continuation_right(&self) -> R2 {
-                    let (here, there) = R2::new();
-                    self.sender2.send(there).unwrap_or(());
-                    here
-                }
-            }
-        }
-    }
-
-    fn expand_choose_mpst_create_multi_to_all(&self) -> TokenStream {
-        let meshedchannels_name = self.meshedchannels_name.clone();
-
-        // Get all the roles provided into a Vec
-        let all_roles = self.all_roles.clone();
-
-        let choose_mpst_create_multi_to_all: Vec<TokenStream> = (1..=self.number_roles)
-            .map(|sender| {
-
-                let name_macro = if let Some(elt) =
-                    all_roles.get(usize::try_from(sender - 1).unwrap())
-                {
-                    Ident::new(
-                        &format!("choose_mpst_{}_to_all", elt).to_lowercase(),
-                        Span::call_site(),
-                    )
-                } else {
-                    panic!("Not enough arguments for name in expand_choose_mpst_create_multi_to_all")
-                };
-
-                let sender_name = if let Some(elt) =
-                    all_roles.get(usize::try_from(sender - 1).unwrap())
-                {
-                    Ident::new(
-                        &format!("Role{}", elt),
-                        Span::call_site(),
-                    )
-                } else {
-                    panic!("Not enough arguments for sender_name in expand_choose_mpst_create_multi_to_all")
-                };
-
-                let receivers: Vec<Ident> = (1..=self.number_roles)
-                    .filter_map(|receiver| {
-                        if sender != receiver {
-                            Some(
-                                if let Some(elt) =
-                                    all_roles.get(usize::try_from(receiver - 1).unwrap())
-                                {
-                                    Ident::new(
-                                        &format!("Role{}", elt),
-                                        Span::call_site(),
-                                    )
-                                } else {
-                                    panic!("Not enough arguments for receivers in expand_choose_mpst_create_multi_to_all")
-                                }
-                            )
-                        } else {
-                            None
-                        }
-                    })
-                    .collect();
-
-                quote! {
-                    mpstthree::choose_mpst_create_multi_to_all!(
-                        #name_macro ,
-                        #( #receivers , )* =>
-                        #sender_name ,
-                        #meshedchannels_name ,
-                        #sender
-                    );
-                }
-            })
-            .collect();
-
-        quote! {
-            #( #choose_mpst_create_multi_to_all )*
-        }
-    }
-
     fn expand(&self) -> TokenStream {
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        // Create the first MeshedChannel structure and related methods and macros
+        let meshedchannels_struct_one =
+            meshedchannels(&self.meshedchannels_name_one, self.number_roles_one);
 
-        // Get all the roles provided into a Vec
-        let all_roles = self.all_roles.clone();
+        let session_types_one = create_session_types(1, self.number_roles_one);
 
-        let session_types: Vec<Ident> = (1..self.number_roles)
-            .map(|i| Ident::new(&format!("S{}", i), Span::call_site()))
-            .collect();
+        let session_types_struct_one = create_session_type_structs(1, self.number_roles_one);
 
-        let session_types_struct: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { #temp_ident : mpstthree::binary::struct_trait::session::Session , }
-            })
-            .collect();
+        let roles_struct_one = create_role_structs(&self.all_roles_one);
 
-        let session_types_dual_struct: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { <#temp_ident as mpstthree::binary::struct_trait::session::Session>::Dual , }
-            })
-            .collect();
+        let names_struct_one = create_name_structs(&self.all_roles_one);
 
-        let session_types_pub: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
-                let temp_type = Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { pub #temp_session : #temp_type , }
-            })
-            .collect();
-
-        let sender_receiver: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_sender = Ident::new(&format!("sender{}", i), Span::call_site());
-                let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
-                let temp_type = Ident::new(&format!("S{}", i), Span::call_site());
-                quote! { let ( #temp_sender , #temp_receiver ) =
-                <#temp_type as mpstthree::binary::struct_trait::session::Session>::new() ; }
-            })
-            .collect();
-
-        let sender_struct: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
-                let temp_sender = Ident::new(&format!("sender{}", i), Span::call_site());
-                quote! { #temp_session : #temp_sender , }
-            })
-            .collect();
-
-        let receiver_struct: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
-                let temp_receiver = Ident::new(&format!("receiver{}", i), Span::call_site());
-                quote! { #temp_session : #temp_receiver , }
-            })
-            .collect();
-
-        let head_str: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
-                quote! {
-                    if result.is_empty() {
-                        result = format!(
-                            "{}",
-                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str()
-                        ) ;
-                    } else {
-                        result = format!(
-                            "{}\n{}",
-                            result,
-                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str()
-                        );
-                    }
-                }
-            })
-            .collect();
-
-        let tail_str: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_ident =
-                    Ident::new(&format!("S{}", i), Span::call_site());
-                quote! {
-                    if result.is_empty() {
-                        result = format!(
-                            "{}<{}>",
-                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str(),
-                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::tail_str()
-                        ) ;
-                    } else {
-                        result = format!(
-                            "{}\n{}<{}>",
-                            result,
-                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::head_str(),
-                            <#temp_ident as mpstthree::binary::struct_trait::session::Session>::tail_str()
-                        ) ;
-                    }
-                }
-            })
-            .collect();
-
-        let stringify: Vec<TokenStream> = (1..self.number_roles)
-            .map(|i| {
-                let temp_session = Ident::new(&format!("session{}", i), Span::call_site());
-                quote! { stringify!( #temp_session ) , }
-            })
-            .collect();
-
-        let roles_struct: Vec<TokenStream> = all_roles
-            .iter()
-            .map(|i| self.expand_role(format!("{}", i)))
-            .collect();
-
-        let send_methods: Vec<TokenStream> = (1..=self.number_roles)
+        let send_methods_one: Vec<TokenStream> = (1..=self.number_roles_one)
             .map(|sender| {
-                (1..=self.number_roles)
+                (1..=self.number_roles_one)
                     .filter_map(|receiver| {
                         if sender != receiver {
-                            Some(self.expand_send(
-                                all_roles.clone(),
+                            Some(send_canceled(
+                                &self.all_roles_one,
                                 sender,
                                 receiver,
-                                session_types.clone(),
-                                session_types_struct.clone(),
+                                &session_types_one,
+                                &session_types_struct_one,
+                                &self.meshedchannels_name_one,
+                                self.number_roles_one,
                             ))
                         } else {
                             None
@@ -1713,17 +129,19 @@ impl BakingInterleavedWithEnumAndCancel {
             })
             .collect();
 
-        let recv_methods: Vec<TokenStream> = (1..=self.number_roles)
+        let recv_methods_one: Vec<TokenStream> = (1..=self.number_roles_one)
             .map(|receiver| {
-                (1..=self.number_roles)
+                (1..=self.number_roles_one)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(self.expand_recv(
-                                all_roles.clone(),
+                            Some(recv(
+                                &self.all_roles_one,
                                 receiver,
                                 sender,
-                                session_types.clone(),
-                                session_types_struct.clone(),
+                                &session_types_one,
+                                &session_types_struct_one,
+                                &self.meshedchannels_name_one,
+                                self.number_roles_one,
                             ))
                         } else {
                             None
@@ -1733,17 +151,19 @@ impl BakingInterleavedWithEnumAndCancel {
             })
             .collect();
 
-        let recv_from_all_methods: Vec<TokenStream> = (1..=self.number_roles)
+        let recv_from_all_methods_one: Vec<TokenStream> = (1..=self.number_roles_one)
             .map(|receiver| {
-                (1..=self.number_roles)
+                (1..=self.number_roles_one)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(self.expand_recv_from_all(
-                                all_roles.clone(),
+                            Some(recv_from_all(
+                                &self.all_roles_one,
                                 receiver,
                                 sender,
-                                session_types.clone(),
-                                session_types_struct.clone(),
+                                &session_types_one,
+                                &session_types_struct_one,
+                                &self.meshedchannels_name_one,
+                                self.number_roles_one,
                             ))
                         } else {
                             None
@@ -1753,12 +173,18 @@ impl BakingInterleavedWithEnumAndCancel {
             })
             .collect();
 
-        let offer_methods: Vec<TokenStream> = (1..=self.number_roles)
+        let offer_methods_one: Vec<TokenStream> = (1..=self.number_roles_one)
             .map(|receiver| {
-                (1..=self.number_roles)
+                (1..=self.number_roles_one)
                     .filter_map(|sender| {
                         if receiver != sender {
-                            Some(self.expand_offer(all_roles.clone(), sender, receiver))
+                            Some(offer(
+                                &self.all_roles_one,
+                                sender,
+                                receiver,
+                                &self.meshedchannels_name_one,
+                                self.number_roles_one,
+                            ))
                         } else {
                             None
                         }
@@ -1767,164 +193,210 @@ impl BakingInterleavedWithEnumAndCancel {
             })
             .collect();
 
-        let choose_methods: Vec<TokenStream> = (1..=self.number_roles)
-            .map(|sender| self.expand_choose(all_roles.clone(), sender))
+        let choose_methods_one: Vec<TokenStream> = (1..=self.number_roles_one)
+            .map(|sender| {
+                choose(
+                    &self.all_roles_one,
+                    sender,
+                    &self.meshedchannels_name_one,
+                    self.number_roles_one,
+                )
+            })
             .collect();
 
-        let close_methods: Vec<TokenStream> = (1..=self.number_roles)
-            .map(|sender| self.expand_close(all_roles.clone(), sender))
+        let close_methods_one: TokenStream =
+            close(&self.meshedchannels_name_one, self.number_roles_one);
+
+        let choose_mpst_create_multi_to_all_one = choose_mpst_create_multi_to_all(
+            &self.meshedchannels_name_one,
+            &self.all_roles_one,
+            self.number_roles_one,
+        );
+
+        let cancel_method_one: TokenStream =
+            cancel(&self.meshedchannels_name_one, self.number_roles_one);
+
+        // Create the second MeshedChannel structure and related methods and macros
+        let meshedchannels_struct_two =
+            meshedchannels(&self.meshedchannels_name_two, self.number_roles_two);
+
+        let session_types_two = create_session_types(1, self.number_roles_two);
+
+        let session_types_struct_two = create_session_type_structs(1, self.number_roles_two);
+
+        let roles_struct_two = create_role_structs(&self.all_roles_two);
+
+        let names_struct_two = create_name_structs(&self.all_roles_two);
+
+        let send_methods_two: Vec<TokenStream> = (1..=self.number_roles_two)
+            .map(|sender| {
+                (1..=self.number_roles_two)
+                    .filter_map(|receiver| {
+                        if sender != receiver {
+                            Some(send_canceled(
+                                &self.all_roles_two,
+                                sender,
+                                receiver,
+                                &session_types_two,
+                                &session_types_struct_two,
+                                &self.meshedchannels_name_two,
+                                self.number_roles_two,
+                            ))
+                        } else {
+                            None
+                        }
+                    })
+                    .collect()
+            })
             .collect();
 
-        let choose_mpst_create_multi_to_all = self.expand_choose_mpst_create_multi_to_all();
+        let recv_methods_two: Vec<TokenStream> = (1..=self.number_roles_two)
+            .map(|receiver| {
+                (1..=self.number_roles_two)
+                    .filter_map(|sender| {
+                        if receiver != sender {
+                            Some(recv(
+                                &self.all_roles_two,
+                                receiver,
+                                sender,
+                                &session_types_two,
+                                &session_types_struct_two,
+                                &self.meshedchannels_name_two,
+                                self.number_roles_two,
+                            ))
+                        } else {
+                            None
+                        }
+                    })
+                    .collect()
+            })
+            .collect();
 
-        let cancel_method: TokenStream = self.expand_cancel();
+        let recv_from_all_methods_two: Vec<TokenStream> = (1..=self.number_roles_two)
+            .map(|receiver| {
+                (1..=self.number_roles_two)
+                    .filter_map(|sender| {
+                        if receiver != sender {
+                            Some(recv_from_all(
+                                &self.all_roles_two,
+                                receiver,
+                                sender,
+                                &session_types_two,
+                                &session_types_struct_two,
+                                &self.meshedchannels_name_two,
+                                self.number_roles_two,
+                            ))
+                        } else {
+                            None
+                        }
+                    })
+                    .collect()
+            })
+            .collect();
+
+        let offer_methods_two: Vec<TokenStream> = (1..=self.number_roles_two)
+            .map(|receiver| {
+                (1..=self.number_roles_two)
+                    .filter_map(|sender| {
+                        if receiver != sender {
+                            Some(offer(
+                                &self.all_roles_two,
+                                sender,
+                                receiver,
+                                &self.meshedchannels_name_two,
+                                self.number_roles_two,
+                            ))
+                        } else {
+                            None
+                        }
+                    })
+                    .collect()
+            })
+            .collect();
+
+        let choose_methods_two: Vec<TokenStream> = (1..=self.number_roles_two)
+            .map(|sender| {
+                choose(
+                    &self.all_roles_two,
+                    sender,
+                    &self.meshedchannels_name_two,
+                    self.number_roles_two,
+                )
+            })
+            .collect();
+
+        let close_methods_two: TokenStream =
+            close(&self.meshedchannels_name_two, self.number_roles_two);
+
+        let choose_mpst_create_multi_to_all_two = choose_mpst_create_multi_to_all(
+            &self.meshedchannels_name_two,
+            &self.all_roles_two,
+            self.number_roles_two,
+        );
+
+        let cancel_method_two: TokenStream =
+            cancel(&self.meshedchannels_name_two, self.number_roles_two);
+
+        // Create the fork function elemental blocks
+        let quote_fork_mpst = fork_interleaved_mpst(
+            &self.func_name,
+            &self.meshedchannels_name_one,
+            self.number_roles_one,
+            self.index_tuple_one,
+            &self.meshedchannels_name_two,
+            self.number_roles_two,
+            self.index_tuple_two,
+        );
 
         quote! {
-            #[must_use]
-            #[derive(Debug)]
-            pub struct #meshedchannels_name<
-                #( #session_types , )*
-                R,
-                N
-            >
-            where
-                #( #session_types_struct )*
-                R: mpstthree::role::Role,
-                N: mpstthree::role::Role
-            {
-                #( #session_types_pub )*
-                pub stack: R,
-                pub name: N,
-            }
-            #[doc(hidden)]
-            impl<
-                #( #session_types_struct )*
-                R: mpstthree::role::Role,
-                N: mpstthree::role::Role
-            > mpstthree::binary::struct_trait::session::Session for #meshedchannels_name<
-                #(
-                    #session_types , )*
-                    R,
-                    N
-                > {
-                type Dual =
-                #meshedchannels_name<
-                    #( #session_types_dual_struct )*
-                    <R as mpstthree::role::Role>::Dual,
-                    <N as mpstthree::role::Role>::Dual,
-                >;
+            // Append the first MeshedChannel structure and related methods and macros
+            #meshedchannels_struct_one
 
-                #[doc(hidden)]
-                fn new() -> (Self, Self::Dual) {
-                    #( #sender_receiver )*
+            #( #roles_struct_one )*
 
-                    let (role_one, role_two) = R::new();
-                    let (name_one, name_two) = N::new();
-                    (
-                        #meshedchannels_name {
-                            #( #sender_struct )*
-                            stack: role_one,
-                            name: name_one,
-                        },
-                        #meshedchannels_name {
-                            #( #receiver_struct )*
-                            stack: role_two,
-                            name: name_two,
-                        }
-                    )
-                }
+            #( #names_struct_one )*
 
-                #[doc(hidden)]
-                fn head_str() -> String {
-                    let mut result = "".to_string();
-                    #( #head_str )*
-                    format!(
-                        "{}\n{}\n{}",
-                        result,
-                        <R as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::head_str()
-                    )
-                }
+            #( #send_methods_one )*
 
-                #[doc(hidden)]
-                fn tail_str() -> String {
-                    let mut result = "".to_string();
-                    #( #tail_str )*
-                    format!(
-                        "{}\n{}<{}>\n{}<{}>",
-                        result,
-                        <R as mpstthree::role::Role>::head_str(),
-                        <R as mpstthree::role::Role>::tail_str(),
-                        <N as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::tail_str()
-                    )
-                }
+            #( #recv_methods_one )*
 
-                #[doc(hidden)]
-                fn self_head_str(&self) -> String {
-                    let mut result = "".to_string();
-                    #( #head_str )*
-                    format!(
-                        "{}\n{}\n{}",
-                        result,
-                        <R as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::head_str()
-                    )
-                }
+            #( #recv_from_all_methods_one )*
 
-                #[doc(hidden)]
-                fn self_tail_str(&self) -> String {
-                    let mut result = "".to_string();
-                    #( #tail_str )*
-                    format!(
-                        "{}\n{}<{}>\n{}<{}>",
-                        result,
-                        <R as mpstthree::role::Role>::head_str(),
-                        <R as mpstthree::role::Role>::tail_str(),
-                        <N as mpstthree::role::Role>::head_str(),
-                        <N as mpstthree::role::Role>::tail_str()
-                    )
-                }
-            }
-            #[doc(hidden)]
-            impl<
-                    #( #session_types_struct )*
-                    R: mpstthree::role::Role,
-                    N: mpstthree::role::Role
-                > #meshedchannels_name<#( #session_types , )* R, N> {
-                #[doc(hidden)]
-                pub fn field_names(self) ->
-                    (
-                        &'static [&'static str],
-                        #meshedchannels_name<#( #session_types , )* R, N>
-                    ) {
-                    (
-                        &[
-                            #( #stringify )*
-                        ],
-                        self
-                    )
-                }
-            }
+            #( #offer_methods_one )*
 
+            #( #choose_methods_one )*
 
-            #( #roles_struct )*
+            #close_methods_one
 
-            #( #send_methods )*
+            #cancel_method_one
 
-            #( #recv_methods )*
+            #choose_mpst_create_multi_to_all_one
 
-            #( #recv_from_all_methods )*
+            // Create the second MeshedChannel structure and related methods and macros
+            #meshedchannels_struct_two
 
-            #( #offer_methods )*
+            #( #roles_struct_two )*
 
-            #( #choose_methods )*
+            #( #names_struct_two )*
 
-            #( #close_methods )*
+            #( #send_methods_two )*
 
-            #cancel_method
+            #( #recv_methods_two )*
 
-            #choose_mpst_create_multi_to_all
+            #( #recv_from_all_methods_two )*
+
+            #( #offer_methods_two )*
+
+            #( #choose_methods_two )*
+
+            #close_methods_two
+
+            #cancel_method_two
+
+            #choose_mpst_create_multi_to_all_two
+
+            // Create the fork function
+            #quote_fork_mpst
         }
     }
 }

@@ -32,8 +32,7 @@ fn nice_sum_server_accum(s: NiceSumServer, x: i32) -> Result<(), Box<dyn Error>>
             let s = send::send(x, s);
             close::close(s)
         },
-    })?;
-    Ok(())
+    })
 }
 
 fn nice_sum_client_accum(s: NiceSumClient, mut xs: Vec<i32>) -> Result<i32, Box<dyn Error>> {
@@ -63,11 +62,11 @@ fn main() {
 
     let (other_thread, s) = fork::fork_with_thread_id(nice_sum_server);
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         let sum2 = nice_sum_client_accum(s, xs)?;
         assert_eq!(sum1, sum2);
         Ok(())
-    }()
+    }
     .is_ok());
 
     assert!(other_thread.join().is_ok());

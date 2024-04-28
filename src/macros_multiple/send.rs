@@ -21,7 +21,7 @@
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_multiple_normal_role, create_send_mpst_session, create_meshedchannels};
+/// use mpstthree::{create_multiple_normal_role, create_normal_name, create_send_mpst_session, create_meshedchannels};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
@@ -29,9 +29,11 @@
 ///     RoleD, RoleDDual |
 /// );
 ///
+/// create_normal_name!(NameD);
+///
 /// create_meshedchannels!(MeshedChannels, 3);
 ///
-/// create_send_mpst_session!(send_mpst_d_to_a, RoleA, RoleD, MeshedChannels, 3, 1);
+/// create_send_mpst_session!(send_mpst_d_to_a, RoleA, NameD, MeshedChannels, 3, 1);
 /// ```
 ///
 /// *This macro is available only if MultiCrusty is built with
@@ -47,7 +49,7 @@ macro_rules! create_send_mpst_session {
         $n_sessions:literal,
         $exclusion:literal
     ) => {
-        mpst_seq::create_send_mpst_session!(
+        mpst_seq_proc::create_send_mpst_session!(
             $func_name,
             $receiver,
             $sender,
@@ -75,7 +77,7 @@ macro_rules! create_send_mpst_session {
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_multiple_normal_role, create_send_mpst_cancel, create_meshedchannels};
+/// use mpstthree::{create_multiple_normal_role, create_normal_name, create_send_mpst_cancel, create_meshedchannels};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
@@ -83,9 +85,11 @@ macro_rules! create_send_mpst_session {
 ///     RoleD, RoleDDual |
 /// );
 ///
+/// create_normal_name!(NameD);
+///
 /// create_meshedchannels!(MeshedChannels, 3);
 ///
-/// create_send_mpst_cancel!(send_cancel_d_to_a, RoleA, RoleD, MeshedChannels, 3, 1);
+/// create_send_mpst_cancel!(send_cancel_d_to_a, RoleA, NameD, MeshedChannels, 3, 1);
 /// ```
 ///
 /// *This macro is available only if MultiCrusty is built with
@@ -101,7 +105,7 @@ macro_rules! create_send_mpst_cancel {
         $n_sessions:literal,
         $exclusion:literal
     ) => {
-        mpst_seq::create_send_mpst_cancel!(
+        mpst_seq_proc::create_send_mpst_cancel!(
             $func_name,
             $receiver,
             $sender,
@@ -129,27 +133,33 @@ macro_rules! create_send_mpst_cancel {
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_meshedchannels, create_normal_role, create_send_check_cancel};
+/// use mpstthree::{
+///     create_meshedchannels, create_normal_name, create_normal_role, create_send_check_cancel,
+/// };
 ///
 /// create_normal_role!(RoleB, RoleBDual);
 /// create_normal_role!(RoleD, RoleDDual);
 ///
+/// create_normal_name!(NameD);
+///
 /// create_meshedchannels!(MeshedChannels, 3);
 ///
-/// create_send_check_cancel!(send_cancel_d_to_b, RoleB, RoleD, MeshedChannels, 3, 2);
+/// create_send_check_cancel!(send_cancel_d_to_b, RoleB, NameD, MeshedChannels, 3, 2);
 /// ```
 ///
 /// # Compile fail
 ///
 /// ```compile_fail
-/// use mpstthree::{create_meshedchannels, create_normal_role, create_send_check_cancel};
+/// use mpstthree::{create_meshedchannels, create_normal_name, create_normal_role, create_send_check_cancel};
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleD, RoleDDual);
 ///
+/// create_normal_name!(NameD);
+///
 /// create_meshedchannels!(MeshedChannels, 3);
 ///
-/// create_send_check_cancel!(send_cancel_d_to_b, RoleA, RoleD, MeshedChannels, 3, 1);
+/// create_send_check_cancel!(send_cancel_d_to_b, RoleA, NameD, MeshedChannels, 3, 1);
 /// ```
 ///
 /// *This macro is available only if MultiCrusty is built with
@@ -165,7 +175,7 @@ macro_rules! create_send_check_cancel {
         $n_sessions:literal,
         $exclusion:literal
     ) => {
-        mpst_seq::create_send_check_cancel!(
+        mpst_seq_proc::create_send_check_cancel!(
             $func_name,
             $receiver,
             $sender,
@@ -192,13 +202,15 @@ macro_rules! create_send_check_cancel {
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_multiple_normal_role, create_meshedchannels, create_send_mpst_session_bundle};
+/// use mpstthree::{create_multiple_normal_role, create_normal_name, create_meshedchannels, create_send_mpst_session_bundle};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
+///
+/// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 ///
@@ -209,7 +221,7 @@ macro_rules! create_send_check_cancel {
 ///    send_mpst_d_to_b,
 ///    RoleB,
 ///    2 | =>
-///    RoleD,
+///    NameD,
 ///    MeshedChannels,
 ///    3
 /// );
@@ -250,13 +262,15 @@ macro_rules! create_send_mpst_session_bundle {
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_multiple_normal_role, create_meshedchannels, create_send_mpst_cancel_bundle};
+/// use mpstthree::{create_multiple_normal_role, create_normal_name, create_meshedchannels, create_send_mpst_cancel_bundle};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
+///
+/// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 ///
@@ -267,7 +281,7 @@ macro_rules! create_send_mpst_session_bundle {
 ///    send_cancel_d_to_b,
 ///    RoleB,
 ///    2 | =>
-///    RoleD,
+///    NameD,
 ///    MeshedChannels,
 ///    3
 /// );
@@ -308,11 +322,13 @@ macro_rules! create_send_mpst_cancel_bundle {
 /// # Example
 ///
 /// ```
-/// use mpstthree::{create_normal_role, create_meshedchannels, create_send_check_cancel_bundle};
+/// use mpstthree::{create_normal_role, create_normal_name, create_meshedchannels, create_send_check_cancel_bundle};
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleB, RoleBDual);
 /// create_normal_role!(RoleD, RoleDDual);
+///
+/// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 ///
@@ -320,7 +336,7 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///    send_cancel_d_to_b,
 ///    RoleB,
 ///    2 | =>
-///    RoleD,
+///    NameD,
 ///    MeshedChannels,
 ///    3
 /// );
@@ -329,13 +345,15 @@ macro_rules! create_send_mpst_cancel_bundle {
 /// # Compile fail
 ///
 /// ```compile_fail
-/// use mpstthree::{create_multiple_normal_role, create_meshedchannels, create_send_check_cancel_bundle};
+/// use mpstthree::{create_multiple_normal_role, create_normal_name, create_meshedchannels, create_send_check_cancel_bundle};
 ///
 /// create_multiple_normal_role!(
 ///     RoleA, RoleADual |
 ///     RoleB, RoleBDual |
 ///     RoleD, RoleDDual |
 /// );
+///
+/// create_normal_name!(NameD);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 ///
@@ -346,7 +364,7 @@ macro_rules! create_send_mpst_cancel_bundle {
 ///    send_cancel_d_to_b,
 ///    RoleB,
 ///    2 | =>
-///    RoleD,
+///    NameD,
 ///    MeshedChannels,
 ///    3
 /// );

@@ -5,7 +5,7 @@
 )]
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::bundle_impl_with_enum_and_cancel;
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -14,27 +14,24 @@ use std::error::Error;
 static LOOPS: i64 = 100;
 
 // Create new roles
-bundle_impl_with_enum_and_cancel!(MeshedChannelsTwo, A, B);
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
+generate!("rec_and_cancel", MeshedChannels, A, B);
 
 // Types
 // A
 enum Branching0fromBtoA {
-    More(MeshedChannelsTwo<Recv<(), Send<(), RecursAtoB>>, RoleB<RoleB<RoleB<RoleEnd>>>, NameA>),
-    Done(MeshedChannelsTwo<End, RoleEnd, NameA>),
+    More(MeshedChannels<Recv<(), Send<(), RecursAtoB>>, RoleB<RoleB<RoleB<RoleEnd>>>, NameA>),
+    Done(MeshedChannels<End, RoleEnd, NameA>),
 }
 type RecursAtoB = Recv<Branching0fromBtoA, End>;
+
 // C
 type Choose0fromBtoA = Send<Branching0fromBtoA, End>;
 type EndpointMoreB =
-    MeshedChannelsTwo<Send<(), Recv<(), Choose0fromBtoA>>, RoleA<RoleA<RoleBroadcast>>, NameB>;
+    MeshedChannels<Send<(), Recv<(), Choose0fromBtoA>>, RoleA<RoleA<RoleBroadcast>>, NameB>;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsTwo<RecursAtoB, RoleB<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsTwo<Choose0fromBtoA, RoleBroadcast, NameB>;
+type EndpointA = MeshedChannels<RecursAtoB, RoleB<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<Choose0fromBtoA, RoleBroadcast, NameB>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {

@@ -7,7 +7,7 @@ import numpy as np
 matplotlib.rcParams['text.usetex'] = True
 
 # Path for criterion
-main_path = './target/criterion'
+main_path = './save/ping_pong/'
 
 # Get all directories in main_path
 directories = os.listdir(main_path)
@@ -18,23 +18,25 @@ path_file = '/base/estimates.json'
 # Lists for plots
 binary = []
 mpst = []
+ampst = []
+atmp = []
 crossbeam = []
 cancel = []
 broadcast_cancel = []
 
 nb_loops_binary = []
 nb_loops_mpst = []
+nb_loops_ampst = []
+nb_loops_atmp = []
 nb_loops_crossbeam = []
 nb_loops_cancel = []
 nb_loops_broadcast_cancel = []
-
 
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
     with open(main_path + '/' + path + path_file) as json_file:
         data = json.load(json_file)
         return data['mean']['point_estimate']
-
 
 # For each folder in main_path
 for d in directories:
@@ -45,7 +47,13 @@ for d in directories:
         splitted = d.split(' ')
 
         try:
-            if 'binary' in d and 'cancel' not in d:
+            if 'ATMP' in d:
+                atmp.append(int(test(d))/10**6)
+                nb_loops_atmp.append(int(splitted[-1]))
+            elif 'AMPST' in d:
+                ampst.append(int(test(d))/10**6)
+                nb_loops_ampst.append(int(splitted[-1]))
+            elif 'binary' in d and 'cancel' not in d:
                 binary.append(int(test(d))/10**6)
                 nb_loops_binary.append(int(splitted[-1]))
             elif 'MPST' in d:
@@ -65,48 +73,53 @@ for d in directories:
             print("Missing ", d)
 
 # Sort the lists in pair
-if len(nb_loops_binary) > 0:
-    nb_loops_binary, binary = (list(t)
-                            for t in zip(*sorted(zip(nb_loops_binary, binary))))
+if nb_loops_crossbeam and crossbeam:
+    nb_loops_crossbeam, crossbeam = (list(t) for t in zip(*sorted(zip(nb_loops_crossbeam, crossbeam))))
 
-if len(nb_loops_mpst) > 0:
+if nb_loops_binary and binary:
+    nb_loops_binary, binary = (list(t) for t in zip(*sorted(zip(nb_loops_binary, binary))))
+
+if nb_loops_mpst and mpst:
     nb_loops_mpst, mpst = (list(t) for t in zip(*sorted(zip(nb_loops_mpst, mpst))))
 
-if len(nb_loops_crossbeam) > 0:
-    nb_loops_crossbeam, crossbeam = (list(t) for t in zip(
-        *sorted(zip(nb_loops_crossbeam, crossbeam))))
+if nb_loops_ampst and ampst:
+    nb_loops_ampst, ampst = (list(t) for t in zip(*sorted(zip(nb_loops_ampst, ampst))))
 
-if len(nb_loops_cancel) > 0:
-    nb_loops_cancel, cancel = (list(t)
-                            for t in zip(*sorted(zip(nb_loops_cancel, cancel))))
+if nb_loops_atmp and atmp:
+    nb_loops_atmp, atmp = (list(t) for t in zip(*sorted(zip(nb_loops_atmp, atmp))))
 
-if len(nb_loops_broadcast_cancel) > 0:
-    nb_loops_broadcast_cancel, broadcast_cancel = (list(t)
-                                                for t in zip(*sorted(zip(nb_loops_broadcast_cancel, broadcast_cancel))))
+if nb_loops_cancel and cancel:
+    nb_loops_cancel, cancel = (list(t) for t in zip(*sorted(zip(nb_loops_cancel, cancel))))
+
+if nb_loops_broadcast_cancel and broadcast_cancel:
+    nb_loops_broadcast_cancel, broadcast_cancel = (list(t) for t in zip(*sorted(zip(nb_loops_broadcast_cancel, broadcast_cancel))))
 
 # Change size
-fig, ax = plt.subplots(figsize=(60, 60))
+fig, ax = plt.subplots(figsize=(120, 60))
 plt.gcf().subplots_adjust(bottom=0.27, left=0.25)
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
-# Plot the MPST graph
-ax.plot(nb_loops_mpst, mpst, label='MPST',
-        linestyle='solid', linewidth=5, marker='>', markersize=20)
+# Plot the Crossbeam graph
+ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, color='#1f77b4')
 
 # Plot the binary graph
-ax.plot(nb_loops_binary, binary, label='Binary',
-        linestyle='solid', linewidth=5, marker='o', markersize=20)
+ax.plot(nb_loops_binary, binary, label='Binary', linestyle='solid', linewidth=20, color='#ff7f0e')
 
-# Plot the crossbeam graph
-ax.plot(nb_loops_crossbeam, crossbeam, label='Crossbeam',
-        linestyle='solid', linewidth=5, marker='d', markersize=20)
+# Plot the MPST graph
+ax.plot(nb_loops_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, color='#2ca02c')
 
-if len(cancel) > 0:
-    # Plot the cancel graph
-    ax.plot(nb_loops_cancel, cancel, label='AMPST',
-            linestyle='solid', linewidth=5, marker='*', markersize=20)
+# Plot the AMPST graph
+ax.plot(nb_loops_ampst, ampst, label='AMPST', linestyle='solid', linewidth=20, color='#d62728')
+
+# # Plot the ATMP graph
+# ax.plot(nb_loops_atmp, atmp, label='ATMP', linestyle='solid', linewidth=20, color='#9467bd')
+
+# if len(cancel) > 0:
+#     # Plot the cancel graph
+#     ax.plot(nb_loops_cancel, cancel, label='AMPST',
+#             linestyle='solid', linewidth=5, marker='*', markersize=20)
 
 # if len(broadcast_cancel) > 0:
 #     # Plot the broadcast cancel graph
@@ -114,18 +127,18 @@ if len(cancel) > 0:
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
 # Label X and Y axis
-ax.set_ylabel('Time (ms)', fontsize=500)
-ax.set_xlabel('\# iterations', fontsize=600)
-ax.tick_params(axis='both', which='major', labelsize=500)
-ax.xaxis.set_ticks(np.arange(0, 510, 250))
-ax.yaxis.set_ticks(np.arange(0, 25, 8))
-ax.set_xlim(0, 510)
-ax.set_ylim(0, 25)
+ax.set_ylabel('Time (ms)', fontsize=200)
+ax.set_xlabel('\# iterations', fontsize=200)
+ax.tick_params(axis='both', which='major', labelsize=200)
+ax.xaxis.set_ticks(np.arange(0, 510, 50))
+ax.yaxis.set_ticks(np.arange(0, 13, 1.25))
+ax.set_xlim(0, 250)
+ax.set_ylim(0, 2.5)
 # ax.tick_params(axis='both', which='minor', labelsize=30)
 
 offset_x = matplotlib.transforms.ScaledTranslation(0, -2, fig.dpi_scale_trans)
 
-# apply offset transform to all x ticklabels.
+# apply offset transform to all x tick labels.
 for label in ax.xaxis.get_majorticklabels():
     label.set_transform(label.get_transform() + offset_x)
 
@@ -156,7 +169,6 @@ for label in ax.yaxis.get_majorticklabels():
 # # Add grid
 # ax.grid(which='both')
 
-
 # ax.grid(which='minor', alpha=0.2)
 # ax.grid(which='major', alpha=0.5)
 
@@ -169,8 +181,36 @@ for label in ax.yaxis.get_majorticklabels():
 # ax.legend(bbox_to_anchor=(0.5, 1.08), loc="center",
 #           prop={'size': 200}, markerscale=5, ncol=4)
 
+# Tight layout
+plt.tight_layout()
+
+plt.legend(
+    ['Crossbeam', 'Binary', 'MPST', 'AMPST'],
+    loc='upper left',
+    fancybox=True,
+    shadow=True,
+    ncol=1,
+    fontsize=200
+)
+
+# plt.legend(
+#     ['AMPST', 'ATMP'],
+#     loc='upper left',
+#     fancybox=True,
+#     shadow=True,
+#     ncol=1,
+#     fontsize=200
+# )
+
+# create the name for the new figure
+index_graphs = 0
+while os.path.isfile('graphs_bench/ping_pong/runtime_' + str(index_graphs) + '.pdf'):
+    index_graphs += 1
+
+name_graph = './graphs_bench/ping_pong/runtime_' + str(index_graphs) + '.pdf'
+
 # Save fig
-plt.savefig('./graphs_bench/graphPingPong.pdf')
+plt.savefig(name_graph)
 
 # # function to show the plot
 # plt.show()

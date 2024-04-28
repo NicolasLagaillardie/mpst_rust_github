@@ -36,6 +36,7 @@
 ///        let (_, s) = recv_http_d_to_a(s)?;
 ///        client_recurs(s, xs, index + 1)
 ///    }
+
 ///    Option::None => {
 ///        let s = choose_mpst_multi_http_to_all!(
 ///            s,
@@ -68,10 +69,10 @@ macro_rules! choose_mpst_multi_http_to_all {
         $meshedchannels_name: ident,
         $exclusion: literal
     ) => {
-        mpst_seq::choose_mpst_multi_http_to_all!(
+        mpst_seq_proc::choose_mpst_multi_http_to_all!(
             $session ,
-            ( $( $label , )+ ) ,
-            ( $( $receiver , )+ ) ,
+            ( $( ( $label ) )+ ) ,
+            ( $( ( $receiver ) )+ ) ,
             $sender ,
             $meshedchannels_name ,
             $exclusion

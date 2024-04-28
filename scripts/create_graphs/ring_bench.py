@@ -7,7 +7,7 @@ import numpy as np
 matplotlib.rcParams['text.usetex'] = True
 
 # Path for criterion
-main_path_criterion = './target/criterion'
+main_path_criterion = './save/ring'
 
 # Get all directories_criterion in main_path_criterion
 directories_criterion = os.listdir(main_path_criterion)
@@ -16,25 +16,40 @@ directories_criterion = os.listdir(main_path_criterion)
 path_file = '/base/estimates.json'
 
 # Dictionary for converting from string to int
-str_to_int = {'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7,
-              'eight': 8, 'nine': 9, 'ten': 10, 'eleven': 11, 'twenty': 20, 'empty': 0}
+str_to_int = {
+    'two': 2,
+    'three': 3,
+    'four': 4,
+    'five': 5,
+    'six': 6,
+    'seven': 7,
+    'eight': 8,
+    'nine': 9,
+    'ten': 10,
+    'eleven': 11,
+    'twenty': 20,
+    'empty': 0
+}
 
 # Lists for plots
+crossbeam = []
 binary = []
 mpst = []
-crossbeam = []
+ampst = []
+atmp = []
 cancel = []
 broadcast_cancel = []
 
-nb_participants_mpst = []
-nb_participants_binary = []
 nb_participants_crossbeam = []
+nb_participants_binary = []
+nb_participants_mpst = []
+nb_participants_ampst = []
+nb_participants_atmp = []
 nb_participants_cancel = []
 nb_participants_broadcast_cancel = []
 
 # Number of loops in the recursion
 number_of_loops = '100'
-
 
 def test(path):
     # Get the wanted data in the JSON file (field -> mean, field -> point_estimate)
@@ -42,53 +57,63 @@ def test(path):
         data = json.load(json_file)
         return data['mean']['point_estimate']
 
-
 # For each folder in main_path_criterion
 for d in directories_criterion:
     # If name looks like the one from what we want
-    if 'ring' in d and ' ' + number_of_loops in d:
+    if 'ring' in d and ' ' + number_of_loops in d and 'inline' not in d:
         # Split the name
         splitted = d.split(' ')
 
         try:
             # If MPST of binary, append to related lists
-            if 'MPST' in d and str_to_int[splitted[1]] >= 2:
-                if 'broadcast' in d:
-                    broadcast_cancel.append(int(test(d))/10**6)
-                    nb_participants_broadcast_cancel.append(
-                        str_to_int[splitted[1]])
-                elif 'cancel' in d:
-                    cancel.append(int(test(d))/10**6)
-                    nb_participants_cancel.append(str_to_int[splitted[1]])
-                else:
-                    mpst.append(int(test(d))/10**6)
-                    nb_participants_mpst.append(str_to_int[splitted[1]])
-            elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d:
-                binary.append(int(test(d))/10**6)
-                nb_participants_binary.append(str_to_int[splitted[1]])
-            elif 'crossbeam' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d:
-                crossbeam.append(int(test(d))/10**6)
-                nb_participants_crossbeam.append(str_to_int[splitted[1]])
+            if 'protocol' not in d:
+                if 'ATMP' in d and str_to_int[splitted[1]] >= 2:
+                    atmp.append(int(test(d))/10**6)
+                    nb_participants_atmp.append(str_to_int[splitted[1]])
+                elif 'AMPST' in d and str_to_int[splitted[1]] >= 2:
+                    ampst.append(int(test(d))/10**6)
+                    nb_participants_ampst.append(str_to_int[splitted[1]])
+                elif 'MPST' in d and str_to_int[splitted[1]] >= 2:
+                    if 'broadcast' in d:
+                        broadcast_cancel.append(int(test(d))/10**6)
+                        nb_participants_broadcast_cancel.append(
+                            str_to_int[splitted[1]])
+                    elif 'cancel' in d:
+                        cancel.append(int(test(d))/10**6)
+                        nb_participants_cancel.append(str_to_int[splitted[1]])
+                    elif 'baking' in d:
+                        mpst.append(int(test(d))/10**6)
+                        nb_participants_mpst.append(str_to_int[splitted[1]])
+                elif 'binary' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d and 'baking' in d:
+                    binary.append(int(test(d))/10**6)
+                    nb_participants_binary.append(str_to_int[splitted[1]])
+                elif 'crossbeam' in d and str_to_int[splitted[1]] >= 2 and 'cancel' not in d and 'baking' in d:
+                    crossbeam.append(int(test(d))/10**6)
+                    nb_participants_crossbeam.append(str_to_int[splitted[1]])
         except:
             print("Missing ", d)
 
 # Sort the lists in pair
-nb_participants_mpst, mpst = (list(t) for t in zip(
-    *sorted(zip(nb_participants_mpst, mpst))))
+if nb_participants_crossbeam and crossbeam:
+    nb_participants_crossbeam, crossbeam = (list(t) for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
 
-nb_participants_binary, binary = (list(t)
-                                  for t in zip(*sorted(zip(nb_participants_binary, binary))))
+if nb_participants_binary and binary:
+    nb_participants_binary, binary = (list(t) for t in zip(*sorted(zip(nb_participants_binary, binary))))
 
-nb_participants_crossbeam, crossbeam = (list(t)
-                                        for t in zip(*sorted(zip(nb_participants_crossbeam, crossbeam))))
+if nb_participants_mpst and mpst:
+    nb_participants_mpst, mpst = (list(t) for t in zip(*sorted(zip(nb_participants_mpst, mpst))))
 
-if len(cancel) > 0:
-    nb_participants_cancel, cancel = (list(t)
-                                      for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
+if nb_participants_ampst and ampst:
+    nb_participants_ampst, ampst = (list(t) for t in zip(*sorted(zip(nb_participants_ampst, ampst))))
 
-if len(broadcast_cancel) > 0:
-    nb_participants_broadcast_cancel, broadcast_cancel = (list(t)
-                                                          for t in zip(*sorted(zip(nb_participants_broadcast_cancel, broadcast_cancel))))
+if nb_participants_atmp and atmp:
+    nb_participants_atmp, atmp = (list(t) for t in zip(*sorted(zip(nb_participants_atmp, atmp))))
+
+if nb_participants_cancel and cancel:
+    nb_participants_cancel, cancel = (list(t) for t in zip(*sorted(zip(nb_participants_cancel, cancel))))
+
+if nb_participants_broadcast_cancel and broadcast_cancel:
+    nb_participants_broadcast_cancel, broadcast_cancel = (list(t) for t in zip(*sorted(zip(nb_participants_broadcast_cancel, broadcast_cancel))))
 
 # Change size
 # ax = plt.figure(figsize=(50, 50)).gca()
@@ -98,37 +123,42 @@ plt.gcf().subplots_adjust(bottom=0.27, left=0.13)
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
-# Plot the MPST graph
-ax.plot(nb_participants_mpst, mpst, label='MPST',
-        linestyle='solid', linewidth=20, marker='>', markersize=150)
+# # Plot the Crossbeam graph
+# ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam', linestyle='solid', linewidth=20, marker='P', markersize=70, color='#1f77b4')
 
-# Plot the binary graph
-ax.plot(nb_participants_binary, binary, label='Binary',
-        linestyle='solid', linewidth=20, marker='o', markersize=150)
+# # Plot the binary graph
+# ax.plot(nb_participants_binary, binary, label='Binary', linestyle='solid', linewidth=20, marker='o', markersize=70, color='#ff7f0e')
 
-# Plot the crossbeam graph
-ax.plot(nb_participants_crossbeam, crossbeam, label='Crossbeam',
-        linestyle='solid', linewidth=20, marker='d', markersize=150)
+# # Plot the MPST graph
+# ax.plot(nb_participants_mpst, mpst, label='MPST', linestyle='solid', linewidth=20, marker='^', markersize=70, color='#2ca02c')
 
-if len(cancel) > 0:
-    # Plot the cancel graph
-    ax.plot(nb_participants_cancel, cancel, label='Cancel',
-            linestyle='solid', linewidth=20, marker='*', markersize=150)
+# Plot the AMPST graph
+ax.plot(nb_participants_ampst, ampst, label='MultiCrusty', linestyle='solid', linewidth=20, marker='*', markersize=70, color='#d62728')
+
+# Plot the ATMP graph
+ax.plot(nb_participants_atmp, atmp, label='Anon', linestyle='solid', linewidth=20, marker='v', markersize=70, color='#9467bd')
+
+# if len(cancel) > 0:
+#     # Plot the cancel graph
+#     ax.plot(nb_participants_cancel, cancel, label='Cancel',
+#             linestyle='solid', linewidth=20, marker='*', markersize=150)
 
 # if len(broadcast_cancel) > 0:
 #     # Plot the broadcast cancel graph
 #     ax.plot(nb_loops_broadcast_cancel, broadcast_cancel,
 #             label='Broadcast cancel', linestyle='dotted', linewidth=5)
 
+min_ampst_atmp = int(min(min(ampst), min(atmp)))
+max_ampst_atmp = int(max(max(ampst), max(atmp))) + 1.1
+
 # Label X and Y axis
-ax.set_xlabel('\# roles', fontsize=600)
-# ax.set_ylabel('Time (ms)', fontsize=500)
-ax.tick_params(axis='both', which='major', labelsize=500)
-ax.xaxis.set_ticks(np.arange(2, 11, 2))
-ax.yaxis.set_ticks(np.arange(0, 70, 30))
-ax.set_xlim(2, 10)
-ax.set_ylim(0, 64)
-# ax.tick_params(axis='both', which='minor', labelsize=30)
+ax.set_xlabel('\# roles', fontsize=300)
+# ax.set_ylabel('Time (ms)', fontsize=300)
+ax.tick_params(axis='both', which='major', labelsize=300)
+ax.xaxis.set_ticks(np.arange(2, 11, 3))
+ax.yaxis.set_ticks(np.arange(min_ampst_atmp, max_ampst_atmp, 1))
+ax.set_xlim(2, 8)
+ax.set_ylim(min_ampst_atmp, max_ampst_atmp)
 
 # maxi1 = max(mpst)
 # maxi2 = max(binary)
@@ -163,7 +193,6 @@ for label in ax.yaxis.get_majorticklabels():
 # # Add grid
 # ax.grid(which='both')
 
-
 # ax.grid(which='minor', alpha=0.2)
 # ax.grid(which='major', alpha=0.5)
 
@@ -174,8 +203,18 @@ for label in ax.yaxis.get_majorticklabels():
 # show a legend on the plot
 # ax.legend(bbox_to_anchor=(0.5, 1), loc="lower center", prop={'size': 20})
 
+# Tight layout
+plt.tight_layout()
+
+# create the name for the new figure
+index_graphs = 0
+while os.path.isfile('graphs_bench/ring/runtime_' + number_of_loops + '_' + str(index_graphs) + '.pdf'):
+    index_graphs += 1
+
+name_graph = './graphs_bench/ring/runtime_' + number_of_loops + '_' + str(index_graphs) + '.pdf'
+
 # Save fig
-plt.savefig('./graphs_bench/graphRing'+number_of_loops+'.pdf')
+plt.savefig(name_graph)
 
 # # function to show the plot
 # plt.show()

@@ -16,6 +16,7 @@
 ///     println!("Step 1");
 ///     Ok(())
 /// }
+
 /// fn do_step2() -> Result<(), String> {
 ///     println!("Step 2");
 ///     Err("Error in step 2".into())
@@ -31,13 +32,13 @@
 ///        do_step2();
 ///        do_step3();
 ///     } catch (e) {
-///        println!("Failed to perform necessary steps: {}", e);
+///        println!("Failed to perform necessary steps: {e:?}");
 ///     }}
 /// }
 /// ```
 #[macro_export]
 macro_rules! attempt { // `try` is a reserved keyword
-    (@recurse ($a:expr) { } catch ($e:ident) $b:block) => {
+    (@recurse ($a:expr) { } catch ($e: ident) $b:block) => {
        if let Err ($e) = $a $b
     };
     (@recurse ($a:expr) { $e:expr; $($tail:tt)* } $($handler:tt)*) => {

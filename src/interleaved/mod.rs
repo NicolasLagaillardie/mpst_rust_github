@@ -1,5 +1,3 @@
-#![cfg(feature = "interleaved")]
-
 //! This module contains all the macros that are used for
 //! the interleaved sessions.
 //!

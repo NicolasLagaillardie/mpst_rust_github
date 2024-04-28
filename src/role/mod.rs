@@ -1,7 +1,4 @@
-#![cfg(feature = "role")]
-
-//! The main trait used for representing an ordering or the
-//! name of a participant.
+//! The main trait used for representing an ordering of a participant.
 //!
 //! Every structure that relies on this trait, such as
 //! [`RoleA`] and

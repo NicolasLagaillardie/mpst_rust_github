@@ -1,51 +1,58 @@
 #![allow(clippy::type_complexity, clippy::too_many_arguments, clippy::large_enum_variant)]
-    
+
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
     broadcast_cancel, bundle_struct_fork_close_multi,
     create_fn_choose_mpst_cancel_multi_to_all_bundle, create_multiple_normal_role_short,
-    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, offer_cancel_mpst,
+    create_recv_mpst_session_bundle, create_send_check_cancel_bundle, offer_cancel_mpst, create_multiple_normal_name_short
 };
 
 use std::error::Error;
 
 // Create the new MeshedChannels for five participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsSix, 6);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 6);
 
 // Create new roles
 // normal
 create_multiple_normal_role_short!(Central, A, B, C, D, E);
 
+// Create new names
+create_multiple_normal_name_short!(Central, A, B, C, D, E);
+
 // Create new send functions
 // A
 create_send_check_cancel_bundle!(
     send_mpst_a_to_b, RoleB, 2 | =>
-    RoleA, MeshedChannelsSix, 6
+    NameA, MeshedChannels, 6
 );
+
 // B
 create_send_check_cancel_bundle!(
     send_mpst_b_to_a, RoleA, 2 |
     send_mpst_b_to_c, RoleC, 3 | =>
-    RoleB, MeshedChannelsSix, 6
+    NameB, MeshedChannels, 6
 );
+
 // C
 create_send_check_cancel_bundle!(
     send_mpst_c_to_b, RoleB, 3 |
     send_mpst_c_to_d, RoleD, 4 | =>
-    RoleC, MeshedChannelsSix, 6
+    NameC, MeshedChannels, 6
 );
+
 // D
 create_send_check_cancel_bundle!(
     send_mpst_d_to_c, RoleC, 4 |
     send_mpst_d_to_e, RoleE, 5 | =>
-    RoleD, MeshedChannelsSix, 6
+    NameD, MeshedChannels, 6
 );
+
 // E
 create_send_check_cancel_bundle!(
     send_mpst_e_to_d, RoleD, 5 | =>
-    RoleE, MeshedChannelsSix, 6
+    NameE, MeshedChannels, 6
 );
 
 // Create new recv functions and related types
@@ -53,55 +60,53 @@ create_send_check_cancel_bundle!(
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 2 |
     recv_mpst_a_from_e, RoleE, 5 | =>
-    RoleA, MeshedChannelsSix, 6
+    NameA, MeshedChannels, 6
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 2 |
     recv_mpst_b_from_c, RoleC, 3 |
     recv_mpst_b_from_e, RoleE, 5 | =>
-    RoleB, MeshedChannelsSix, 6
+    NameB, MeshedChannels, 6
 );
+
 // C
 create_recv_mpst_session_bundle!(
     recv_mpst_c_from_b, RoleB, 3 |
     recv_mpst_c_from_d, RoleD, 4 |
     recv_mpst_c_from_e, RoleE, 5 | =>
-    RoleC, MeshedChannelsSix, 6
+    NameC, MeshedChannels, 6
 );
+
 // D
 create_recv_mpst_session_bundle!(
     recv_mpst_d_from_c, RoleC, 4 |
     recv_mpst_d_from_e, RoleE, 5 | =>
-    RoleD, MeshedChannelsSix, 6
+    NameD, MeshedChannels, 6
 );
+
 // E
 create_recv_mpst_session_bundle!(
     recv_mpst_e_from_d, RoleD, 5 | =>
-    RoleE, MeshedChannelsSix, 6
+    NameE, MeshedChannels, 6
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
-type NameE = RoleE<RoleEnd>;
 
 // Types
 // A
 enum Branching0fromEtoA {
-    Forward(MeshedChannelsSix<End, Send<(), End>, End, End, RecursAtoE, RoleB<RoleE<RoleEnd>>, NameA>),
+    Forward(MeshedChannels<End, Send<(), End>, End, End, RecursAtoE, RoleB<RoleE<RoleEnd>>, NameA>),
     Backward(
-        MeshedChannelsSix<End, Recv<(), End>, End, End, RecursAtoE, RoleB<RoleE<RoleEnd>>, NameA>,
+        MeshedChannels<End, Recv<(), End>, End, End, RecursAtoE, RoleB<RoleE<RoleEnd>>, NameA>,
     ),
-    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameA>),
+    Done(MeshedChannels<End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoE = <Choose0fromEtoA as Session>::Dual;
+
 // B
 enum Branching0fromEtoB {
     Forward(
-        MeshedChannelsSix<
+        MeshedChannels<
             End,
             Recv<(), End>,
             Send<(), End>,
@@ -112,7 +117,7 @@ enum Branching0fromEtoB {
         >,
     ),
     Backward(
-        MeshedChannelsSix<
+        MeshedChannels<
             End,
             Send<(), End>,
             Recv<(), End>,
@@ -122,13 +127,14 @@ enum Branching0fromEtoB {
             NameB,
         >,
     ),
-    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameB>),
+    Done(MeshedChannels<End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoE = <Choose0fromEtoB as Session>::Dual;
+
 // C
 enum Branching0fromEtoC {
     Forward(
-        MeshedChannelsSix<
+        MeshedChannels<
             End,
             End,
             Recv<(), End>,
@@ -139,7 +145,7 @@ enum Branching0fromEtoC {
         >,
     ),
     Backward(
-        MeshedChannelsSix<
+        MeshedChannels<
             End,
             End,
             Send<(), End>,
@@ -149,13 +155,14 @@ enum Branching0fromEtoC {
             NameC,
         >,
     ),
-    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameC>),
+    Done(MeshedChannels<End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoE = <Choose0fromEtoC as Session>::Dual;
+
 // D
 enum Branching0fromEtoD {
     Forward(
-        MeshedChannelsSix<
+        MeshedChannels<
             End,
             End,
             End,
@@ -166,7 +173,7 @@ enum Branching0fromEtoD {
         >,
     ),
     Backward(
-        MeshedChannelsSix<
+        MeshedChannels<
             End,
             End,
             End,
@@ -176,16 +183,17 @@ enum Branching0fromEtoD {
             NameD,
         >,
     ),
-    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameD>),
+    Done(MeshedChannels<End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoE = <Choose0fromEtoD as Session>::Dual;
+
 // E
 type Choose0fromEtoA = Send<(End, Branching0fromEtoA), End>;
 type Choose0fromEtoB = Send<(End, Branching0fromEtoB), End>;
 type Choose0fromEtoC = Send<(End, Branching0fromEtoC), End>;
 type Choose0fromEtoD = Send<(End, Branching0fromEtoD), End>;
-type EndpointDoneE = MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameE>;
-type EndpointForwardE = MeshedChannelsSix<
+type EndpointDoneE = MeshedChannels<End, End, End, End, End, RoleEnd, NameE>;
+type EndpointForwardE = MeshedChannels<
     End,
     Choose0fromEtoA,
     Choose0fromEtoB,
@@ -194,7 +202,7 @@ type EndpointForwardE = MeshedChannelsSix<
     RoleD<RoleBroadcast>,
     NameE,
 >;
-type EndpointBackwardE = MeshedChannelsSix<
+type EndpointBackwardE = MeshedChannels<
     End,
     Choose0fromEtoA,
     Choose0fromEtoB,
@@ -205,12 +213,12 @@ type EndpointBackwardE = MeshedChannelsSix<
 >;
 
 // Creating the MP sessions
-type EndpointCentral = MeshedChannelsSix<End, End, End, End, End, RoleEnd, RoleCentral<RoleEnd>>;
-type EndpointA = MeshedChannelsSix<End, End, End, End, RecursAtoE, RoleE<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsSix<End, End, End, End, RecursBtoE, RoleE<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsSix<End, End, End, End, RecursCtoE, RoleE<RoleEnd>, NameC>;
-type EndpointD = MeshedChannelsSix<End, End, End, End, RecursDtoE, RoleE<RoleEnd>, NameD>;
-type EndpointE = MeshedChannelsSix<
+type EndpointCentral = MeshedChannels<End, End, End, End, End, RoleEnd, NameCentral>;
+type EndpointA = MeshedChannels<End, End, End, End, RecursAtoE, RoleE<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, End, End, End, RecursBtoE, RoleE<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<End, End, End, End, RecursCtoE, RoleE<RoleEnd>, NameC>;
+type EndpointD = MeshedChannels<End, End, End, End, RecursDtoE, RoleE<RoleEnd>, NameD>;
+type EndpointE = MeshedChannels<
     End,
     Choose0fromEtoA,
     Choose0fromEtoB,
@@ -228,8 +236,8 @@ create_fn_choose_mpst_cancel_multi_to_all_bundle!(
     Branching0fromEtoB,
     Branching0fromEtoC,
     Branching0fromEtoD, =>
-    RoleA, RoleB, RoleC, RoleD, =>
-    RoleCentral, RoleE, MeshedChannelsSix, 6
+    NameA, NameB, NameC, NameD, =>
+    NameCentral, NameE, MeshedChannels, 6
 );
 
 fn endpoint_central(s: EndpointCentral) -> Result<(), Box<dyn Error>> {
@@ -344,10 +352,10 @@ fn main() {
         endpoint_e,
     );
 
-    assert!(thread_central.join().is_ok());
-    assert!(thread_a.join().is_ok());
-    assert!(thread_b.join().is_ok());
-    assert!(thread_c.join().is_ok());
-    assert!(thread_d.join().is_ok());
-    assert!(thread_e.join().is_ok());
+    thread_central.join().unwrap();
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
+    thread_c.join().unwrap();
+    thread_d.join().unwrap();
+    thread_e.join().unwrap();
 }

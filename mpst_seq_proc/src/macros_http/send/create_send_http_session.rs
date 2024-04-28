@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct CreateSendHttpSession {
+pub(crate) struct CreateSendHttpSession {
     func_name: Ident,
     sender: Ident,
     receiver: Ident,
@@ -51,14 +51,14 @@ impl From<CreateSendHttpSession> for TokenStream {
 
 impl CreateSendHttpSession {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let sender = self.sender.clone();
-        let receiver = self.receiver.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let sender = &self.sender;
+        let receiver = &self.receiver;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let session_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -67,7 +67,7 @@ impl CreateSendHttpSession {
 
         let session_types_struct: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session ,
                 }
@@ -79,7 +79,7 @@ impl CreateSendHttpSession {
                 if i != self.exclusion {
                     quote! {}
                 } else {
-                    let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                     quote! {
                         let new_session = mpstthree::binary::send::send(x, s.#temp_ident);
                     }
@@ -89,7 +89,7 @@ impl CreateSendHttpSession {
 
         let send_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 if i == self.exclusion {
                     quote! {
                         mpstthree::binary::struct_trait::send::Send<T, #temp_ident >,
@@ -104,7 +104,7 @@ impl CreateSendHttpSession {
 
         let new_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                 if i == self.exclusion {
                     quote! {
                         #temp_ident : new_session ,
@@ -131,7 +131,7 @@ impl CreateSendHttpSession {
                         #send_types
                     )*
                     #receiver<R>,
-                    #sender<mpstthree::role::end::RoleEnd>,
+                    #sender,
                 >,
                 http: bool,
                 req: hyper::Request<hyper::Body>
@@ -142,7 +142,7 @@ impl CreateSendHttpSession {
                             #session_types
                         )*
                         R,
-                        #sender<mpstthree::role::end::RoleEnd>,
+                        #sender,
                     >,
                     hyper::client::ResponseFuture
                 ),

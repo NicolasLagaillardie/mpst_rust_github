@@ -20,9 +20,9 @@ use crossbeam_channel::{bounded, Sender};
 /// use mpstthree::role::end::RoleEnd;
 /// use mpstthree::role::Role; // Only used for example
 ///
-/// type NameAlltoCDual = RoleAlltoC<RoleEnd, RoleEnd>;
+/// type StackAlltoCDual = RoleAlltoC<RoleEnd, RoleEnd>;
 ///
-/// let _ = NameAlltoCDual::new(); // Only used for example
+/// let _ = StackAlltoCDual::new(); // Only used for example
 /// ```
 #[derive(Debug)]
 pub struct RoleAlltoC<R1, R2>
@@ -41,7 +41,6 @@ where
 impl<R1: Role, R2: Role> Role for RoleAlltoC<R1, R2> {
     type Dual = RoleCtoAll<R1::Dual, R2::Dual>;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender_normal_1, _) = bounded::<R1>(1);
         let (sender_normal_2, _) = bounded::<R2>(1);
@@ -60,12 +59,10 @@ impl<R1: Role, R2: Role> Role for RoleAlltoC<R1, R2> {
         )
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         "RoleAlltoC".to_string()
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         format!(
             "{}<{}> + {}<{}>",
@@ -76,12 +73,10 @@ impl<R1: Role, R2: Role> Role for RoleAlltoC<R1, R2> {
         )
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         "RoleAlltoC".to_string()
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         format!(
             "{}<{}> + {}<{}>",

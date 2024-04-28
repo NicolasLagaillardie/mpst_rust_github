@@ -1,0 +1,14 @@
+timed global protocol SimpleVoting(role Voter, role Server){
+    Authenticate(String) from Voter to Server within [0;1] using a and resetting ();
+    choice at Server {
+        Ok(String) from Server to Voter within [0;1] using a and resetting ();
+        choice at Voter {
+            Yes(String) from Voter to Server within [0;1] using a and resetting ();
+        } or {
+            No(String) from Voter to Server within [0;1] using a and resetting ();
+        }
+        Result(Int) from Server to Voter within [0;1] using a and resetting ();
+    } or {
+        Reject(String) from Server to Voter within [0;1] using a and resetting ();
+    }
+}

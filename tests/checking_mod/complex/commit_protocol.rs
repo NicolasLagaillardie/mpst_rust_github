@@ -1,10 +1,15 @@
+#![allow(dead_code)]
+
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary::struct_trait::recv::Recv;
 use mpstthree::binary::struct_trait::send::Send;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_role};
+use mpstthree::{
+    checker_concat, checker_concat_impl, create_meshedchannels, create_multiple_normal_name,
+    create_multiple_normal_role,
+};
 
 use petgraph::dot::Dot;
 
@@ -21,15 +26,12 @@ create_multiple_normal_role!(
     RoleD, RoleDDual |
 );
 
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameC, NameD);
+
 // Payload types
 struct Update;
 struct Okay;
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
 
 // Types
 
@@ -127,6 +129,33 @@ type EndpointCFull = MeshedChannels<Recurs0CfromA, End, End, RoleA<RoleEnd>, Nam
 type EndpointDFull = MeshedChannels<Recurs0DfromA, End, End, RoleA<RoleEnd>, NameD>;
 
 /////////////////////////////////////////
+
+checker_concat_impl!(
+    [
+        Branches0BfromA,
+        CommitForward,
+        Branches0CfromA,
+        CommitForward,
+        Branches0DfromA,
+        CommitForward
+    ],
+    [
+        Branches1BfromA,
+        CommitBackward,
+        Branches1CfromA,
+        CommitBackward,
+        Branches1DfromA,
+        CommitBackward
+    ],
+    [
+        Branches0BfromA,
+        End,
+        Branches0CfromA,
+        End,
+        Branches0DfromA,
+        End
+    ]
+);
 
 pub fn main() {
     let (graphs, kmc) = checker_concat!(

@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result};
 
 #[derive(Debug)]
-pub struct CreateNormalRoleShort {
+pub(crate) struct CreateNormalRoleShort {
     role: Ident,
 }
 
@@ -24,14 +24,14 @@ impl From<CreateNormalRoleShort> for TokenStream {
 
 impl CreateNormalRoleShort {
     fn expand(&self) -> TokenStream {
-        let role = self.role.clone();
+        let role = &self.role;
 
         // Build the new names
         // role
-        let concatenated_role = format!("Role{}", role);
+        let concatenated_role = format!("Role{role}");
         let role_name = Ident::new(&concatenated_role, Span::call_site());
         // dual
-        let concatenated_dual = format!("Role{}Dual", role);
+        let concatenated_dual = format!("Role{role}Dual");
         let dual_name = Ident::new(&concatenated_dual, Span::call_site());
 
         quote! {

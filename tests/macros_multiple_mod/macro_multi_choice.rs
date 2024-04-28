@@ -6,9 +6,9 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use mpstthree::{
     close_mpst, create_broadcast_role, create_choose_mpst_session_multi_both,
-    create_choose_type_multi, create_meshedchannels, create_multiple_normal_role,
-    create_offer_mpst_session_multi, create_offer_type_multi, create_recv_mpst_session,
-    create_send_mpst_session, fork_mpst_multi,
+    create_choose_type_multi, create_meshedchannels, create_multiple_normal_name,
+    create_multiple_normal_role, create_offer_mpst_session_multi, create_offer_type_multi,
+    create_recv_mpst_session, create_send_mpst_session, fork_mpst_multi,
 };
 use std::error::Error;
 
@@ -22,23 +22,27 @@ create_multiple_normal_role!(
     RoleB, RoleBDual |
     RoleD, RoleDDual |
 );
+
 // broadcast
 create_broadcast_role!(RoleAlltoD, RoleDtoAll);
 
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameD);
+
 // Create new send functions
-create_send_mpst_session!(send_mpst_d_to_a, RoleA, RoleD, MeshedChannels, 3, 1);
-create_send_mpst_session!(send_mpst_a_to_d, RoleD, RoleA, MeshedChannels, 3, 2);
-create_send_mpst_session!(send_mpst_d_to_b, RoleB, RoleD, MeshedChannels, 3, 2);
-create_send_mpst_session!(send_mpst_b_to_a, RoleA, RoleB, MeshedChannels, 3, 1);
-create_send_mpst_session!(send_mpst_a_to_b, RoleB, RoleA, MeshedChannels, 3, 1);
+create_send_mpst_session!(send_mpst_d_to_a, RoleA, NameD, MeshedChannels, 3, 1);
+create_send_mpst_session!(send_mpst_a_to_d, RoleD, NameA, MeshedChannels, 3, 2);
+create_send_mpst_session!(send_mpst_d_to_b, RoleB, NameD, MeshedChannels, 3, 2);
+create_send_mpst_session!(send_mpst_b_to_a, RoleA, NameB, MeshedChannels, 3, 1);
+create_send_mpst_session!(send_mpst_a_to_b, RoleB, NameA, MeshedChannels, 3, 1);
 
 // Create new recv functions and related types
 // normal
-create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, RoleD, MeshedChannels, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_from_d, RoleD, RoleA, MeshedChannels, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, RoleB, MeshedChannels, 3, 2);
-create_recv_mpst_session!(recv_mpst_b_from_a, RoleA, RoleB, MeshedChannels, 3, 1);
-create_recv_mpst_session!(recv_mpst_a_from_b, RoleB, RoleA, MeshedChannels, 3, 1);
+create_recv_mpst_session!(recv_mpst_d_from_a, RoleA, NameD, MeshedChannels, 3, 1);
+create_recv_mpst_session!(recv_mpst_a_from_d, RoleD, NameA, MeshedChannels, 3, 2);
+create_recv_mpst_session!(recv_mpst_b_from_d, RoleD, NameB, MeshedChannels, 3, 2);
+create_recv_mpst_session!(recv_mpst_b_from_a, RoleA, NameB, MeshedChannels, 3, 1);
+create_recv_mpst_session!(recv_mpst_a_from_b, RoleB, NameA, MeshedChannels, 3, 1);
 
 close_mpst!(close_mpst_multi, MeshedChannels, 3);
 
@@ -49,7 +53,7 @@ create_offer_mpst_session_multi!(
     offer_mpst_session_a_to_d,
     OfferMpstMultiThree,
     RoleAlltoD,
-    RoleA,
+    NameA,
     MeshedChannels,
     3,
     2
@@ -59,7 +63,7 @@ create_offer_mpst_session_multi!(
     offer_mpst_session_b_to_d,
     OfferMpstMultiThree,
     RoleAlltoD,
-    RoleB,
+    NameB,
     MeshedChannels,
     3,
     2
@@ -70,17 +74,12 @@ create_choose_mpst_session_multi_both!(
     choose_right_mpst_session_d_to_all,
     ChooseMpstThree,
     RoleDtoAll,
-    RoleD,
+    NameD,
     MeshedChannels,
     3
 );
 
 fork_mpst_multi!(fork_mpst, MeshedChannels, 3);
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
 
 // Types
 type AtoCClose = End;
@@ -123,7 +122,7 @@ type ChooseCtoA<N> = ChooseMpstThree<
     CtoAClose,
     StackAVideoDual,
     StackAEnd,
-    RoleADual<RoleEnd>,
+    NameA,
 >;
 type ChooseCtoB<N> = ChooseMpstThree<
     AtoBVideo<N>,
@@ -132,7 +131,7 @@ type ChooseCtoB<N> = ChooseMpstThree<
     CtoBClose,
     StackBVideoDual,
     StackBEnd,
-    RoleBDual<RoleEnd>,
+    NameB,
 >;
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
 type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, NameD>;
@@ -219,10 +218,10 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
         AtoCClose,
         StackAVideoDual,
         StackAEndDual,
-        <NameA as Role>::Dual,
+        NameA,
         StackBVideoDual,
         StackBEndDual,
-        <NameB as Role>::Dual,
+        NameB,
         StackCVideo,
         StackCEnd,
     >(s);
@@ -253,10 +252,10 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
         AtoCClose,
         StackAVideoDual,
         StackAEndDual,
-        <NameA as Role>::Dual,
+        NameA,
         StackBVideoDual,
         StackBEndDual,
-        <NameB as Role>::Dual,
+        NameB,
         StackCVideo,
         StackCEnd,
     >(s);
@@ -267,31 +266,19 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 ////////////////////////////////////////
 
 pub fn test_new_choice_full() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        {
-            let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_video);
+    // Test video branch.
+    let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_video);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_pawn.join().is_ok());
-            assert!(thread_d.join().is_ok());
-        }
-        Ok(())
-    }()
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_pawn.join().is_ok());
+    assert!(thread_d.join().is_ok());
 }
 
 pub fn test_new_choice_close() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        // Test end branch.
-        {
-            let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_close);
+    // Test end branch.
+    let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_close);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_pawn.join().is_ok());
-            assert!(thread_d.join().is_ok());
-        }
-
-        Ok(())
-    }()
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_pawn.join().is_ok());
+    assert!(thread_d.join().is_ok());
 }

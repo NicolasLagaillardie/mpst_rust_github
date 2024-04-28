@@ -53,7 +53,7 @@ fn client(s: ClientMPST<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn main() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+    assert!({
         let s: ServerMPST<i32> = fork(client);
         //-------
         let https = HttpsConnector::new();
@@ -62,6 +62,6 @@ pub fn main() {
         let (_result, s, _resp) = recv_http(s, false, client.request(Request::default()))?;
         let (s, _req) = send_http(0, s, false, Method::GET, "", vec![("", "")], "")?;
         close(s)
-    }()
+    }
     .is_ok());
 }

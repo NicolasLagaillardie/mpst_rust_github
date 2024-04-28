@@ -1,8 +1,9 @@
 // Test for parametrisation on the number of roles
 use mpstthree::binary::struct_trait::{end::End, session::Session};
+use mpstthree::name::Name;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
-use mpstthree::{create_meshedchannels, create_normal_role};
+use mpstthree::{create_meshedchannels, create_normal_name, create_normal_role};
 use std::error::Error;
 
 // Create new MeshedChannels for three participants
@@ -14,15 +15,18 @@ create_meshedchannels!(MeshedChannelsFour, 4);
 // Create an A dummy
 create_normal_role!(RoleA, RoleADual);
 
+// Create an A dummy
+create_normal_name!(NameA);
+
 /////////////////////////////////////////
 
-pub fn basic_macros() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
+pub fn basic_macros_three() {
+    assert!({
         {
             let (sender1, _) = End::new();
             let (sender2, _) = End::new();
             let (role_one, _) = RoleEnd::new();
-            let (name_one, _) = RoleEnd::new();
+            let (name_one, _) = NameA::new();
 
             let _test = MeshedChannelsThree {
                 session1: sender1,
@@ -31,19 +35,21 @@ pub fn basic_macros() {
                 name: name_one,
             };
 
-            let (_test2, _) = MeshedChannelsThree::<End, End, RoleEnd, RoleA<RoleEnd>>::new();
+            let (_test2, _) = MeshedChannelsThree::<End, End, RoleEnd, NameA>::new();
         }
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
+}
 
-    assert!(|| -> Result<(), Box<dyn Error>> {
+pub fn basic_macros_four() {
+    assert!({
         {
             let (sender1, _) = End::new();
             let (sender2, _) = End::new();
             let (sender3, _) = End::new();
             let (role_one, _) = RoleEnd::new();
-            let (name_one, _) = RoleEnd::new();
+            let (name_one, _) = NameA::new();
 
             let _test = MeshedChannelsFour {
                 session1: sender1,
@@ -53,9 +59,9 @@ pub fn basic_macros() {
                 name: name_one,
             };
 
-            let (_test2, _) = MeshedChannelsFour::<End, End, End, RoleEnd, RoleA<RoleEnd>>::new();
+            let (_test2, _) = MeshedChannelsFour::<End, End, End, RoleEnd, NameA>::new();
         }
-        Ok(())
-    }()
+        Ok::<(), Box<dyn Error>>(())
+    }
     .is_ok());
 }

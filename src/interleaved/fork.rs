@@ -9,6 +9,7 @@ use std::marker;
 
 use crate::binary::struct_trait::session::Session;
 use crate::meshedchannels::MeshedChannels;
+use crate::name::Name;
 use crate::role::Role;
 
 #[doc(hidden)]
@@ -20,9 +21,9 @@ where
     R0: Role + 'static,
     R1: Role + 'static,
     R2: Role + 'static,
-    N0: Role + 'static,
-    N1: Role + 'static,
-    N2: Role + 'static,
+    N0: Name + 'static,
+    N1: Name + 'static,
+    N2: Name + 'static,
     F: FnOnce(
             MeshedChannels<S0, S1, R0, N0>,
             MeshedChannels<<S0 as Session>::Dual, S2, R1, N1>,
@@ -69,31 +70,6 @@ where
 #[doc(hidden)]
 macro_rules! fork_mpst_multi_solo {
     ($func_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
-        mpst_seq::fork_mpst_multi_solo!($func_name, $meshedchannels_name, $n_sessions);
-    };
-}
-
-#[macro_export]
-#[doc(hidden)]
-// Indexes start at one
-macro_rules! fork_mpst_multi_interleaved {
-    (
-        $func_name:ident,
-        $meshedchannels_name_one:ident,
-        $nsessions_one:literal,
-        $index_tuple_one:literal,
-        $meshedchannels_name_two:ident,
-        $nsessions_two:literal,
-        $index_tuple_two:literal
-    ) => {
-        mpst_seq::fork_mpst_multi_interleaved!(
-            $func_name,
-            $meshedchannels_name_one,
-            $nsessions_one,
-            $index_tuple_one,
-            $meshedchannels_name_two,
-            $nsessions_two,
-            $index_tuple_two
-        );
+        mpst_seq_proc::fork_mpst_multi_solo!($func_name, $meshedchannels_name, $n_sessions);
     };
 }

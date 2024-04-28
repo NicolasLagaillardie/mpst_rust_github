@@ -1,0 +1,4126 @@
+[package]
+name = "mpstthree"
+version = "0.1.17"
+authors = ["NicolasLagaillardie <nicolas.lagaillardie@tutanota.com>"]
+edition = "2021"
+rust-version = "1.77"
+description = "A library implementing Multiparty Session Types for 2 or more participants"
+readme = "README.md"
+homepage = "https://github.com/NicolasLagaillardie/mpst_rust_github"
+repository = "https://github.com/NicolasLagaillardie/mpst_rust_github"
+license = "MIT OR Apache-2.0"
+keywords = ["multiparty", "session", "affine", "multicrusty", "timed"]
+documentation = "https://docs.rs/mpstthree"
+categories = ["concurrency"]
+# include = [
+#     "/benches/**",
+#     "/build.rs",
+#     "/Cargo.toml",
+#     "/LICENSE-APACHE",
+#     "/LICENSE-MIT",
+#     "/README.md",
+#     "/src/**",
+#     "/tests/**",
+#     "/examples/**",
+#     "main.rs",
+# ]
+exclude = [
+    ".vscode/",
+    ".travis.yml",
+    "codecov.yml",
+    ".gitignore",
+    ".github/",
+    ".cargo_vcs_info.json",
+    "scripts/",
+    "example/",
+    "outputs/",
+    "cfsm/",
+    "compile_time/",
+    "graphs_bench/",
+    "rustfmt_0.toml",
+    "notes.txt",
+    "result.rs",
+    "results/",
+    "save/",
+    "expand/",
+    "target/",
+]
+autotests = false
+autobenches = false
+
+################################### Workspace
+
+[workspace]
+members = ["mpst_seq_proc"]
+
+################################### Lib
+
+[lib]
+bench = false
+
+################################### Badges
+
+[badges]
+maintenance = { status = "actively-developed" }
+
+################################### Bin
+
+[[bin]]
+name = "mpst"
+path = "main.rs"
+bench = false
+
+################################### Tests
+
+[[test]]
+name = "checking"
+path = "tests/checking.rs"
+required-features = ["macros_multiple", "checking"]
+
+[[test]]
+name = "basics"
+path = "tests/basics.rs"
+required-features = ["checking"]
+
+[[test]]
+name = "binary"
+path = "tests/binary.rs"
+required-features = ["default"]
+
+[[test]]
+name = "cancel"
+path = "tests/cancel.rs"
+required-features = ["baking"]
+
+[[test]]
+name = "macros_multiple"
+path = "tests/macros_multiple.rs"
+required-features = ["macros_multiple"]
+
+[[test]]
+name = "macros_simple"
+path = "tests/macros_simple.rs"
+required-features = ["macros_simple"]
+
+[[test]]
+name = "baking"
+path = "tests/baking.rs"
+required-features = ["baking", "checking"]
+
+[[test]]
+name = "extra"
+path = "tests/extra.rs"
+required-features = ["baking"]
+
+[[test]]
+name = "interleaved"
+path = "tests/interleaved.rs"
+required-features = ["baking_interleaved"]
+
+[[test]]
+name = "binary_atmp"
+path = "tests/binary_atmp.rs"
+required-features = ["binary_atmp"]
+
+[[test]]
+name = "baking_atmp"
+path = "tests/baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[test]]
+name = "baking_message"
+path = "tests/baking_message.rs"
+required-features = ["baking", "checking"]
+
+################################### Benches
+
+################################### Ping-Pong
+
+######### Ping-Pong start
+######### Ping-Pong end
+
+################## Examples
+
+######### Crossbeam
+
+[[bench]]
+name = "example_calculator_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_logging_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_crossbeam"
+harness = false
+path = "benches/examples/crossbeam/distributed_calculators.rs"
+required-features = ["full"]
+
+######### Binary
+
+[[bench]]
+name = "example_calculator_binary"
+harness = false
+path = "benches/examples/binary/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_binary"
+harness = false
+path = "benches/examples/binary/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_binary"
+harness = false
+path = "benches/examples/binary/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_logging_binary"
+harness = false
+path = "benches/examples/binary/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_binary"
+harness = false
+path = "benches/examples/binary/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_binary"
+harness = false
+path = "benches/examples/binary/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_binary"
+harness = false
+path = "benches/examples/binary/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_binary"
+harness = false
+path = "benches/examples/binary/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_binary"
+harness = false
+path = "benches/examples/binary/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_binary"
+harness = false
+path = "benches/examples/binary/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_binary"
+harness = false
+path = "benches/examples/binary/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_binary"
+harness = false
+path = "benches/examples/binary/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_binary"
+harness = false
+path = "benches/examples/binary/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_binary"
+harness = false
+path = "benches/examples/binary/distributed_calculators.rs"
+required-features = ["full"]
+
+######### Basic
+
+[[bench]]
+name = "example_logging_basic"
+harness = false
+path = "benches/examples/basic/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_basic"
+harness = false
+path = "benches/examples/basic/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_calculator_basic"
+harness = false
+path = "benches/examples/basic/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_binary_basic"
+harness = false
+path = "benches/examples/basic/fib_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_mpst_basic"
+harness = false
+path = "benches/examples/basic/fib_mpst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_basic"
+harness = false
+path = "benches/examples/basic/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_basic"
+harness = false
+path = "benches/examples/basic/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_basic"
+harness = false
+path = "benches/examples/basic/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_basic"
+harness = false
+path = "benches/examples/basic/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_basic"
+harness = false
+path = "benches/examples/basic/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_basic"
+harness = false
+path = "benches/examples/basic/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_basic"
+harness = false
+path = "benches/examples/basic/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_fowler_basic"
+harness = false
+path = "benches/examples/basic/dns_fowler.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_imai_basic"
+harness = false
+path = "benches/examples/basic/dns_imai.rs"
+required-features = ["full"]
+
+######### MPST
+
+[[bench]]
+name = "example_logging_mpst"
+harness = false
+path = "benches/examples/mpst/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_mpst"
+harness = false
+path = "benches/examples/mpst/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_calculator_mpst"
+harness = false
+path = "benches/examples/mpst/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_mpst"
+harness = false
+path = "benches/examples/mpst/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_mpst"
+harness = false
+path = "benches/examples/mpst/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_mpst"
+harness = false
+path = "benches/examples/mpst/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_mpst"
+harness = false
+path = "benches/examples/mpst/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_mpst"
+harness = false
+path = "benches/examples/mpst/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_mpst"
+harness = false
+path = "benches/examples/mpst/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_mpst"
+harness = false
+path = "benches/examples/mpst/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_mpst"
+harness = false
+path = "benches/examples/mpst/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_fowler_mpst"
+harness = false
+path = "benches/examples/mpst/dns_fowler.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_imai_mpst"
+harness = false
+path = "benches/examples/mpst/dns_imai.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_mpst"
+harness = false
+path = "benches/examples/mpst/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_mpst"
+harness = false
+path = "benches/examples/mpst/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_http_mpst"
+harness = false
+path = "benches/examples/mpst/http.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_mpst"
+harness = false
+path = "benches/examples/mpst/distributed_calculators.rs"
+required-features = ["full"]
+
+######### AMPST
+
+[[bench]]
+name = "example_logging_ampst"
+harness = false
+path = "benches/examples/ampst/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_ampst"
+harness = false
+path = "benches/examples/ampst/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_calculator_ampst"
+harness = false
+path = "benches/examples/ampst/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_ampst"
+harness = false
+path = "benches/examples/ampst/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_ampst"
+harness = false
+path = "benches/examples/ampst/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_ampst"
+harness = false
+path = "benches/examples/ampst/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_ampst"
+harness = false
+path = "benches/examples/ampst/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_ampst"
+harness = false
+path = "benches/examples/ampst/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_ampst"
+harness = false
+path = "benches/examples/ampst/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_ampst"
+harness = false
+path = "benches/examples/ampst/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_ampst"
+harness = false
+path = "benches/examples/ampst/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_fowler_ampst"
+harness = false
+path = "benches/examples/ampst/dns_fowler.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_dns_imai_ampst"
+harness = false
+path = "benches/examples/ampst/dns_imai.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_ampst"
+harness = false
+path = "benches/examples/ampst/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_ampst"
+harness = false
+path = "benches/examples/ampst/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_http_ampst"
+harness = false
+path = "benches/examples/ampst/http.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_ampst"
+harness = false
+path = "benches/examples/ampst/distributed_calculators.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_gravity_android_ampst"
+harness = false
+path = "benches/examples/rate_based_ampst/gravity_android.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_pinetime_heart_rate_ampst"
+harness = false
+path = "benches/examples/rate_based_ampst/pinetime_heart_rate.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_proximity_based_car_key_ampst"
+harness = false
+path = "benches/examples/rate_based_ampst/proximity_based_car_key.rs"
+required-features = ["full"]
+
+######### Interleaved
+
+[[bench]]
+name = "example_logging_solo_interleaved"
+harness = false
+path = "benches/examples/interleaved/logging_solo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_solo_interleaved"
+harness = false
+path = "benches/examples/interleaved/circuit_breaker_solo.rs"
+required-features = ["full"]
+
+######### ATMP
+
+[[bench]]
+name = "example_calculator_atmp"
+harness = false
+path = "benches/examples/atmp/calculator.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_fib_atmp"
+harness = false
+path = "benches/examples/atmp/fib.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_o_auth_atmp"
+harness = false
+path = "benches/examples/atmp/o_auth.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_online_wallet_atmp"
+harness = false
+path = "benches/examples/atmp/online_wallet.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_simple_voting_atmp"
+harness = false
+path = "benches/examples/atmp/simple_voting.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_smtp_atmp"
+harness = false
+path = "benches/examples/atmp/smtp.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_three_buyers_atmp"
+harness = false
+path = "benches/examples/atmp/three_buyers.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_travel_agency_atmp"
+harness = false
+path = "benches/examples/atmp/travel_agency.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_servo_atmp"
+harness = false
+path = "benches/examples/atmp/servo.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_remote_data_atmp"
+harness = false
+path = "benches/examples/atmp/remote_data.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_http_atmp"
+harness = false
+path = "benches/examples/atmp/http.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_circuit_breaker_atmp"
+harness = false
+path = "benches/examples/atmp/circuit_breaker.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_logging_atmp"
+harness = false
+path = "benches/examples/atmp/logging.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_video_stream_atmp"
+harness = false
+path = "benches/examples/atmp/video_stream.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_distributed_calculators_atmp"
+harness = false
+path = "benches/examples/atmp/distributed_calculators.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_gravity_android_atmp"
+harness = false
+path = "benches/examples/rate_based_atmp/gravity_android.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_pinetime_heart_rate_atmp"
+harness = false
+path = "benches/examples/rate_based_atmp/pinetime_heart_rate.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "example_proximity_based_car_key_atmp"
+harness = false
+path = "benches/examples/rate_based_atmp/proximity_based_car_key.rs"
+required-features = ["full"]
+
+################## Ring
+
+######### Empty
+
+[[bench]]
+name = "ring_two_mpst_empty"
+harness = false
+path = "benches/ring/empty/mpst/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_binary_empty"
+harness = false
+path = "benches/ring/empty/binary/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/crossbeam/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_mpst_empty"
+harness = false
+path = "benches/ring/empty/mpst/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_binary_empty"
+harness = false
+path = "benches/ring/empty/binary/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/crossbeam/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_empty"
+harness = false
+path = "benches/ring/empty/mpst/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_binary_empty"
+harness = false
+path = "benches/ring/empty/binary/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/crossbeam/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_mpst_empty"
+harness = false
+path = "benches/ring/empty/mpst/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_binary_empty"
+harness = false
+path = "benches/ring/empty/binary/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/crossbeam/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_mpst_empty"
+harness = false
+path = "benches/ring/empty/mpst/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_binary_empty"
+harness = false
+path = "benches/ring/empty/binary/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/crossbeam/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_mpst_empty"
+harness = false
+path = "benches/ring/empty/mpst/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_binary_empty"
+harness = false
+path = "benches/ring/empty/binary/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/crossbeam/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_mpst_empty"
+harness = false
+path = "benches/ring/empty/mpst/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_binary_empty"
+harness = false
+path = "benches/ring/empty/binary/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/crossbeam/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_mpst_empty"
+harness = false
+path = "benches/ring/empty/mpst/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_binary_empty"
+harness = false
+path = "benches/ring/empty/binary/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/crossbeam/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_mpst_empty"
+harness = false
+path = "benches/ring/empty/mpst/ring_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_binary_empty"
+harness = false
+path = "benches/ring/empty/binary/ring_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/crossbeam/ring_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_mpst_empty"
+harness = false
+path = "benches/ring/empty/mpst/ring_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_binary_empty"
+harness = false
+path = "benches/ring/empty/binary/ring_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/crossbeam/ring_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_mpst_empty"
+harness = false
+path = "benches/ring/empty/mpst/ring_twenty.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_binary_empty"
+harness = false
+path = "benches/ring/empty/binary/ring_twenty.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_crossbeam_empty"
+harness = false
+path = "benches/ring/empty/crossbeam/ring_twenty.rs"
+required-features = ["full"]
+
+######### Normal
+
+[[bench]]
+name = "ring_two_mpst_normal"
+harness = false
+path = "benches/ring/normal/mpst/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_binary_normal"
+harness = false
+path = "benches/ring/normal/binary/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/crossbeam/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_mpst_normal"
+harness = false
+path = "benches/ring/normal/mpst/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_binary_normal"
+harness = false
+path = "benches/ring/normal/binary/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/crossbeam/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_normal"
+harness = false
+path = "benches/ring/normal/mpst/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_binary_normal"
+harness = false
+path = "benches/ring/normal/binary/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/crossbeam/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_mpst_normal"
+harness = false
+path = "benches/ring/normal/mpst/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_binary_normal"
+harness = false
+path = "benches/ring/normal/binary/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/crossbeam/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_mpst_normal"
+harness = false
+path = "benches/ring/normal/mpst/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_binary_normal"
+harness = false
+path = "benches/ring/normal/binary/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/crossbeam/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_mpst_normal"
+harness = false
+path = "benches/ring/normal/mpst/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_binary_normal"
+harness = false
+path = "benches/ring/normal/binary/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/crossbeam/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_mpst_normal"
+harness = false
+path = "benches/ring/normal/mpst/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_binary_normal"
+harness = false
+path = "benches/ring/normal/binary/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/crossbeam/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_mpst_normal"
+harness = false
+path = "benches/ring/normal/mpst/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_binary_normal"
+harness = false
+path = "benches/ring/normal/binary/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/crossbeam/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_mpst_normal"
+harness = false
+path = "benches/ring/normal/mpst/ring_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_binary_normal"
+harness = false
+path = "benches/ring/normal/binary/ring_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/crossbeam/ring_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_mpst_normal"
+harness = false
+path = "benches/ring/normal/mpst/ring_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_binary_normal"
+harness = false
+path = "benches/ring/normal/binary/ring_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/crossbeam/ring_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_mpst_normal"
+harness = false
+path = "benches/ring/normal/mpst/ring_twenty.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_binary_normal"
+harness = false
+path = "benches/ring/normal/binary/ring_twenty.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_crossbeam_normal"
+harness = false
+path = "benches/ring/normal/crossbeam/ring_twenty.rs"
+required-features = ["full"]
+
+######### Cancel Broadcast
+
+[[bench]]
+name = "ring_three_mpst_cancel_broadcast"
+harness = false
+path = "benches/ring/cancel_broadcast/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_cancel_broadcast"
+harness = false
+path = "benches/ring/cancel_broadcast/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_mpst_cancel_broadcast"
+harness = false
+path = "benches/ring/cancel_broadcast/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_mpst_cancel_broadcast"
+harness = false
+path = "benches/ring/cancel_broadcast/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_mpst_cancel_broadcast"
+harness = false
+path = "benches/ring/cancel_broadcast/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_mpst_cancel_broadcast"
+harness = false
+path = "benches/ring/cancel_broadcast/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_mpst_cancel_broadcast"
+harness = false
+path = "benches/ring/cancel_broadcast/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_mpst_cancel_broadcast"
+harness = false
+path = "benches/ring/cancel_broadcast/ring_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_mpst_cancel_broadcast"
+harness = false
+path = "benches/ring/cancel_broadcast/ring_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_mpst_cancel_broadcast"
+harness = false
+path = "benches/ring/cancel_broadcast/ring_twenty.rs"
+required-features = ["full"]
+
+######### Cancel
+
+[[bench]]
+name = "ring_two_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_mpst_cancel"
+harness = false
+path = "benches/ring/cancel/ring_twenty.rs"
+required-features = ["full"]
+
+######### Baking
+
+#### Crossbeam
+
+[[bench]]
+name = "ring_two_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/crossbeam/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/crossbeam/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/crossbeam/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/crossbeam/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/crossbeam/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/crossbeam/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/crossbeam/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/crossbeam/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/crossbeam/ring_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/crossbeam/ring_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_crossbeam_baking"
+harness = false
+path = "benches/ring/baking/crossbeam/ring_twenty.rs"
+required-features = ["full"]
+
+#### Binary
+
+[[bench]]
+name = "ring_two_binary_baking"
+harness = false
+path = "benches/ring/baking/binary/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_binary_baking"
+harness = false
+path = "benches/ring/baking/binary/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_binary_baking"
+harness = false
+path = "benches/ring/baking/binary/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_binary_baking"
+harness = false
+path = "benches/ring/baking/binary/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_binary_baking"
+harness = false
+path = "benches/ring/baking/binary/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_binary_baking"
+harness = false
+path = "benches/ring/baking/binary/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_binary_baking"
+harness = false
+path = "benches/ring/baking/binary/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_binary_baking"
+harness = false
+path = "benches/ring/baking/binary/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_binary_baking"
+harness = false
+path = "benches/ring/baking/binary/ring_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_binary_baking"
+harness = false
+path = "benches/ring/baking/binary/ring_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_binary_baking"
+harness = false
+path = "benches/ring/baking/binary/ring_twenty.rs"
+required-features = ["full"]
+
+#### MPST
+
+[[bench]]
+name = "ring_two_mpst_baking"
+harness = false
+path = "benches/ring/baking/mpst/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_mpst_baking"
+harness = false
+path = "benches/ring/baking/mpst/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_baking"
+harness = false
+path = "benches/ring/baking/mpst/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_mpst_baking"
+harness = false
+path = "benches/ring/baking/mpst/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_mpst_baking"
+harness = false
+path = "benches/ring/baking/mpst/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_mpst_baking"
+harness = false
+path = "benches/ring/baking/mpst/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_mpst_baking"
+harness = false
+path = "benches/ring/baking/mpst/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_mpst_baking"
+harness = false
+path = "benches/ring/baking/mpst/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_mpst_baking"
+harness = false
+path = "benches/ring/baking/mpst/ring_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_mpst_baking"
+harness = false
+path = "benches/ring/baking/mpst/ring_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_mpst_baking"
+harness = false
+path = "benches/ring/baking/mpst/ring_twenty.rs"
+required-features = ["full"]
+
+#### AMPST
+
+[[bench]]
+name = "ring_two_ampst_baking"
+harness = false
+path = "benches/ring/baking/ampst/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_ampst_baking"
+harness = false
+path = "benches/ring/baking/ampst/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_ampst_baking"
+harness = false
+path = "benches/ring/baking/ampst/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_ampst_baking"
+harness = false
+path = "benches/ring/baking/ampst/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_ampst_baking"
+harness = false
+path = "benches/ring/baking/ampst/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_ampst_baking"
+harness = false
+path = "benches/ring/baking/ampst/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_ampst_baking"
+harness = false
+path = "benches/ring/baking/ampst/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_ampst_baking"
+harness = false
+path = "benches/ring/baking/ampst/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_ampst_baking"
+harness = false
+path = "benches/ring/baking/ampst/ring_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_ampst_baking"
+harness = false
+path = "benches/ring/baking/ampst/ring_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_ampst_baking"
+harness = false
+path = "benches/ring/baking/ampst/ring_twenty.rs"
+required-features = ["full"]
+
+######### Baking Cancel Inline
+
+[[bench]]
+name = "ring_two_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_two_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_two_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_two_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_two_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_three_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_three_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_three_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_four_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_four_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_four_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_five_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_five_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_five_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_six_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_six_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_six_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_seven_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_seven_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_seven_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_eight_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_eight_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_eight_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_nine_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_nine_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_nine_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_ten_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_ten_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_ten_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_eleven_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_eleven_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eleven_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_eleven_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_mpst_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_twenty_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_binary_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_twenty_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_twenty_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/ring/baking_cancel_inline/ring_twenty_crossbeam.rs"
+required-features = ["full"]
+
+######### ATMP
+
+[[bench]]
+name = "ring_two_atmp"
+harness = false
+path = "benches/ring/baking/atmp/ring_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_three_atmp"
+harness = false
+path = "benches/ring/baking/atmp/ring_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_four_atmp"
+harness = false
+path = "benches/ring/baking/atmp/ring_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_five_atmp"
+harness = false
+path = "benches/ring/baking/atmp/ring_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_six_atmp"
+harness = false
+path = "benches/ring/baking/atmp/ring_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_seven_atmp"
+harness = false
+path = "benches/ring/baking/atmp/ring_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_eight_atmp"
+harness = false
+path = "benches/ring/baking/atmp/ring_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_nine_atmp"
+harness = false
+path = "benches/ring/baking/atmp/ring_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "ring_ten_atmp"
+harness = false
+path = "benches/ring/baking/atmp/ring_ten.rs"
+required-features = ["full"]
+
+################## Mesh
+
+######### Empty
+
+#### Crossbeam
+
+[[bench]]
+name = "mesh_two_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/crossbeam/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/crossbeam/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/crossbeam/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/crossbeam/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/crossbeam/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/crossbeam/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/crossbeam/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/crossbeam/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/crossbeam/mesh_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/crossbeam/mesh_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_crossbeam_empty"
+harness = false
+path = "benches/mesh/empty/crossbeam/mesh_twenty.rs"
+required-features = ["full"]
+
+#### Binary
+
+[[bench]]
+name = "mesh_two_binary_empty"
+harness = false
+path = "benches/mesh/empty/binary/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_binary_empty"
+harness = false
+path = "benches/mesh/empty/binary/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_binary_empty"
+harness = false
+path = "benches/mesh/empty/binary/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_binary_empty"
+harness = false
+path = "benches/mesh/empty/binary/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_binary_empty"
+harness = false
+path = "benches/mesh/empty/binary/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_binary_empty"
+harness = false
+path = "benches/mesh/empty/binary/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_binary_empty"
+harness = false
+path = "benches/mesh/empty/binary/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_binary_empty"
+harness = false
+path = "benches/mesh/empty/binary/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_binary_empty"
+harness = false
+path = "benches/mesh/empty/binary/mesh_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_binary_empty"
+harness = false
+path = "benches/mesh/empty/binary/mesh_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_binary_empty"
+harness = false
+path = "benches/mesh/empty/binary/mesh_twenty.rs"
+required-features = ["full"]
+
+#### MPST
+
+[[bench]]
+name = "mesh_two_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mpst/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mpst/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mpst/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mpst/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mpst/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mpst/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mpst/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mpst/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mpst/mesh_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mpst/mesh_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_mpst_empty"
+harness = false
+path = "benches/mesh/empty/mpst/mesh_twenty.rs"
+required-features = ["full"]
+
+######### Normal
+
+#### Crossbeam
+
+[[bench]]
+name = "mesh_two_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/crossbeam/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/crossbeam/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/crossbeam/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/crossbeam/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/crossbeam/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/crossbeam/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/crossbeam/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/crossbeam/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/crossbeam/mesh_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/crossbeam/mesh_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_crossbeam_normal"
+harness = false
+path = "benches/mesh/normal/crossbeam/mesh_twenty.rs"
+required-features = ["full"]
+
+#### Binary
+
+[[bench]]
+name = "mesh_two_binary_normal"
+harness = false
+path = "benches/mesh/normal/binary/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_binary_normal"
+harness = false
+path = "benches/mesh/normal/binary/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_binary_normal"
+harness = false
+path = "benches/mesh/normal/binary/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_binary_normal"
+harness = false
+path = "benches/mesh/normal/binary/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_binary_normal"
+harness = false
+path = "benches/mesh/normal/binary/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_binary_normal"
+harness = false
+path = "benches/mesh/normal/binary/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_binary_normal"
+harness = false
+path = "benches/mesh/normal/binary/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_binary_normal"
+harness = false
+path = "benches/mesh/normal/binary/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_binary_normal"
+harness = false
+path = "benches/mesh/normal/binary/mesh_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_binary_normal"
+harness = false
+path = "benches/mesh/normal/binary/mesh_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_binary_normal"
+harness = false
+path = "benches/mesh/normal/binary/mesh_twenty.rs"
+required-features = ["full"]
+
+#### MPST
+
+[[bench]]
+name = "mesh_two_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mpst/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mpst/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mpst/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mpst/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mpst/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mpst/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mpst/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mpst/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mpst/mesh_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mpst/mesh_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_mpst_normal"
+harness = false
+path = "benches/mesh/normal/mpst/mesh_twenty.rs"
+required-features = ["full"]
+
+######### Cancel Broadcast
+
+[[bench]]
+name = "mesh_three_mpst_cancel_broadcast"
+harness = false
+path = "benches/mesh/cancel_broadcast/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_cancel_broadcast"
+harness = false
+path = "benches/mesh/cancel_broadcast/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_mpst_cancel_broadcast"
+harness = false
+path = "benches/mesh/cancel_broadcast/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_mpst_cancel_broadcast"
+harness = false
+path = "benches/mesh/cancel_broadcast/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_mpst_cancel_broadcast"
+harness = false
+path = "benches/mesh/cancel_broadcast/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_mpst_cancel_broadcast"
+harness = false
+path = "benches/mesh/cancel_broadcast/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_mpst_cancel_broadcast"
+harness = false
+path = "benches/mesh/cancel_broadcast/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_mpst_cancel_broadcast"
+harness = false
+path = "benches/mesh/cancel_broadcast/mesh_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_mpst_cancel_broadcast"
+harness = false
+path = "benches/mesh/cancel_broadcast/mesh_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_mpst_cancel_broadcast"
+harness = false
+path = "benches/mesh/cancel_broadcast/mesh_twenty.rs"
+required-features = ["full"]
+
+######### Cancel
+
+[[bench]]
+name = "mesh_two_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_mpst_cancel"
+harness = false
+path = "benches/mesh/cancel/mesh_twenty.rs"
+required-features = ["full"]
+
+######### Baking
+
+#### Crossbeam
+
+[[bench]]
+name = "mesh_two_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/crossbeam/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/crossbeam/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/crossbeam/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/crossbeam/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/crossbeam/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/crossbeam/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/crossbeam/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/crossbeam/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/crossbeam/mesh_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/crossbeam/mesh_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_crossbeam_baking"
+harness = false
+path = "benches/mesh/baking/crossbeam/mesh_twenty.rs"
+required-features = ["full"]
+
+#### Binary
+
+[[bench]]
+name = "mesh_two_binary_baking"
+harness = false
+path = "benches/mesh/baking/binary/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_binary_baking"
+harness = false
+path = "benches/mesh/baking/binary/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_binary_baking"
+harness = false
+path = "benches/mesh/baking/binary/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_binary_baking"
+harness = false
+path = "benches/mesh/baking/binary/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_binary_baking"
+harness = false
+path = "benches/mesh/baking/binary/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_binary_baking"
+harness = false
+path = "benches/mesh/baking/binary/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_binary_baking"
+harness = false
+path = "benches/mesh/baking/binary/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_binary_baking"
+harness = false
+path = "benches/mesh/baking/binary/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_binary_baking"
+harness = false
+path = "benches/mesh/baking/binary/mesh_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_binary_baking"
+harness = false
+path = "benches/mesh/baking/binary/mesh_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_binary_baking"
+harness = false
+path = "benches/mesh/baking/binary/mesh_twenty.rs"
+required-features = ["full"]
+
+#### MPST
+
+[[bench]]
+name = "mesh_two_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mpst/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mpst/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mpst/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mpst/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mpst/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mpst/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mpst/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mpst/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mpst/mesh_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mpst/mesh_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_mpst_baking"
+harness = false
+path = "benches/mesh/baking/mpst/mesh_twenty.rs"
+required-features = ["full"]
+
+#### AMPST
+
+[[bench]]
+name = "mesh_two_ampst_baking"
+harness = false
+path = "benches/mesh/baking/ampst/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_ampst_baking"
+harness = false
+path = "benches/mesh/baking/ampst/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_ampst_baking"
+harness = false
+path = "benches/mesh/baking/ampst/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_ampst_baking"
+harness = false
+path = "benches/mesh/baking/ampst/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_ampst_baking"
+harness = false
+path = "benches/mesh/baking/ampst/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_ampst_baking"
+harness = false
+path = "benches/mesh/baking/ampst/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_ampst_baking"
+harness = false
+path = "benches/mesh/baking/ampst/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_ampst_baking"
+harness = false
+path = "benches/mesh/baking/ampst/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_ampst_baking"
+harness = false
+path = "benches/mesh/baking/ampst/mesh_ten.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_ampst_baking"
+harness = false
+path = "benches/mesh/baking/ampst/mesh_eleven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_ampst_baking"
+harness = false
+path = "benches/mesh/baking/ampst/mesh_twenty.rs"
+required-features = ["full"]
+
+######### Baking Cancel Inline
+
+[[bench]]
+name = "mesh_two_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_two_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_two_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_two_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_two_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_two_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_three_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_three_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_three_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_four_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_four_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_four_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_five_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_five_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_five_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_six_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_six_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_six_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_seven_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_seven_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_seven_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_eight_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_eight_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_eight_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_nine_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_nine_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_nine_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_ten_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_ten_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_ten_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_eleven_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_eleven_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eleven_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_eleven_crossbeam.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_mpst_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_twenty_ampst.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_binary_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_twenty_binary.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_twenty_crossbeam_baking_cancel_inline"
+harness = false
+path = "benches/mesh/baking_cancel_inline/mesh_twenty_crossbeam.rs"
+required-features = ["full"]
+
+######### ATMP
+
+[[bench]]
+name = "mesh_two_atmp"
+harness = false
+path = "benches/mesh/baking/atmp/mesh_two.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_three_atmp"
+harness = false
+path = "benches/mesh/baking/atmp/mesh_three.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_four_atmp"
+harness = false
+path = "benches/mesh/baking/atmp/mesh_four.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_five_atmp"
+harness = false
+path = "benches/mesh/baking/atmp/mesh_five.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_six_atmp"
+harness = false
+path = "benches/mesh/baking/atmp/mesh_six.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_seven_atmp"
+harness = false
+path = "benches/mesh/baking/atmp/mesh_seven.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_eight_atmp"
+harness = false
+path = "benches/mesh/baking/atmp/mesh_eight.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_nine_atmp"
+harness = false
+path = "benches/mesh/baking/atmp/mesh_nine.rs"
+required-features = ["full"]
+
+[[bench]]
+name = "mesh_ten_atmp"
+harness = false
+path = "benches/mesh/baking/atmp/mesh_ten.rs"
+required-features = ["full"]
+
+################################### Examples
+
+######### Crossbeam
+
+[[example]]
+name = "calculator_crossbeam"
+path = "examples/crossbeam/calculator.rs"
+required-features = ["default"]
+
+[[example]]
+name = "circuit_breaker_crossbeam"
+path = "examples/crossbeam/circuit_breaker.rs"
+required-features = ["default"]
+
+[[example]]
+name = "fib_crossbeam"
+path = "examples/crossbeam/fib.rs"
+required-features = ["default"]
+
+[[example]]
+name = "logging_crossbeam"
+path = "examples/crossbeam/logging.rs"
+required-features = ["default"]
+
+[[example]]
+name = "o_auth_crossbeam"
+path = "examples/crossbeam/o_auth.rs"
+required-features = ["default"]
+
+[[example]]
+name = "online_wallet_crossbeam"
+path = "examples/crossbeam/online_wallet.rs"
+required-features = ["default"]
+
+[[example]]
+name = "remote_data_crossbeam"
+path = "examples/crossbeam/remote_data.rs"
+required-features = ["default"]
+
+[[example]]
+name = "servo_crossbeam"
+path = "examples/crossbeam/servo.rs"
+required-features = ["default"]
+
+[[example]]
+name = "simple_voting_crossbeam"
+path = "examples/crossbeam/simple_voting.rs"
+required-features = ["default"]
+
+[[example]]
+name = "smtp_crossbeam"
+path = "examples/crossbeam/smtp.rs"
+required-features = ["default"]
+
+[[example]]
+name = "three_buyers_crossbeam"
+path = "examples/crossbeam/three_buyers.rs"
+required-features = ["default"]
+
+[[example]]
+name = "travel_agency_crossbeam"
+path = "examples/crossbeam/travel_agency.rs"
+required-features = ["default"]
+
+[[example]]
+name = "video_stream_crossbeam"
+path = "examples/crossbeam/video_stream.rs"
+required-features = ["default"]
+
+[[example]]
+name = "distributed_calculators_crossbeam"
+path = "examples/crossbeam/distributed_calculators.rs"
+required-features = ["default"]
+
+######### Binary
+
+[[example]]
+name = "calculator_binary"
+path = "examples/binary/calculator.rs"
+required-features = ["default"]
+
+[[example]]
+name = "circuit_breaker_binary"
+path = "examples/binary/circuit_breaker.rs"
+required-features = ["default"]
+
+[[example]]
+name = "fib_binary"
+path = "examples/binary/fib.rs"
+required-features = ["default"]
+
+[[example]]
+name = "logging_binary"
+path = "examples/binary/logging.rs"
+required-features = ["default"]
+
+[[example]]
+name = "o_auth_binary"
+path = "examples/binary/o_auth.rs"
+required-features = ["default"]
+
+[[example]]
+name = "online_wallet_binary"
+path = "examples/binary/online_wallet.rs"
+required-features = ["default"]
+
+[[example]]
+name = "remote_data_binary"
+path = "examples/binary/remote_data.rs"
+required-features = ["default"]
+
+[[example]]
+name = "servo_binary"
+path = "examples/binary/servo.rs"
+required-features = ["default"]
+
+[[example]]
+name = "simple_voting_binary"
+path = "examples/binary/simple_voting.rs"
+required-features = ["default"]
+
+[[example]]
+name = "smtp_binary"
+path = "examples/binary/smtp.rs"
+required-features = ["default"]
+
+[[example]]
+name = "three_buyers_binary"
+path = "examples/binary/three_buyers.rs"
+required-features = ["default"]
+
+[[example]]
+name = "travel_agency_binary"
+path = "examples/binary/travel_agency.rs"
+required-features = ["default"]
+
+[[example]]
+name = "video_stream_binary"
+path = "examples/binary/video_stream.rs"
+required-features = ["default"]
+
+[[example]]
+name = "distributed_calculators_binary"
+path = "examples/binary/distributed_calculators.rs"
+required-features = ["default"]
+
+######### Basic
+
+[[example]]
+name = "video_stream_basic"
+path = "examples/basic/video_stream_basic.rs"
+required-features = ["macros_simple"]
+
+[[example]]
+name = "circuit_breaker_basic"
+path = "examples/basic/circuit_breaker.rs"
+required-features = ["macros_multiple"]
+
+[[example]]
+name = "logging_basic"
+path = "examples/basic/logging.rs"
+required-features = ["macros_multiple"]
+
+######### MPST
+
+[[example]]
+name = "fib_mpst"
+path = "examples/mpst/fib.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "circuit_breaker_mpst"
+path = "examples/mpst/circuit_breaker.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "logging_mpst"
+path = "examples/mpst/logging.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "calculator_mpst"
+path = "examples/mpst/calculator.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_mpst"
+path = "examples/mpst/dns_fowler.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_checking_mpst"
+path = "examples/mpst/dns_fowler_checking.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "dns_imai_mpst"
+path = "examples/mpst/dns_imai.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_mpst"
+path = "examples/mpst/o_auth.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_checking_mpst"
+path = "examples/mpst/o_auth_checking.rs"
+required-features = ["baking_checking"]
+
+# [[example]]
+# name = "o_auth_transport_mpst"
+# path = "examples/mpst/o_auth_transport.rs"
+# required-features = ["transport_macros_multiple"]
+
+[[example]]
+name = "online_wallet_mpst"
+path = "examples/mpst/online_wallet.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "simple_voting_mpst"
+path = "examples/mpst/simple_voting.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "smtp_mpst"
+path = "examples/mpst/smtp.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "three_buyers_mpst"
+path = "examples/mpst/three_buyers.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "travel_agency_mpst"
+path = "examples/mpst/travel_agency.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_mpst"
+path = "examples/mpst/servo.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "remote_data_mpst"
+path = "examples/mpst/remote_data.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "http_mpst"
+path = "examples/mpst/http.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "video_stream_mpst"
+path = "examples/mpst/video_stream.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_8257_original_mpst"
+path = "examples/mpst/servo_8257_original.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_8257_fixed_mpst"
+path = "examples/mpst/servo_8257_fixed.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "distributed_calculators_mpst"
+path = "examples/mpst/distributed_calculators.rs"
+required-features = ["baking"]
+
+######### AMPST
+
+[[example]]
+name = "fib_ampst"
+path = "examples/ampst/fib.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "circuit_breaker_ampst"
+path = "examples/ampst/circuit_breaker.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "logging_ampst"
+path = "examples/ampst/logging.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "calculator_ampst"
+path = "examples/ampst/calculator.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_ampst"
+path = "examples/ampst/dns_fowler.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "dns_fowler_checking_ampst"
+path = "examples/ampst/dns_fowler_checking.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "dns_imai_ampst"
+path = "examples/ampst/dns_imai.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_ampst"
+path = "examples/ampst/o_auth.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "o_auth_checking_ampst"
+path = "examples/ampst/o_auth_checking.rs"
+required-features = ["baking_checking"]
+
+# [[example]]
+# name = "o_auth_transport_ampst"
+# path = "examples/ampst/o_auth_transport.rs"
+# required-features = ["transport_macros_multiple"]
+
+[[example]]
+name = "online_wallet_ampst"
+path = "examples/ampst/online_wallet.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "simple_voting_ampst"
+path = "examples/ampst/simple_voting.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "smtp_ampst"
+path = "examples/ampst/smtp.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "three_buyers_ampst"
+path = "examples/ampst/three_buyers.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "travel_agency_ampst"
+path = "examples/ampst/travel_agency.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_ampst"
+path = "examples/ampst/servo.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "remote_data_ampst"
+path = "examples/ampst/remote_data.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "http_ampst"
+path = "examples/ampst/http.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "video_stream_ampst"
+path = "examples/ampst/video_stream.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_8257_original_ampst"
+path = "examples/ampst/servo_8257_original.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "servo_8257_fixed_ampst"
+path = "examples/ampst/servo_8257_fixed.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "distributed_calculators_ampst"
+path = "examples/ampst/distributed_calculators.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "gravity_android_ampst"
+path = "examples/rate_based_ampst/gravity_android.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "pinetime_heart_rate_ampst"
+path = "examples/rate_based_ampst/pinetime_heart_rate.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "proximity_based_car_key_ampst"
+path = "examples/rate_based_ampst/proximity_based_car_key.rs"
+required-features = ["baking"]
+
+######### Checking
+
+[[example]]
+name = "video_stream_checking"
+path = "examples/checking/video_stream.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "adder_checking"
+path = "examples/checking/adder.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "basic_checking"
+path = "examples/checking/basic.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_original_checking"
+path = "examples/checking/servo_8257_original.rs"
+required-features = ["baking_checking"]
+
+[[example]]
+name = "servo_8257_fixed_checking"
+path = "examples/checking/servo_8257_fixed.rs"
+required-features = ["baking_checking"]
+
+######### Interleaved
+
+#### Baking
+
+[[example]]
+name = "circuit_breaker_logging_interleaved"
+path = "examples/interleaved/baking/circuit_breaker_logging.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "circuit_breaker_solo"
+path = "examples/interleaved/baking/circuit_breaker_solo.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "logging_solo"
+path = "examples/interleaved/baking/logging_solo.rs"
+required-features = ["interleaved"]
+
+[[example]]
+name = "sleeping_barber_interleaved"
+path = "examples/interleaved/baking/sleeping_barber.rs"
+required-features = ["interleaved"]
+
+#### ATMP
+
+[[example]]
+name = "sleeping_barber_interleaved_atmp"
+path = "examples/interleaved/atmp/sleeping_barber.rs"
+required-features = ["baking_atmp_interleaved"]
+
+[[example]]
+name = "circuit_breaker_logging_interleaved_atmp"
+path = "examples/interleaved/atmp/circuit_breaker_logging.rs"
+required-features = ["baking_atmp_interleaved"]
+
+######### ATMP
+
+[[example]]
+name = "fib_atmp"
+path = "examples/atmp/fib.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "servo_atmp"
+path = "examples/atmp/servo.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "servo_8257_async_failing_atmp"
+path = "examples/atmp/servo_8257_async_failing.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "servo_8257_async_working_atmp"
+path = "examples/atmp/servo_8257_async_working.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "servo_8257_async_fixed_atmp"
+path = "examples/atmp/servo_8257_async_fixed.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "simple_voting_atmp"
+path = "examples/atmp/simple_voting.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "calculator_atmp"
+path = "examples/atmp/calculator.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "o_auth_atmp"
+path = "examples/atmp/o_auth.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "online_wallet_atmp"
+path = "examples/atmp/online_wallet.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "smtp_atmp"
+path = "examples/atmp/smtp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "three_buyers_atmp"
+path = "examples/atmp/three_buyers.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "travel_agency_atmp"
+path = "examples/atmp/travel_agency.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "remote_data_atmp"
+path = "examples/atmp/remote_data.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "http_atmp"
+path = "examples/atmp/http.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "non_feasible_atmp"
+path = "examples/atmp/non_feasible.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "circuit_breaker_atmp"
+path = "examples/atmp/circuit_breaker.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "logging_atmp"
+path = "examples/atmp/logging.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "video_stream_atmp"
+path = "examples/atmp/video_stream.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "distributed_calculators_atmp"
+path = "examples/atmp/distributed_calculators.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "gravity_android_atmp"
+path = "examples/rate_based_atmp/gravity_android.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "pinetime_heart_rate_atmp"
+path = "examples/rate_based_atmp/pinetime_heart_rate.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "proximity_based_car_key_atmp"
+path = "examples/rate_based_atmp/proximity_based_car_key.rs"
+required-features = ["baking_atmp"]
+
+################################### Mesh examples
+
+################## Crossbeam
+
+[[example]]
+name = "mesh_two_crossbeam"
+path = "examples/mesh/mesh_two_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_three_crossbeam"
+path = "examples/mesh/mesh_three_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_four_crossbeam"
+path = "examples/mesh/mesh_four_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_five_crossbeam"
+path = "examples/mesh/mesh_five_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_six_crossbeam"
+path = "examples/mesh/mesh_six_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_seven_crossbeam"
+path = "examples/mesh/mesh_seven_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_eight_crossbeam"
+path = "examples/mesh/mesh_eight_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_nine_crossbeam"
+path = "examples/mesh/mesh_nine_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_ten_crossbeam"
+path = "examples/mesh/mesh_ten_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_eleven_crossbeam"
+path = "examples/mesh/mesh_eleven_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_twenty_crossbeam"
+path = "examples/mesh/mesh_twenty_crossbeam.rs"
+required-features = ["default"]
+
+################## Binary
+
+[[example]]
+name = "mesh_two_binary"
+path = "examples/mesh/mesh_two_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_three_binary"
+path = "examples/mesh/mesh_three_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_four_binary"
+path = "examples/mesh/mesh_four_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_five_binary"
+path = "examples/mesh/mesh_five_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_six_binary"
+path = "examples/mesh/mesh_six_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_seven_binary"
+path = "examples/mesh/mesh_seven_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_eight_binary"
+path = "examples/mesh/mesh_eight_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_nine_binary"
+path = "examples/mesh/mesh_nine_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_ten_binary"
+path = "examples/mesh/mesh_ten_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_eleven_binary"
+path = "examples/mesh/mesh_eleven_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "mesh_twenty_binary"
+path = "examples/mesh/mesh_twenty_binary.rs"
+required-features = ["default"]
+
+################## MPST
+
+[[example]]
+name = "mesh_two_baking_mpst"
+path = "examples/mesh/mesh_two_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_three_baking_mpst"
+path = "examples/mesh/mesh_three_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_four_baking_mpst"
+path = "examples/mesh/mesh_four_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_five_baking_mpst"
+path = "examples/mesh/mesh_five_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_six_baking_mpst"
+path = "examples/mesh/mesh_six_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_seven_baking_mpst"
+path = "examples/mesh/mesh_seven_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_eight_baking_mpst"
+path = "examples/mesh/mesh_eight_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_nine_baking_mpst"
+path = "examples/mesh/mesh_nine_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_ten_baking_mpst"
+path = "examples/mesh/mesh_ten_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_eleven_baking_mpst"
+path = "examples/mesh/mesh_eleven_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_twenty_baking_mpst"
+path = "examples/mesh/mesh_twenty_baking_mpst.rs"
+required-features = ["baking"]
+
+################## AMPST
+
+[[example]]
+name = "mesh_two_baking_ampst"
+path = "examples/mesh/mesh_two_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_three_baking_ampst"
+path = "examples/mesh/mesh_three_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_four_baking_ampst"
+path = "examples/mesh/mesh_four_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_five_baking_ampst"
+path = "examples/mesh/mesh_five_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_six_baking_ampst"
+path = "examples/mesh/mesh_six_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_seven_baking_ampst"
+path = "examples/mesh/mesh_seven_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_eight_baking_ampst"
+path = "examples/mesh/mesh_eight_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_nine_baking_ampst"
+path = "examples/mesh/mesh_nine_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_ten_baking_ampst"
+path = "examples/mesh/mesh_ten_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_eleven_baking_ampst"
+path = "examples/mesh/mesh_eleven_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "mesh_twenty_baking_ampst"
+path = "examples/mesh/mesh_twenty_baking_ampst.rs"
+required-features = ["baking"]
+
+################## ATMP
+
+[[example]]
+name = "mesh_two_baking_atmp"
+path = "examples/mesh/mesh_two_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "mesh_three_baking_atmp"
+path = "examples/mesh/mesh_three_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "mesh_four_baking_atmp"
+path = "examples/mesh/mesh_four_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "mesh_five_baking_atmp"
+path = "examples/mesh/mesh_five_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "mesh_six_baking_atmp"
+path = "examples/mesh/mesh_six_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "mesh_seven_baking_atmp"
+path = "examples/mesh/mesh_seven_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "mesh_eight_baking_atmp"
+path = "examples/mesh/mesh_eight_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "mesh_nine_baking_atmp"
+path = "examples/mesh/mesh_nine_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "mesh_ten_baking_atmp"
+path = "examples/mesh/mesh_ten_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+################################### Ring examples
+
+################## Crossbeam
+
+[[example]]
+name = "ring_two_crossbeam"
+path = "examples/ring/ring_two_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_three_crossbeam"
+path = "examples/ring/ring_three_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_four_crossbeam"
+path = "examples/ring/ring_four_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_five_crossbeam"
+path = "examples/ring/ring_five_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_six_crossbeam"
+path = "examples/ring/ring_six_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_seven_crossbeam"
+path = "examples/ring/ring_seven_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_eight_crossbeam"
+path = "examples/ring/ring_eight_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_nine_crossbeam"
+path = "examples/ring/ring_nine_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_ten_crossbeam"
+path = "examples/ring/ring_ten_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_eleven_crossbeam"
+path = "examples/ring/ring_eleven_crossbeam.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_twenty_crossbeam"
+path = "examples/ring/ring_twenty_crossbeam.rs"
+required-features = ["default"]
+
+################## Binary
+
+[[example]]
+name = "ring_two_binary"
+path = "examples/ring/ring_two_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_three_binary"
+path = "examples/ring/ring_three_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_four_binary"
+path = "examples/ring/ring_four_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_five_binary"
+path = "examples/ring/ring_five_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_six_binary"
+path = "examples/ring/ring_six_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_seven_binary"
+path = "examples/ring/ring_seven_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_eight_binary"
+path = "examples/ring/ring_eight_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_nine_binary"
+path = "examples/ring/ring_nine_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_ten_binary"
+path = "examples/ring/ring_ten_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_eleven_binary"
+path = "examples/ring/ring_eleven_binary.rs"
+required-features = ["default"]
+
+[[example]]
+name = "ring_twenty_binary"
+path = "examples/ring/ring_twenty_binary.rs"
+required-features = ["default"]
+
+################## MPST
+
+[[example]]
+name = "ring_two_baking_mpst"
+path = "examples/ring/ring_two_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_three_baking_mpst"
+path = "examples/ring/ring_three_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_four_baking_mpst"
+path = "examples/ring/ring_four_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_five_baking_mpst"
+path = "examples/ring/ring_five_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_six_baking_mpst"
+path = "examples/ring/ring_six_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_seven_baking_mpst"
+path = "examples/ring/ring_seven_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_eight_baking_mpst"
+path = "examples/ring/ring_eight_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_nine_baking_mpst"
+path = "examples/ring/ring_nine_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_ten_baking_mpst"
+path = "examples/ring/ring_ten_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_eleven_baking_mpst"
+path = "examples/ring/ring_eleven_baking_mpst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_twenty_baking_mpst"
+path = "examples/ring/ring_twenty_baking_mpst.rs"
+required-features = ["baking"]
+
+################## AMPST
+
+[[example]]
+name = "ring_two_baking_ampst"
+path = "examples/ring/ring_two_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_three_baking_ampst"
+path = "examples/ring/ring_three_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_four_baking_ampst"
+path = "examples/ring/ring_four_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_five_baking_ampst"
+path = "examples/ring/ring_five_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_six_baking_ampst"
+path = "examples/ring/ring_six_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_seven_baking_ampst"
+path = "examples/ring/ring_seven_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_eight_baking_ampst"
+path = "examples/ring/ring_eight_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_nine_baking_ampst"
+path = "examples/ring/ring_nine_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_ten_baking_ampst"
+path = "examples/ring/ring_ten_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_eleven_baking_ampst"
+path = "examples/ring/ring_eleven_baking_ampst.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "ring_twenty_baking_ampst"
+path = "examples/ring/ring_twenty_baking_ampst.rs"
+required-features = ["baking"]
+
+################## ATMP
+
+[[example]]
+name = "ring_two_baking_atmp"
+path = "examples/ring/ring_two_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "ring_three_baking_atmp"
+path = "examples/ring/ring_three_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "ring_four_baking_atmp"
+path = "examples/ring/ring_four_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "ring_five_baking_atmp"
+path = "examples/ring/ring_five_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "ring_six_baking_atmp"
+path = "examples/ring/ring_six_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "ring_seven_baking_atmp"
+path = "examples/ring/ring_seven_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "ring_eight_baking_atmp"
+path = "examples/ring/ring_eight_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "ring_nine_baking_atmp"
+path = "examples/ring/ring_nine_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "ring_ten_baking_atmp"
+path = "examples/ring/ring_ten_baking_atmp.rs"
+required-features = ["baking_atmp"]
+
+################################### Artifact examples
+
+[[example]]
+name = "my_basic"
+path = "examples/artifact/my_basic.rs"
+required-features = ["baking"]
+
+[[example]]
+name = "basic"
+path = "examples/artifact/basic.rs"
+required-features = ["baking"]
+
+################################### ATMP artifact examples
+
+[[example]]
+name = "atmp_my_basic"
+path = "examples/artifact_atmp/my_basic.rs"
+required-features = ["baking_atmp"]
+
+[[example]]
+name = "atmp_basic"
+path = "examples/artifact_atmp/basic.rs"
+required-features = ["baking_atmp"]
+
+################################### Readme example
+
+[[example]]
+name = "readme"
+path = "examples/readme_example.rs"
+required-features = ["mpst"]
+
+################################### Profil
+
+[profile.release]
+debug = true
+
+################################### Dependencies
+
+[dependencies]
+mpst-seq-proc = { path = "mpst_seq_proc" }
+# mpst-seq-proc = "0.1"
+crossbeam-channel = "0.5.12"
+either = "1.11.0"
+# For HTTP
+hyper = { version = "1.2.0", features = ["full"], optional = true }
+hyper-tls = { version = "0.6.0", optional = true }
+hyper-util = { version = "0.1.3", features = ["full"] }
+http-body-util = "0.1"
+tokio = { version = "1.33.0", features = ["full"], optional = true }
+# For kMC
+regex = { version = "1.10.4", optional = true }
+petgraph = { version = "0.6.4", optional = true }
+# Protobuf libraries
+protobuf = { version = "3.4.0", features = ["with-bytes"] }
+protobuf-codegen = "3.4.0"
+protoc-bin-vendored = "3.0.0"
+# Parser for Top-Down
+once_cell = {version = "1.19.0", optional = true}
+
+################################### Dev-dependencies for tests/benches
+
+[dev-dependencies]
+criterion = { version = "0.5.1", features = ["html_reports"] }
+trybuild = "1.0.85"
+ntest = "0.9.0"
+rand = "0.8.5"
+
+################################### Features
+
+[features]
+default = []
+mpst = ["default"]
+binary_atmp = ["default"]
+macros_simple = ["mpst"]
+macros_multiple = ["mpst", "macros_simple"]
+checking = ["mpst", "regex", "petgraph"]
+baking = ["mpst", "macros_multiple"]
+interleaved = ["baking"] # For interleaved sessions
+baking_atmp = ["binary_atmp", "mpst"]
+baking_interleaved = ["baking", "interleaved"]
+baking_checking = ["baking", "checking"]
+baking_atmp_interleaved = ["baking_atmp", "interleaved"]
+transport_tcp = ["default"]
+transport_udp = ["default"]
+top_down_nuscr = ["default", "regex", "once_cell"]
+# transport_http = ["default", "hyper", "hyper-tls", "tokio"]
+# transport = ["transport_tcp", "transport_udp", "transport_http"]
+transport = ["transport_tcp", "transport_udp"]
+transport_macros_multiple = [
+    "macros_multiple",
+    "transport",
+] # For test compile examples
+protobuf_feature = []
+affine_atmp = ["baking", "baking_atmp"]
+full_without_checking = ["baking", "transport", "interleaved"]
+full = ["baking_checking", "transport", "baking_atmp", "interleaved"]
+
+################################### Doc handling for all-features
+
+# docs.rs-specific configuration
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "doc_cfg"]
+
+################################### Rust playground features
+
+[package.metadata.playground]
+features = ["full", "interleaved"]

@@ -1,15 +1,13 @@
 # Multiparty session types for Rust
 
-<!-- [![Build Status](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github.svg?token=svBAgWJGqmCpdC4i1kLT&branch=master)](https://travis-ci.com/NicolasLagaillardie/mpst_rust_github) -->
 ![Ubuntu](https://github.com/NicolasLagaillardie/mpst_rust_github/actions/workflows/ubuntu.yml/badge.svg)
 ![Windows](https://github.com/NicolasLagaillardie/mpst_rust_github/actions/workflows/windows.yml/badge.svg)
 ![Mac](https://github.com/NicolasLagaillardie/mpst_rust_github/actions/workflows/mac.yml/badge.svg)
 [![Crate](https://img.shields.io/crates/v/mpstthree.svg)](https://crates.io/crates/mpstthree)
-[![Minimum rustc version](https://img.shields.io/badge/rustc-1.58+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
+[![Minimum rustc version](https://img.shields.io/badge/rustc-1.77+-brightgreen.svg)](https://github.com/NicolasLagaillardie/mpst_rust_github)
 [![Documentation](https://docs.rs/mpstthree/badge.svg)](https://docs.rs/mpstthree/)
 [![codecov](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github/branch/master/graph/badge.svg?token=VEUNVJJAOY)](https://codecov.io/gh/NicolasLagaillardie/mpst_rust_github)
-[![dependency status](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github/status.svg)](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github)
-<!-- [![License: "MIT OR Apache-2.0"](https://img.shields.io/crates/l/mpstthree.svg)](#license) -->
+[![Dependency status](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github/status.svg)](https://deps.rs/repo/github/NicolasLagaillardie/mpst_rust_github)
 
 This library implements [multiparty session types](http://mrg.doc.ic.ac.uk/publications/a-gentle-introduction-to-multiparty-asynchronous-session-types/) in Rust for at least two participants.
 It relies on [sesh](https://github.com/wenkokke/sesh).
@@ -22,7 +20,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-mpstthree = "0.1.16"
+mpstthree = "0.1.17"
 ```
 
 ## Example
@@ -138,11 +136,7 @@ Do not forget to **unwrap()** the returned threads.
 ```rust
 // Fork all endpoints
 fn main() {
-    let (thread_a, thread_b, thread_c) = fork_mpst(
-        endpoint_a,
-        endpoint_b,
-        endpoint_c,
-    );
+    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
     thread_a.join().unwrap();
     thread_b.join().unwrap();
@@ -155,8 +149,10 @@ fn main() {
 For running this example, assuming it is in the **examples/** folder, use:
 
 ```sh
-cargo run --example [name of your example]
+cargo run --example [name of your example] --features="mpst"
 ```
+
+where `--features="mpst"` is used for building the `mpst` feature of this library, which includes the `MeshedChannels` and `role`s types, among other things.
 
 ## Getting started
 
@@ -210,16 +206,18 @@ You can check the tests and examples to have a larger overview of the different 
 
 The different features available are:
 
-1. `default`: default features, for implementing the basic example above.
+0. `default`: default features, for implementing the basic example above.
+1. `message`: feature for using the _message_ structure provided by the library.
 2. `macros_simple`: feature for implementing protocols with three participants, whatever are their name.
 3. `macros_multiple`: feature for implementing protocols with any number of participants. Contains `macros_simple`.
 4. `baking`: feature for implementing protocols with any number of participants and using associated functions instead of functions. Contains `macros_multiple`.
-5. `transport_tcp`: feature containing primitives for communicating with TCP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
-6. `transport_udp`: feature containing primitives for communicating with UDP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
-7. `transport_http`: feature containing primitives for communicating with HTTP/HTTPS. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
-8. `transport`: feature containing `transport_tcp`, `transport_udp` and `transport_http`.
-9. `checking`: feature for the top-down approach. Needs the [`KMC`] tool.
-10. `full`: feature containing `checking`, `baking` and `transport`.
+5. `baking_atmp`: feature for implementing _asynchronous_ _atmp_ protocols with any number of participants and using associated functions instead of functions.
+6. `transport_tcp`: feature containing primitives for communicating with TCP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+7. `transport_udp`: feature containing primitives for communicating with UDP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+8. `transport_http`: feature containing primitives for communicating with HTTP/HTTPS. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+9. `transport`: feature containing `transport_tcp`, `transport_udp` and `transport_http`.
+10. `checking`: feature for the top-down approach. Needs the [`KMC`] tool.
+11. `full`: feature containing `checking`, `baking` and `transport`.
 
 ## Contributing
 
@@ -231,9 +229,9 @@ We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
-* **Nicolas Lagaillardie** - *Initial work* - [NicolasLagaillardie](https://github.com/NicolasLagaillardie)
-* **Rumyana Neykova** - *Initial work* - [RumyanaNeykova](https://github.com/rumineykova)
-* **Nobuko Yoshida** - *Initial work* - [NobukoYoshida](https://github.com/NobukoYoshida)
+* **Nicolas Lagaillardie** - *Initial work* - [Nicolas Lagaillardie](https://github.com/NicolasLagaillardie)
+* **Rumyana Neykova** - *Initial work* - [Rumyana Neykova](https://github.com/rumineykova)
+* **Nobuko Yoshida** - *Initial work* - [Nobuko Yoshida](https://github.com/NobukoYoshida)
 
 See also the list of [contributors](https://github.com/NicolasLagaillardie/mpst_rust_github/graphs/contributors) who participated in this project.
 

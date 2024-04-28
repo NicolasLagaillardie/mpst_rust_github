@@ -5,17 +5,18 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::Role;
 
-use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::role::a::RoleA;
 use mpstthree::role::a_to_all::RoleAtoAll;
 use mpstthree::role::all_to_a::RoleAlltoA;
 use mpstthree::role::b::RoleB;
-use mpstthree::role::b_dual::RoleBDual;
 use mpstthree::role::c::RoleC;
-use mpstthree::role::c_dual::RoleCDual;
 use mpstthree::role::end::RoleEnd;
+
+use mpstthree::name::a::NameA;
+use mpstthree::name::b::NameB;
+use mpstthree::name::c::NameC;
 
 use mpstthree::functionmpst::ChooseMpst;
 use mpstthree::functionmpst::OfferMpst;
@@ -61,57 +62,29 @@ type StackAFull = RoleB<RoleB<StackAChoice>>;
 
 // Creating the MP sessions
 // For A
-type ChooseAtoB<N> = ChooseMpst<
-    AtoBVideo<N>,
-    CtoBVideo<N>,
-    AtoBClose,
-    CtoBClose,
-    StackBVideoDual,
-    StackBEnd,
-    RoleBDual<RoleEnd>,
->;
-type ChooseAtoC<N> = ChooseMpst<
-    AtoCClose,
-    BtoCVideo<N>,
-    BtoCClose,
-    AtoCClose,
-    StackCVideoDual,
-    StackCEnd,
-    RoleCDual<RoleEnd>,
->;
+type ChooseAtoB<N> =
+    ChooseMpst<AtoBVideo<N>, CtoBVideo<N>, AtoBClose, CtoBClose, StackBVideoDual, StackBEnd, NameB>;
+type ChooseAtoC<N> =
+    ChooseMpst<AtoCClose, BtoCVideo<N>, BtoCClose, AtoCClose, StackCVideoDual, StackCEnd, NameC>;
 type InitA<N> = Send<N, Recv<N, ChooseAtoB<N>>>;
-type EndpointAFull<N> = MeshedChannels<InitA<N>, ChooseAtoC<N>, StackAFull, RoleA<RoleEnd>>;
+type EndpointAFull<N> = MeshedChannels<InitA<N>, ChooseAtoC<N>, StackAFull, NameA>;
 
 // For B
-type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCVideo<N>, StackBVideo, RoleB<RoleEnd>>;
-type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, RoleB<RoleEnd>>;
+type EndpointBVideo<N> = MeshedChannels<BtoAVideo<N>, BtoCVideo<N>, StackBVideo, NameB>;
+type EndpointBEnd = MeshedChannels<BtoAClose, BtoCClose, StackBEnd, NameB>;
 
-type OfferB<N> = OfferMpst<
-    BtoAVideo<N>,
-    BtoCVideo<N>,
-    BtoAClose,
-    BtoCClose,
-    StackBVideo,
-    StackBEnd,
-    RoleB<RoleEnd>,
->;
+type OfferB<N> =
+    OfferMpst<BtoAVideo<N>, BtoCVideo<N>, BtoAClose, BtoCClose, StackBVideo, StackBEnd, NameB>;
 type InitB<N> = Recv<N, Send<N, OfferB<N>>>;
-type EndpointBFull<N> = MeshedChannels<InitB<N>, End, StackBFull, RoleB<RoleEnd>>;
+type EndpointBFull<N> = MeshedChannels<InitB<N>, End, StackBFull, NameB>;
 
 // For C
-type EndpointCVideo<N> = MeshedChannels<CtoAClose, CtoBVideo<N>, StackCVideo, RoleC<RoleEnd>>;
-type EndpointCEnd = MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>;
+type EndpointCVideo<N> = MeshedChannels<CtoAClose, CtoBVideo<N>, StackCVideo, NameC>;
+type EndpointCEnd = MeshedChannels<CtoAClose, CtoBClose, StackCEnd, NameC>;
 
-type OfferC<N> = OfferMpst<
-    CtoAClose,
-    CtoBVideo<N>,
-    CtoAClose,
-    CtoBClose,
-    StackCVideo,
-    StackCEnd,
-    RoleC<RoleEnd>,
->;
-type EndpointCFull<N> = MeshedChannels<OfferC<N>, End, StackCFull, RoleC<RoleEnd>>;
+type OfferC<N> =
+    OfferMpst<CtoAClose, CtoBVideo<N>, CtoAClose, CtoBClose, StackCVideo, StackCEnd, NameC>;
+type EndpointCFull<N> = MeshedChannels<OfferC<N>, End, StackCFull, NameC>;
 
 // Functions related to endpoints
 fn server(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
@@ -169,40 +142,31 @@ fn client_close(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
 /////////////////////////////////////////
 
 pub fn run_a_usecase_left() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        // Test video branch.
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(client_video, authenticator, server);
+    // Test video branch.
+    let (thread_a, thread_b, thread_c) = fork_mpst(client_video, authenticator, server);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
-
-        Ok(())
-    }()
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }
 
 pub fn run_a_usecase_right() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        // Test end branch.
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(client_close, authenticator, server);
+    // Test end branch.
+    let (thread_a, thread_b, thread_c) = fork_mpst(client_close, authenticator, server);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
-
-        Ok(())
-    }()
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }
 
 pub fn run_a_usecase_checker() {
-    let (graphs, kmc) =
-        checker_concat!(EndpointAFull<i32>, EndpointBFull<i32>, EndpointCFull<i32>).unwrap();
+    let (graphs, kmc) = checker_concat!(
+        "",
+        EndpointAFull<i32>,
+        EndpointBFull<i32>,
+        EndpointCFull<i32>
+    )
+    .unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];

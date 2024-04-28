@@ -4,17 +4,12 @@ use rand::{thread_rng, Rng};
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
-use mpstthree::{bundle_impl, choose_mpst_create_multi_to_all};
+use mpstthree::{choose_mpst_create_multi_to_all, generate};
 use std::error::Error;
 use std::marker;
 
 // Create new roles
-bundle_impl!(MeshedChannels, A, B, D);
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
+generate!("basic", MeshedChannels, A, B, D);
 
 // Test our usecase
 // Simple types
@@ -81,12 +76,7 @@ type EndpointAFull<N> = MeshedChannels<End, InitA<N>, StackAInit, NameA>;
 // For B
 type EndpointBRecurs<N> = MeshedChannels<End, RecursBtoD<N>, StackBRecurs, NameB>;
 
-choose_mpst_create_multi_to_all!(
-    choose_mpst_client_to_all,
-    RoleA, RoleB, =>
-    RoleD, MeshedChannels,
-    3
-);
+choose_mpst_create_multi_to_all!(choose_mpst_client_to_all, NameD, MeshedChannels, 3);
 
 // Functions related to endpoints
 fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
@@ -95,7 +85,7 @@ fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branches0BtoD::Video(s) => {
-            let (request, s) = s.recv()?;
+            let (request, s) = s.recv();
             let s = s.send(request + 1);
             server(s)
         },
@@ -103,7 +93,7 @@ fn server(s: EndpointBRecurs<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
-    let (id, s) = s.recv()?;
+    let (id, s) = s.recv();
     let s = s.send(id + 1);
 
     authenticator_recurs(s)
@@ -115,8 +105,8 @@ fn authenticator_recurs(s: EndpointARecurs<i32>) -> Result<(), Box<dyn Error>> {
             s.close()
         },
         Branches0AtoD::Video(s) => {
-            let (request, s) = s.recv()?;
-            let (video, s) = s.send(request + 1).recv()?;
+            let (request, s) = s.recv();
+            let (video, s) = s.send(request + 1).recv();
             let s = s.send(video + 1);
             authenticator_recurs(s)
         },
@@ -127,7 +117,7 @@ fn client(s: EndpointDFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let xs: Vec<i32> = (1..100).map(|_| rng.gen()).collect();
 
-    let (_, s) = s.send(0).recv()?;
+    let (_, s) = s.send(0).recv();
 
     client_recurs(s, xs, 1)
 }
@@ -142,7 +132,7 @@ fn client_recurs(
             let s: EndpointDVideo<i32> =
                 choose_mpst_client_to_all!(s, Branches0AtoD::Video, Branches0BtoD::Video);
 
-            let (_, s) = s.send(1).recv()?;
+            let (_, s) = s.send(1).recv();
 
             client_recurs(s, xs, index + 1)
         }
@@ -159,15 +149,9 @@ fn client_recurs(
 ////////////////////////////////////////
 
 pub fn new_run_usecase_recursive() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
+    let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
-        Ok(())
-    }()
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }

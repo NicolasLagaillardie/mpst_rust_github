@@ -1,55 +1,72 @@
+#![allow(unused_imports)]
+
 use petgraph::graph::NodeIndex;
 use petgraph::Graph;
 
 use regex::Regex;
 
+use core::panic;
 use std::collections::hash_map::RandomState;
 use std::collections::HashMap;
 use std::error::Error;
+use std::fmt::Write;
 
 type VecOfStr = Vec<String>;
 type HashMapStrVecOfStr = HashMap<String, VecOfStr>;
 type GraphOfStrStr = Graph<String, String>;
 type VecOfTuple = Vec<(String, usize)>;
 
-// Clean the provided session, which should be stringified.
-//
-// From
-//     "&&mpstthree::meshedchannels::MeshedChannels<mpstthree::\
-//     binary::struct_trait::recv::Recv<checking_recursion::\
-//     Branches0AtoB, mpstthree::binary::struct_trait::end::End>, mpstthree\
-//     ::binary::struct_trait::recv::Recv<i32, mpstthree::binary::\
-//     struct_trait::send::Send<i32, mpstthree::binary::struct_trait::end::\
-//     End>>, mpstthree::role::c::RoleC<mpstthree::role::c::RoleC<\
-//     mpstthree::role::b::RoleB<mpstthree::role::end::RoleEnd>>>, mpstthree\
-//     ::role::a::RoleA<mpstthree::role::end::RoleEnd>>"
-//
-// to
-//
-// [
-//     "Recv<Branches0AtoB,End>",
-//     "Recv<i32,Send<i32,End>>",
-//     "RoleC<RoleC<RoleB<RoleEnd>>>",
-//     "RoleA<RoleEnd>",
-//     "RoleA"
-// ]
+/// Clean the provided session, which should be stringified.
+///
+/// From
+///     "&&mpstthree::meshedchannels::MeshedChannels<mpstthree::\
+///     binary::struct_trait::recv::Recv<checking_recursion::\
+///     Branches0AtoB, mpstthree::binary::struct_trait::end::End>, mpstthree\
+///     ::binary::struct_trait::recv::Recv<i32, mpstthree::binary::\
+///     struct_trait::send::Send<i32, mpstthree::binary::struct_trait::end::\
+///     End>>, mpstthree::role::c::RoleC<mpstthree::role::c::RoleC<\
+///     mpstthree::role::b::RoleB<mpstthree::role::end::RoleEnd>>>, mpstthree\
+///     ::name::a::NameA>"
+///
+/// to
+///
+/// [
+///     "Recv<Branches0AtoB, End>",
+///     "Recv<i32, Send<i32, End>>",
+///     "RoleC<RoleC<RoleB<RoleEnd>>>",
+///     "RoleA<RoleEnd>",
+///     "RoleA"
+/// ]
+///
+/// /!\ Mixing former and new naming: moving from new to former
 #[doc(hidden)]
 pub(crate) fn clean_session(session: &str) -> Result<VecOfStr, Box<dyn Error>> {
-    // The regex expression
-    let main_re = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)")?;
-    let mut temp = session.replace('&', "");
+    let mut double_colon_less = session.replace('&', "");
+
+    // The main regex expression
+    let double_colon_regex = Regex::new(r"([^<,>\s]+)::([^<,>\s]+)")?;
 
     // Replace with regex expression -> term1::term2::term3 by term3
-    for caps in main_re.captures_iter(session) {
-        temp = temp.replace(&caps[0], &caps[caps.len() - 1]);
+    for caps in double_colon_regex.captures_iter(session) {
+        double_colon_less = double_colon_less.replace(&caps[0], &caps[caps.len() - 1]);
+    }
+
+    // The name regex expression
+    let name_regex = Regex::new(r"Name([[:alpha:]]+)")?;
+
+    let mut name_to_role = double_colon_less.clone();
+
+    // Replace with regex expression -> term1::term2::term3 by term3
+    for caps in name_regex.captures_iter(&double_colon_less) {
+        name_to_role =
+            name_to_role.replace(&caps[0], &format!("Role{}<RoleEnd>", &caps[caps.len() - 1]));
     }
 
     // Remove whitespaces
-    temp.retain(|c| !c.is_whitespace());
+    name_to_role.retain(|c| !c.is_whitespace());
 
     // Get each field of the MeshedChannels
-
-    let mut full_block = get_blocks(&temp)?;
+    let mut full_block = get_blocks(&name_to_role)?;
 
     // Get the name of the role
     let name = full_block[full_block.len() - 1]
@@ -121,15 +138,15 @@ pub(crate) fn clean_sessions(
 // Separate the different _fields_ of a stringified type.
 //
 // From
-//     "MeshedChannels<Send<Branches0AtoB,End>,Send\
-//     <i32,Recv<i32,Send<Branches0CtoB,End>>>,RoleC\
-//     <RoleC<RoleBroadcast>>,RoleB<RoleEnd>>"
+//     "MeshedChannels<Send<Branches0AtoB, End>, Send\
+//     <i32, Recv<i32, Send<Branches0CtoB, End>>>, RoleC\
+//     <RoleC<RoleBroadcast>>, RoleB<RoleEnd>>"
 //
 // to
 //
 // [
-//     "Send<Branches0AtoB,End>",
-//     "Send<i32,Recv<i32,Send<Branches0CtoB,End>>>",
+//     "Send<Branches0AtoB, End>",
+//     "Send<i32, Recv<i32, Send<Branches0CtoB, End>>>",
 //     "RoleC<RoleC<RoleBroadcast>>",
 //     "RoleB<RoleEnd>",
 // ]
@@ -147,16 +164,16 @@ pub(crate) fn get_blocks(full_block: &str) -> Result<VecOfStr, Box<dyn Error>> {
             result.push(temp.to_string());
             temp = "".to_string();
         } else if i == '<' && index >= 0 {
-            temp = format!("{}{}", temp, i);
+            temp = format!("{temp}{i}");
             index += 1;
         } else if i == '>' && index >= 0 {
-            temp = format!("{}{}", temp, i);
+            temp = format!("{temp}{i}");
             index -= 1;
         } else if i == ',' && index == 0 {
             result.push(temp);
             temp = "".to_string();
         } else if index >= 0 {
-            temp = format!("{}{}", temp, i);
+            temp = format!("{temp}{i}");
         } else if i == '<' {
             index += 1;
         } else if i == '>' {
@@ -184,8 +201,9 @@ pub(crate) fn get_head_payload_continuation(full_block: &str) -> Result<VecOfStr
         // If the full block is a `End` type
         Ok(vec!["RoleEnd".to_string()])
     } else {
-        let mut result = vec![full_block.to_string().split('<').collect::<Vec<_>>()[0].to_string()];
+        let mut result = vec![full_block.split('<').collect::<Vec<_>>()[0].to_string()];
         result.append(&mut get_blocks(full_block)?);
+
         Ok(result)
     }
 }
@@ -198,15 +216,20 @@ pub(crate) fn extract_index_node(
     index_node: &[usize],
     depth_level: usize,
 ) -> Result<String, Box<dyn Error>> {
-    Ok(format!(
-        "{}{}",
-        index_node[..depth_level]
+    if index_node.len() < depth_level {
+        panic!("Error in extract_index_node: lenght of index_node < depth_level")
+    } else if index_node.len() == 1 {
+        Ok(index_node[0].to_string())
+    } else {
+        let first_elt = index_node[0].to_string();
+
+        Ok(index_node[1..=depth_level]
             .iter()
-            .copied()
-            .map(|i| format!("{}.", i))
-            .collect::<String>(),
-        index_node[depth_level]
-    ))
+            .fold(first_elt, |mut s, &n| {
+                write!(s, ".{}", n).ok();
+                s
+            }))
+    }
 }
 
 // Switch all Send and Recv at the head of each session
@@ -300,7 +323,13 @@ pub(crate) fn aux_get_graph(
                         // Get the index of the receiver
                         let receiver =
                             &get_head_payload_continuation(&blocks_left[blocks_left.len() - 1])?[0];
-                        let index_receiver = roles.iter().position(|r| r == receiver).unwrap();
+
+                        let index_receiver =
+                            if let Some(elt) = roles.iter().position(|r| r == receiver) {
+                                elt
+                            } else {
+                                panic!("Issue with roles {:?} and receiver {:?}", roles, receiver)
+                            };
 
                         // The offset depending on the relative positions of the roles
                         let offset = (index_current_role > index_receiver) as usize;
@@ -427,7 +456,14 @@ pub(crate) fn aux_get_graph(
             let head_stack = &stack[0];
 
             // The index of the head_stack among the roles
-            let index_head = roles.iter().position(|r| r == head_stack).unwrap();
+            let index_head = if let Some(elt) = roles.iter().position(|r| r == head_stack) {
+                elt
+            } else {
+                panic!(
+                    "Issue with roles {:?} and head_stack {:?}",
+                    roles, head_stack
+                )
+            };
 
             // The offset depending on the relative positions of the roles
             let offset = (index_current_role < index_head) as usize;
@@ -451,7 +487,7 @@ pub(crate) fn aux_get_graph(
                 g.add_edge(
                     previous_node,
                     new_node,
-                    format!("{}!{}: {}", current_role, head_stack, &running_session[1]),
+                    format!("{current_role}!{head_stack}: {}", &running_session[1]),
                 );
 
                 cfsm.push((
@@ -572,7 +608,7 @@ pub(crate) fn aux_get_graph(
                     g.add_edge(
                         previous_node,
                         new_node,
-                        format!("{}?{}: {}", current_role, head_stack, &running_session[1]),
+                        format!("{current_role}?{head_stack}: {}", &running_session[1]),
                     );
 
                     cfsm.push((
@@ -641,7 +677,7 @@ pub(crate) fn aux_get_graph(
                         // Update all_choices
                         if let Some(choice) = branches_receivers.get(payload) {
                             for branch in choice.keys() {
-                                all_branches.push(format!("{}::{}", payload, branch));
+                                all_branches.push(format!("{payload}::{branch}"));
                             }
                         } else {
                             panic!("Missing the enum {:?} in branches_receivers", payload)
@@ -761,7 +797,14 @@ pub(crate) fn get_graph_session(
 
     // The index of the current_role among the roles
 
-    let index_current_role = roles.iter().position(|r| r == current_role).unwrap();
+    let index_current_role = if let Some(elt) = roles.iter().position(|r| r == current_role) {
+        elt
+    } else {
+        panic!(
+            "Issue with roles {:?} and current_role {:?}",
+            roles, current_role
+        )
+    };
 
     // The index of the current_role among the roles
     let start_depth_level = 0;
@@ -796,13 +839,13 @@ pub(crate) fn get_graph_session(
     // Format the tuples into strings and add them to cfsm_result
     let mut clean_cfsm = cfsm
         .iter()
-        .map(|(s, i)| format!("{}{}", s, i))
+        .map(|(s, i)| format!("{s}{i}"))
         .collect::<Vec<String>>();
 
     cfsm_result.append(&mut clean_cfsm);
 
     // The missing strings for ending cfsm
-    cfsm_result.push(format!(".marking {}0", current_role));
+    cfsm_result.push(format!(".marking {current_role}0"));
     cfsm_result.push(".end".to_string());
 
     Ok((result, cfsm_result))
@@ -826,7 +869,7 @@ mod tests {
             struct_trait::send::Send<i32, mpstthree::binary::struct_trait::end::\
             End>>, mpstthree::role::c::RoleC<mpstthree::role::c::RoleC<\
             mpstthree::role::b::RoleB<mpstthree::role::end::RoleEnd>>>, mpstthree\
-            ::role::a::RoleA<mpstthree::role::end::RoleEnd>>";
+            ::name::a::NameA>";
 
         let clean_session_compare = vec![
             "Recv<Branches0AtoB,End>",
@@ -846,8 +889,7 @@ mod tests {
             struct_trait::recv::Recv<checking_recursion::Branches0AtoB, mpstthree\
             ::binary::struct_trait::end::End>, mpstthree::binary::\
             struct_trait::end::End, mpstthree::role::b::RoleB<mpstthree::role\
-            ::end::RoleEnd>, mpstthree::role::a::RoleA<mpstthree::role::end::\
-            RoleEnd>>"
+            ::end::RoleEnd>, mpstthree::name::a::NameA>"
                 .to_string(),
             "mpstthree::meshedchannels::MeshedChannels<mpstthree::\
             binary::struct_trait::end::End, mpstthree::binary::struct_trait::\
@@ -855,8 +897,7 @@ mod tests {
             i32, mpstthree::binary::struct_trait::recv::Recv<checking_recursion\
             ::Branches0CtoB, mpstthree::binary::struct_trait::end::End>>>, mpstthree\
             ::role::b::RoleB<mpstthree::role::b::RoleB<mpstthree::role::b::RoleB\
-            <mpstthree::role::end::RoleEnd>>>, mpstthree::role::c::RoleC<\
-            mpstthree::role::end::RoleEnd>>"
+            <mpstthree::role::end::RoleEnd>>>, mpstthree::name::c::NameC>"
                 .to_string(),
             "mpstthree::meshedchannels::\
             MeshedChannels<mpstthree::binary::struct_trait::send::Send<\
@@ -866,7 +907,7 @@ mod tests {
             ::send::Send<checking_recursion::Branches0CtoB, mpstthree::binary::\
             struct_trait::end::End>>>, mpstthree::role::c::RoleC<mpstthree::\
             role::c::RoleC<mpstthree::role::broadcast::RoleBroadcast>>, mpstthree\
-            ::role::b::RoleB<mpstthree::role::end::RoleEnd>>"
+            ::name::b::NameB>"
                 .to_string(),
         ];
 
@@ -941,9 +982,9 @@ mod tests {
 
     #[test]
     fn test_get_blocks() {
-        let dirty_blocks = "MeshedChannels<Send<Branches0AtoB,End>,Send\
-        <i32,Recv<i32,Send<Branches0CtoB,End>>>,RoleC\
-        <RoleC<RoleBroadcast>>,RoleB<RoleEnd>>";
+        let dirty_blocks = "MeshedChannels<Send<Branches0AtoB, End>, Send\
+        <i32, Recv<i32, Send<Branches0CtoB, End>>>, RoleC\
+        <RoleC<RoleBroadcast>>, RoleB<RoleEnd>>";
 
         let clean_blocks = vec![
             "Send<Branches0AtoB,End>",
@@ -975,7 +1016,7 @@ mod tests {
         );
 
         // Random
-        let dirty_random = "Recv<i32,Send<i32,Recv<Branches0CtoB,End>>>";
+        let dirty_random = "Recv<i32, Send<i32, Recv<Branches0CtoB, End>>>";
 
         let clean_random = vec!["Recv", "i32", "Send<i32,Recv<Branches0CtoB,End>>"];
 
@@ -996,7 +1037,7 @@ mod tests {
 
     #[test]
     fn test_build_dual() {
-        let session = "Recv<i32,Send<Branches0CtoB,End>>";
+        let session = "Recv<i32, Send<Branches0CtoB, End>>";
 
         assert_eq!(
             "Send<i32,Recv<Branches0CtoB,End>>",
@@ -1007,7 +1048,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_build_dual_panic() {
-        let session = "Coco<i32,Banana<Branches0CtoB,End>>";
+        let session = "Coco<i32, Banana<Branches0CtoB, End>>";
 
         build_dual(session).unwrap();
     }
@@ -1027,7 +1068,7 @@ mod tests {
 
         let current_role = "RoleA";
 
-        let full_session = vec!["Recv<(),End>".to_string(), "RoleEnd".to_string()];
+        let full_session = vec!["Recv<(), End>".to_string(), "RoleEnd".to_string()];
 
         let roles = vec!["RoleA".to_string(), "RoleB".to_string()];
 
@@ -1090,7 +1131,7 @@ mod tests {
         let full_session = vec![
             "End".to_string(),
             "End".to_string(),
-            "RoleAtoAll<RoleEnd,RoleEnd>".to_string(),
+            "RoleAtoAll<RoleEnd, RoleEnd>".to_string(),
         ];
 
         let roles = vec![
@@ -1127,8 +1168,8 @@ mod tests {
 
         let full_session = vec![
             "End".to_string(),
-            "Send<(),End>".to_string(),
-            "RoleAtoAll<RoleEnd,RoleEnd>".to_string(),
+            "Send<(), End>".to_string(),
+            "RoleAtoAll<RoleEnd, RoleEnd>".to_string(),
         ];
 
         let roles = vec![
@@ -1164,9 +1205,9 @@ mod tests {
         let current_role = "RoleA";
 
         let full_session = vec![
-            "Recv<(),End>".to_string(),
-            "Recv<(),End>".to_string(),
-            "RoleAlltoB<RoleEnd,RoleEnd>".to_string(),
+            "Recv<(), End>".to_string(),
+            "Recv<(), End>".to_string(),
+            "RoleAlltoB<RoleEnd, RoleEnd>".to_string(),
         ];
 
         let roles = vec![
@@ -1233,8 +1274,8 @@ mod tests {
         let current_role = "RoleA";
 
         let full_session = vec![
-            "Send<Branching0AtoB,End>".to_string(),
-            "Send<Branching0AtoC,End>".to_string(),
+            "Send<Branching0AtoB, End>".to_string(),
+            "Send<Branching0AtoC, End>".to_string(),
             "RoleBroadcast".to_string(),
         ];
 
@@ -1302,7 +1343,7 @@ mod tests {
         let current_role = "RoleA";
 
         let full_session = vec![
-            "Recv<Branching0AtoB,End>".to_string(),
+            "Recv<Branching0AtoB, End>".to_string(),
             "End".to_string(),
             "RoleB<RoleEnd>".to_string(),
         ];
@@ -1353,8 +1394,8 @@ mod tests {
         let current_role = "RoleA";
 
         let full_session = vec![
-            "Send<Branching0AtoB,End>".to_string(),
-            "Send<Branching0AtoC,End>".to_string(),
+            "Send<Branching0AtoB, End>".to_string(),
+            "Send<Branching0AtoC, End>".to_string(),
             "RoleBroadcast".to_string(),
         ];
 

@@ -4,18 +4,18 @@
     clippy::large_enum_variant
 )]
 
-use crossbeam_channel::bounded;
+use crossbeam_channel::{bounded, Receiver, Sender};
 
 use std::thread::spawn;
 
-type ReceivingSendingReceiving = crossbeam_channel::Receiver<SendingReceiving>;
-type SendingReceivingSending = crossbeam_channel::Sender<ReceivingSending>;
+type ReceivingSendingReceiving = Receiver<SendingReceiving>;
+type SendingReceivingSending = Sender<ReceivingSending>;
 
-type SendingReceiving = crossbeam_channel::Sender<Receiving>;
-type ReceivingSending = crossbeam_channel::Receiver<Sending>;
+type SendingReceiving = Sender<Receiving>;
+type ReceivingSending = Receiver<Sending>;
 
-type Receiving = crossbeam_channel::Receiver<()>;
-type Sending = crossbeam_channel::Sender<()>;
+type Receiving = Receiver<()>;
+type Sending = Sender<()>;
 
 fn main() {
     let mut threads = Vec::new();
@@ -74,7 +74,5 @@ fn main() {
         threads.push(main);
     }
 
-    threads
-        .into_iter()
-        .for_each(|elt| assert!(elt.join().is_ok()));
+    threads.into_iter().for_each(|elt| elt.join().unwrap());
 }

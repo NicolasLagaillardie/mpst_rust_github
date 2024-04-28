@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct CreateRecvMPSTSession {
+pub(crate) struct CreateRecvMPSTSession {
     func_name: Ident,
     sender: Ident,
     receiver: Ident,
@@ -51,14 +51,14 @@ impl From<CreateRecvMPSTSession> for TokenStream {
 
 impl CreateRecvMPSTSession {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let sender = self.sender.clone();
-        let receiver = self.receiver.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let sender = &self.sender;
+        let receiver = &self.receiver;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let session_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -67,7 +67,7 @@ impl CreateRecvMPSTSession {
 
         let session_types_struct: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session ,
                 }
@@ -79,7 +79,7 @@ impl CreateRecvMPSTSession {
                 if i != self.exclusion {
                     quote! {}
                 } else {
-                    let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                     quote! {
                         let (v, new_session) = mpstthree::binary::recv::recv(s.#temp_ident)?;
                     }
@@ -89,7 +89,7 @@ impl CreateRecvMPSTSession {
 
         let send_types: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 if i == self.exclusion {
                     quote! {
                         mpstthree::binary::struct_trait::recv::Recv<T, #temp_ident >,
@@ -104,7 +104,7 @@ impl CreateRecvMPSTSession {
 
         let new_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                 if i == self.exclusion {
                     quote! {
                         #temp_ident : new_session ,
@@ -130,7 +130,7 @@ impl CreateRecvMPSTSession {
                         #send_types
                     )*
                     #sender<R>,
-                    #receiver<mpstthree::role::end::RoleEnd>,
+                    #receiver,
                 >,
             ) -> Result<
                 (
@@ -140,7 +140,7 @@ impl CreateRecvMPSTSession {
                             #session_types
                         )*
                         R,
-                        #receiver<mpstthree::role::end::RoleEnd>,
+                        #receiver,
                     >,
                 ),
                 Box<dyn std::error::Error>,

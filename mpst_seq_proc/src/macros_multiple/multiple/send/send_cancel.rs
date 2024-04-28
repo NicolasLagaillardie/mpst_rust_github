@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Expr, Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct SendCancel {
+pub(crate) struct SendCancel {
     func_name: Ident,
     name: Ident,
     meshedchannels_name: Ident,
@@ -47,12 +47,12 @@ impl From<SendCancel> for TokenStream {
 impl SendCancel {
     fn expand(&self) -> TokenStream {
         // Get the basic elements
-        let func_name = self.func_name.clone();
-        let name = self.name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
-        let msg = self.msg.clone();
+        let func_name = &self.func_name;
+        let name = &self.name;
+        let meshedchannels_name = &self.meshedchannels_name;
+        let msg = &self.msg;
 
-        // Build the vec with all the types S1,..,SN
+        // Build the vec with all the types S1,.., SN
         let session_types: Vec<Ident> = (1..(self.n_sessions - 1))
             .map(|i| format_ident!("S{}", i))
             .collect();
@@ -63,7 +63,7 @@ impl SendCancel {
                     mpstthree::binary::struct_trait::end::End,
                     #( #session_types , )*
                     R,
-                    #name<mpstthree::role::end::RoleEnd>,
+                    #name,
                 >,
             ) -> std::result::Result<(), Box<dyn std::error::Error>>
             where

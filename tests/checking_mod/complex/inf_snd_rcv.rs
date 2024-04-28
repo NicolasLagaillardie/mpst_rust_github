@@ -1,10 +1,15 @@
+#![allow(dead_code)]
+
 use mpstthree::binary::struct_trait::end::End;
 use mpstthree::binary::struct_trait::recv::Recv;
 use mpstthree::binary::struct_trait::send::Send;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
-use mpstthree::{checker_concat, create_meshedchannels, create_multiple_normal_role};
+use mpstthree::{
+    checker_concat, checker_concat_impl, create_meshedchannels, create_multiple_normal_name,
+    create_multiple_normal_role,
+};
 
 use petgraph::dot::Dot;
 
@@ -19,15 +24,14 @@ create_multiple_normal_role!(
     RoleB, RoleBDual |
 );
 
+// Create new names
+create_multiple_normal_name!(NameA, NameB);
+
 // Payload names
 type A = i32;
 type B = i64;
 type C = i32;
 type D = i64;
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
 
 // Types
 
@@ -68,6 +72,15 @@ type EndpointBExtend1 = MeshedChannels<Recv<B, End>, RoleA<RoleEnd>, NameB>;
 type EndpointBFull = MeshedChannels<Choose0fromBtoA, RoleBroadcast, NameB>;
 
 /////////////////////////////////////////
+
+checker_concat_impl!(
+    [Branches0AfromB, End],
+    [Branches0AfromB, Looping],
+    [Branches0AfromB, Extend],
+    [Branches1AfromB, End],
+    [Branches1AfromB, Looping],
+    [Branches1AfromB, Extend]
+);
 
 pub fn main() {
     let (graphs, kmc) = checker_concat!(

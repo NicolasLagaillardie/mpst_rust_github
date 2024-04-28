@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -eou pipefail
+
+# Create folder if it does not exist
+mkdir -p compile_time/
+
+# Remove previous benchmarks
+if [ "$#" -eq 4 ]
+    then
+        rm -rf compile_time/$4*.txt
+    else
+        rm -rf compile_time/$1*.txt
+fi
+
+cargo check --example=$1 --features="$3" || command_failed=1
+
+END=$2
+
+# Loop build
+for (( i=1; i<=$END; i++ ))
+do
+    # Remove previous build
+    cargo clean
+    # Get time
+    ts=$(date +%s%N)
+    # Run command
+    cargo build --example=$1 --features="$3"
+    # Get difference
+    tt=$((($(date +%s%N) - $ts)/1000))
+    # Output difference
+    if [ "$#" -eq 4 ]
+        then
+            printf "build; $tt\n" >> compile_time/$4.txt
+        else
+            printf "build; $tt\n" >> compile_time/$1.txt
+    fi
+done

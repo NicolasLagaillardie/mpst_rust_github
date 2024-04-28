@@ -5,7 +5,7 @@
 )]
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::bundle_impl_with_enum_and_cancel;
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -14,25 +14,21 @@ use std::error::Error;
 static LOOPS: i64 = 100;
 
 // Create new roles
-bundle_impl_with_enum_and_cancel!(MeshedChannelsThree, A, B, C);
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
+generate!("rec_and_cancel", MeshedChannels, A, B, C);
 
 // Types
 // A
 enum Branching0fromCtoA {
-    Forward(MeshedChannelsThree<Send<(), End>, RecursAtoC, RoleB<RoleC<RoleEnd>>, NameA>),
-    Backward(MeshedChannelsThree<Recv<(), End>, RecursAtoC, RoleB<RoleC<RoleEnd>>, NameA>),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameA>),
+    Forward(MeshedChannels<Send<(), End>, RecursAtoC, RoleB<RoleC<RoleEnd>>, NameA>),
+    Backward(MeshedChannels<Recv<(), End>, RecursAtoC, RoleB<RoleC<RoleEnd>>, NameA>),
+    Done(MeshedChannels<End, End, RoleEnd, NameA>),
 }
 type RecursAtoC = Recv<Branching0fromCtoA, End>;
+
 // B
 enum Branching0fromCtoB {
     Forward(
-        MeshedChannelsThree<
+        MeshedChannels<
             Recv<(), End>,
             Send<(), RecursBtoC>,
             RoleA<RoleC<RoleC<RoleEnd>>>,
@@ -40,28 +36,29 @@ enum Branching0fromCtoB {
         >,
     ),
     Backward(
-        MeshedChannelsThree<
+        MeshedChannels<
             Send<(), End>,
             Recv<(), RecursBtoC>,
             RoleC<RoleA<RoleC<RoleEnd>>>,
             NameB,
         >,
     ),
-    Done(MeshedChannelsThree<End, End, RoleEnd, NameB>),
+    Done(MeshedChannels<End, End, RoleEnd, NameB>),
 }
 type RecursBtoC = Recv<Branching0fromCtoB, End>;
+
 // C
 type Choose0fromCtoA = Send<Branching0fromCtoA, End>;
 type Choose0fromCtoB = Send<Branching0fromCtoB, End>;
 type EndpointForwardC =
-    MeshedChannelsThree<Choose0fromCtoA, Recv<(), Choose0fromCtoB>, RoleB<RoleBroadcast>, NameC>;
+    MeshedChannels<Choose0fromCtoA, Recv<(), Choose0fromCtoB>, RoleB<RoleBroadcast>, NameC>;
 type EndpointBackwardC =
-    MeshedChannelsThree<Choose0fromCtoA, Send<(), Choose0fromCtoB>, RoleB<RoleBroadcast>, NameC>;
+    MeshedChannels<Choose0fromCtoA, Send<(), Choose0fromCtoB>, RoleB<RoleBroadcast>, NameC>;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsThree<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsThree<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsThree<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
+type EndpointA = MeshedChannels<End, RecursAtoC, RoleC<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, RecursBtoC, RoleC<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<Choose0fromCtoA, Choose0fromCtoB, RoleBroadcast, NameC>;
 
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
     offer_mpst!(s, {

@@ -3,17 +3,25 @@
 # Publish all workspaces
 
 # Exit if error
-set -e
+set -eou pipefail
 
-# mpst_seq
-cd mpst_seq/mpst_seq_proc/
+# mpst_seq_proc
+cd mpst_seq_proc/
+cargo publish --all-features --dry-run
 cargo publish --all-features
+echo "mpst_seq_proc publishing done"
 sleep 5
 cd ..
+
+# mpst_seq
+cd mpst_seq/
+cargo publish --all-features --dry-run
 cargo publish --all-features
+echo "mpst_seq publishing done"
 sleep 5
 cd ..
 
 # final publish
+cargo publish --all-features --dry-run
 cargo publish --all-features
-echo "done"
+echo "main publishing done"

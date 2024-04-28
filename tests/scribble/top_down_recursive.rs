@@ -8,11 +8,14 @@ use mpstthree::role::a::RoleA;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
 
+use mpstthree::name::a::NameA;
+use mpstthree::name::b::NameB;
+use mpstthree::name::c::NameC;
+
 /////////////////////////////////////////
 
 use rand::{thread_rng, Rng};
 
-use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::functionmpst::close::close_mpst;
@@ -38,11 +41,11 @@ type ADDAtoB<N> = Recv<N, End>;
 type OrderingA11 = RoleC<RoleEnd>;
 type OrderingA12Full = RoleB<OrderingA11>;
 type EndpointA13<N> =
-    MeshedChannels<ADDAtoB<N>, Recv<Branches0AtoC<N>, End>, OrderingA12Full, RoleA<RoleEnd>>;
+    MeshedChannels<ADDAtoB<N>, Recv<Branches0AtoC<N>, End>, OrderingA12Full, NameA>;
 type BYEAtoB = Recv<(), End>;
 
 type OrderingA14Full = RoleB<RoleEnd>;
-type EndpointA15 = MeshedChannels<BYEAtoB, End, OrderingA14Full, RoleA<RoleEnd>>;
+type EndpointA15 = MeshedChannels<BYEAtoB, End, OrderingA14Full, NameA>;
 
 enum Branches0AtoC<N: marker::Send> {
     Add(EndpointA13<N>),
@@ -54,19 +57,19 @@ type TestAtoC<N> = Recv<N, Recv<Branches0AtoC<N>, End>>;
 
 type OrderingA16 = RoleC<RoleEnd>;
 type OrderingA17Full = RoleC<OrderingA16>;
-type EndpointA18<N> = MeshedChannels<End, TestAtoC<N>, OrderingA17Full, RoleA<RoleEnd>>;
+type EndpointA18<N> = MeshedChannels<End, TestAtoC<N>, OrderingA17Full, NameA>;
 
 type ADDBtoA<N> = Send<N, End>;
 type ADDBtoC<N> = Recv<N, Recv<Branches0BtoC<N>, End>>;
 
 type OrderingB13 = RoleC<RoleEnd>;
 type OrderingB14Full = RoleC<RoleA<OrderingB13>>;
-type EndpointB15<N> = MeshedChannels<ADDBtoA<N>, ADDBtoC<N>, OrderingB14Full, RoleB<RoleEnd>>;
+type EndpointB15<N> = MeshedChannels<ADDBtoA<N>, ADDBtoC<N>, OrderingB14Full, NameB>;
 type BYEBtoA = Send<(), End>;
 type BYEBtoC = Recv<(), End>;
 
 type OrderingB16Full = RoleC<RoleA<RoleEnd>>;
-type EndpointB17 = MeshedChannels<BYEBtoA, BYEBtoC, OrderingB16Full, RoleB<RoleEnd>>;
+type EndpointB17 = MeshedChannels<BYEBtoA, BYEBtoC, OrderingB16Full, NameB>;
 
 enum Branches0BtoC<N: marker::Send> {
     Add(EndpointB15<N>),
@@ -76,23 +79,21 @@ type Choose0forBtoC<N> = Send<Branches0BtoC<N>, End>;
 
 type OrderingB18 = RoleC<RoleEnd>;
 type OrderingB19Full = OrderingB18;
-type EndpointB20<N> =
-    MeshedChannels<End, Recv<Branches0BtoC<N>, End>, OrderingB19Full, RoleB<RoleEnd>>;
+type EndpointB20<N> = MeshedChannels<End, Recv<Branches0BtoC<N>, End>, OrderingB19Full, NameB>;
 
 type TestCtoA<N> = Send<N, Choose0forAtoC<N>>;
 
 type OrderingC2Full = RoleA<RoleBroadcast>;
-type EndpointC3<N> = MeshedChannels<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Full, RoleC<RoleEnd>>;
+type EndpointC3<N> = MeshedChannels<TestCtoA<N>, Choose0forBtoC<N>, OrderingC2Full, NameC>;
 
 ///////////////////////////////////////// END
 
 ///////////////////////////////////////// For verification
 ///////////////////////////////////////// with functions
 
-type EndpointA19<N> = MeshedChannels<End, Recv<Branches0AtoC<N>, End>, OrderingA16, RoleA<RoleEnd>>;
+type EndpointA19<N> = MeshedChannels<End, Recv<Branches0AtoC<N>, End>, OrderingA16, NameA>;
 
-type EndpointC2<N> =
-    MeshedChannels<Choose0forAtoC<N>, Choose0forBtoC<N>, RoleBroadcast, RoleC<RoleEnd>>;
+type EndpointC2<N> = MeshedChannels<Choose0forAtoC<N>, Choose0forBtoC<N>, RoleBroadcast, NameC>;
 
 ///////////////////////////////////////// END
 
@@ -155,17 +156,11 @@ fn client_recurs(s: EndpointC2<i32>) -> Result<(), Box<dyn Error>> {
 /////////////////////////////////////////
 
 pub fn top_down_approach() {
-    for _i in 0..200 {
-        assert!(|| -> Result<(), Box<dyn Error>> {
-            {
-                let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
+    for _ in 0..200 {
+        let (thread_a, thread_b, thread_c) = fork_mpst(authenticator, server, client);
 
-                assert!(thread_a.join().is_ok());
-                assert!(thread_b.join().is_ok());
-                assert!(thread_c.join().is_ok());
-            }
-            Ok(())
-        }()
-        .is_ok());
+        assert!(thread_a.join().is_ok());
+        assert!(thread_b.join().is_ok());
+        assert!(thread_c.join().is_ok());
     }
 }

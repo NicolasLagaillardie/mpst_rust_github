@@ -6,10 +6,10 @@ use mpstthree::role::end::RoleEnd;
 use mpstthree::role::Role;
 use std::error::Error;
 
-use mpstthree::bundle_impl;
+use mpstthree::generate;
 
 // Create new roles
-bundle_impl!(MeshedChannels, A, B, D);
+generate!("basic", MeshedChannels, A, B, D);
 
 // Those types will be code generated
 type OfferMpstThree<S0, S1, S2, S3, R0, R1, N0> =
@@ -17,26 +17,11 @@ type OfferMpstThree<S0, S1, S2, S3, R0, R1, N0> =
 
 type ChooseMpstThree<S0, S1, S2, S3, R0, R1, N0> = Send<
     Either<
-        MeshedChannels<
-            <S0 as Session>::Dual,
-            <S1 as Session>::Dual,
-            <R0 as Role>::Dual,
-            <N0 as Role>::Dual,
-        >,
-        MeshedChannels<
-            <S2 as Session>::Dual,
-            <S3 as Session>::Dual,
-            <R1 as Role>::Dual,
-            <N0 as Role>::Dual,
-        >,
+        MeshedChannels<<S0 as Session>::Dual, <S1 as Session>::Dual, <R0 as Role>::Dual, N0>,
+        MeshedChannels<<S2 as Session>::Dual, <S3 as Session>::Dual, <R1 as Role>::Dual, N0>,
     >,
     End,
 >;
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
 
 // Types
 type AtoCClose = End;
@@ -77,7 +62,7 @@ type ChooseCtoA<N> = ChooseMpstThree<
     CtoAClose,
     StackAVideoDual,
     StackAEnd,
-    RoleADual<RoleEnd>,
+    NameA,
 >;
 type ChooseCtoB<N> = ChooseMpstThree<
     AtoBVideo<N>,
@@ -86,7 +71,7 @@ type ChooseCtoB<N> = ChooseMpstThree<
     CtoBClose,
     StackBVideoDual,
     StackBEnd,
-    RoleBDual<RoleEnd>,
+    NameB,
 >;
 type InitC<N> = Send<N, Recv<N, ChooseCtoA<N>>>;
 type EndpointCFull<N> = MeshedChannels<InitC<N>, ChooseCtoB<N>, StackCFull, NameD>;
@@ -112,7 +97,7 @@ type EndpointBFull<N> = MeshedChannels<End, OfferB<N>, StackBFull, NameB>;
 fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
     s.offer(
         |s: EndpointBVideo<i32>| {
-            let (request, s) = s.recv()?;
+            let (request, s) = s.recv();
             s.send(request + 1).close()
         },
         |s: EndpointBEnd| s.close(),
@@ -120,12 +105,12 @@ fn server(s: EndpointBFull<i32>) -> Result<(), Box<dyn Error>> {
 }
 
 fn authenticator(s: EndpointAFull<i32>) -> Result<(), Box<dyn Error>> {
-    let (id, s) = s.recv()?;
+    let (id, s) = s.recv();
 
     s.send(id + 1).offer(
         |s: EndpointAVideo<i32>| {
-            let (request, s) = s.recv()?;
-            let (video, s) = s.send(request + 1).recv()?;
+            let (request, s) = s.recv();
+            let (video, s) = s.send(request + 1).recv();
 
             assert_eq!(request, id + 1);
             assert_eq!(video, id + 3);
@@ -140,11 +125,11 @@ fn client_video(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let id: i32 = rng.gen();
 
-    let (accept, s) = s.send(id).recv()?;
+    let (accept, s) = s.send(id).recv();
 
     assert_eq!(accept, id + 1);
 
-    let (result, s) = s.choose_left().send(accept).recv()?;
+    let (result, s) = s.choose_left().send(accept).recv();
 
     assert_eq!(result, accept + 3);
 
@@ -155,7 +140,7 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
     let mut rng = thread_rng();
     let id: i32 = rng.gen();
 
-    let (accept, s) = s.send(id).recv()?;
+    let (accept, s) = s.send(id).recv();
 
     assert_eq!(accept, id + 1);
 
@@ -165,31 +150,19 @@ fn client_close(s: EndpointCFull<i32>) -> Result<(), Box<dyn Error>> {
 ////////////////////////////////////////
 
 pub fn test_new_choice_full() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        {
-            let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_video);
+    // Test video branch.
+    let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_video);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_pawn.join().is_ok());
-            assert!(thread_d.join().is_ok());
-        }
-        Ok(())
-    }()
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_pawn.join().is_ok());
+    assert!(thread_d.join().is_ok());
 }
 
 pub fn test_new_choice_close() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        // Test end branch.
-        {
-            let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_close);
+    // Test end branch.
+    let (thread_a, thread_pawn, thread_d) = fork_mpst(authenticator, server, client_close);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_pawn.join().is_ok());
-            assert!(thread_d.join().is_ok());
-        }
-
-        Ok(())
-    }()
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_pawn.join().is_ok());
+    assert!(thread_d.join().is_ok());
 }

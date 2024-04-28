@@ -22,7 +22,7 @@
 //!
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //! [crates-io]: https://img.shields.io/badge/crates.io-fc8d62?style=for-the-badge&labelColor=555555&logo=rust
-//! [docs-rs]: https://img.shields.io/badge/docs.rs-66c2a5?style=for-the-badge&labelColor=555555&logoColor=white&logo=data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDUxMiA1MTIiPjxwYXRoIGZpbGw9IiNmNWY1ZjUiIGQ9Ik00ODguNiAyNTAuMkwzOTIgMjE0VjEwNS41YzAtMTUtOS4zLTI4LjQtMjMuNC0zMy43bC0xMDAtMzcuNWMtOC4xLTMuMS0xNy4xLTMuMS0yNS4zIDBsLTEwMCAzNy41Yy0xNC4xIDUuMy0yMy40IDE4LjctMjMuNCAzMy43VjIxNGwtOTYuNiAzNi4yQzkuMyAyNTUuNSAwIDI2OC45IDAgMjgzLjlWMzk0YzAgMTMuNiA3LjcgMjYuMSAxOS45IDMyLjJsMTAwIDUwYzEwLjEgNS4xIDIyLjEgNS4xIDMyLjIgMGwxMDMuOS01MiAxMDMuOSA1MmMxMC4xIDUuMSAyMi4xIDUuMSAzMi4yIDBsMTAwLTUwYzEyLjItNi4xIDE5LjktMTguNiAxOS45LTMyLjJWMjgzLjljMC0xNS05LjMtMjguNC0yMy40LTMzLjd6TTM1OCAyMTQuOGwtODUgMzEuOXYtNjguMmw4NS0zN3Y3My4zek0xNTQgMTA0LjFsMTAyLTM4LjIgMTAyIDM4LjJ2LjZsLTEwMiA0MS40LTEwMi00MS40di0uNnptODQgMjkxLjFsLTg1IDQyLjV2LTc5LjFsODUtMzguOHY3NS40em0wLTExMmwtMTAyIDQxLjQtMTAyLTQxLjR2LS42bDEwMi0zOC4yIDEwMiAzOC4ydi42em0yNDAgMTEybC04NSA0Mi41di03OS4xbDg1LTM4Ljh2NzUuNHptMC0xMTJsLTEwMiA0MS40LTEwMi00MS40di0uNmwxMDItMzguMiAxMDIgMzguMnYuNnoiPjwvcGF0aD48L3N2Zz4K
+//! [docs-rs]: https://img.shields.io/badge/docs.rs-66c2a5?style=for-the-badge&labelColor=555555&logoColor=white&logo=data:image/svg+xml;base64, PHN2ZyByb2xlPSJpbWciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDUxMiA1MTIiPjxwYXRoIGZpbGw9IiNmNWY1ZjUiIGQ9Ik00ODguNiAyNTAuMkwzOTIgMjE0VjEwNS41YzAtMTUtOS4zLTI4LjQtMjMuNC0zMy43bC0xMDAtMzcuNWMtOC4xLTMuMS0xNy4xLTMuMS0yNS4zIDBsLTEwMCAzNy41Yy0xNC4xIDUuMy0yMy40IDE4LjctMjMuNCAzMy43VjIxNGwtOTYuNiAzNi4yQzkuMyAyNTUuNSAwIDI2OC45IDAgMjgzLjlWMzk0YzAgMTMuNiA3LjcgMjYuMSAxOS45IDMyLjJsMTAwIDUwYzEwLjEgNS4xIDIyLjEgNS4xIDMyLjIgMGwxMDMuOS01MiAxMDMuOSA1MmMxMC4xIDUuMSAyMi4xIDUuMSAzMi4yIDBsMTAwLTUwYzEyLjItNi4xIDE5LjktMTguNiAxOS45LTMyLjJWMjgzLjljMC0xNS05LjMtMjguNC0yMy40LTMzLjd6TTM1OCAyMTQuOGwtODUgMzEuOXYtNjguMmw4NS0zN3Y3My4zek0xNTQgMTA0LjFsMTAyLTM4LjIgMTAyIDM4LjJ2LjZsLTEwMiA0MS40LTEwMi00MS40di0uNnptODQgMjkxLjFsLTg1IDQyLjV2LTc5LjFsODUtMzguOHY3NS40em0wLTExMmwtMTAyIDQxLjQtMTAyLTQxLjR2LS42bDEwMi0zOC4yIDEwMiAzOC4ydi42em0yNDAgMTEybC04NSA0Mi41di03OS4xbDg1LTM4Ljh2NzUuNHptMC0xMTJsLTEwMiA0MS40LTEwMi00MS40di0uNmwxMDItMzguMiAxMDIgMzguMnYuNnoiPjwvcGF0aD48L3N2Zz4K
 //!
 //! <br>
 //!
@@ -59,6 +59,10 @@
 //! use mpstthree::role::c::RoleC;
 //! use mpstthree::role::end::RoleEnd;
 //!
+//! use mpstthree::name::a::NameA;
+//! use mpstthree::name::b::NameB;
+//! use mpstthree::name::c::NameC;
+//!
 //! // Used inside the functions which process the protocol for receiving one payload
 //! use mpstthree::functionmpst::recv::recv_mpst_a_from_c;
 //! use mpstthree::functionmpst::recv::recv_mpst_b_from_a;
@@ -98,11 +102,11 @@
 //!
 //! // Creating the MP sessions
 //! // for A
-//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
 //! // for B
-//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, NameB>;
 //! // for C
-//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, NameC>;
 //!
 //! // Function to process Endpoint of A
 //! fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
@@ -111,6 +115,7 @@
 //!
 //!     close_mpst(s)
 //! }
+
 //!
 //! // Function to process Endpoint of B
 //! fn endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
@@ -119,6 +124,7 @@
 //!
 //!     close_mpst(s)
 //! }
+
 //!
 //! // Function to process Endpoint of C
 //! fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
@@ -127,6 +133,7 @@
 //!
 //!     close_mpst(s)
 //! }
+
 //!
 //! // Fork all endpoints
 //! fn main() {
@@ -136,10 +143,10 @@
 //!     thread_b.join().unwrap();
 //!     thread_c.join().unwrap();
 //! }
+
 //! ```
 //!
 //! Here is the full description. First, you import the correct functions and types.
-//!
 //! ```ignore
 //! // Used for the functions that will process the protocol
 //! use std::boxed::Box;
@@ -176,7 +183,6 @@
 //! participants. Note that each created type can be reused as many time as needed.
 //! For our example, we create several times the same binary session type for clarity,
 //! but we could use only two of those types for the whole protocol instead.
-//!
 //! ```ignore
 //! // Creating the binary sessions
 //! // for A
@@ -193,7 +199,6 @@
 //! ```
 //!
 //! Add the **stacks** which give the correct order of the operations for each participant.
-//!
 //! ```ignore
 //! // Stacks
 //! // for A
@@ -206,21 +211,19 @@
 //!
 //! You can now encapsulate those **binary session types** and **stacks** into **MeshedChannels**
 //! for each participant. We also add the names of the related roles.
-//!
 //! ```ignore
 //! // Creating the MP sessions
 //! // for A
-//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
+//! type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
 //! // for B
-//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
+//! type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, NameB>;
 //! // for C
-//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+//! type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, NameC>;
 //! ```
 //!
 //! To run the protocol,
 //! we need to detail the behaviour of the participants with functions that input the **Endpoints**
 //! defined above.
-//!
 //! ```ignore
 //! // Function to process Endpoint of A
 //! fn simple_triple_endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
@@ -229,6 +232,7 @@
 //!
 //!     close_mpst(s)
 //! }
+
 //!
 //! // Function to process Endpoint of B
 //! fn simple_triple_endpoint_b(s: EndpointB<i32>) -> Result<(), Box<dyn Error>> {
@@ -237,6 +241,7 @@
 //!
 //!     close_mpst(s)
 //! }
+
 //!
 //! // Function to process Endpoint of C
 //! fn simple_triple_endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
@@ -245,12 +250,12 @@
 //!
 //!     close_mpst(s)
 //! }
+
 //! ```
 //!
 //! In the end, you have to link/fork the threads,
 //! related to the functions above, together with **fork_mpst()**.
 //! Do not forget to **unwrap()** the returned threads.
-//!
 //! ```ignore
 //! // Fork all endpoints
 //! fn main() {
@@ -264,33 +269,44 @@
 //!     thread_b.join().unwrap();
 //!     thread_c.join().unwrap();
 //! }
+
 //! ```
 //!
 //! The different features available are:
 //!
 //! 1. `default`: default features, for implementing the basic example above.
-//! 2. `macros_simple`: feature for implementing protocols with three participants, whatever are their name.
-//! 3. `macros_multiple`: feature for implementing protocols with any number of participants. Contains `macros_simple`.
-//! 4. `baking`: feature for implementing protocols with any number of participants and using associated functions instead of functions. Contains `macros_multiple`.
-//! 5. `transport_tcp`: feature containing primitives for communicating with TCP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
-//! 6. `transport_udp`: feature containing primitives for communicating with UDP. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
-//! 7. `transport_http`: feature containing primitives for communicating with HTTP/HTTPS. **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
-//! 8. `transport`: feature containing `transport_tcp`, `transport_udp` and `transport_http`.
-//! 9. `checking`: feature for the top-down approach. Needs the [`KMC`] tool.
-//! 10. `full`: feature containing `checking`, `baking` and `transport`.
+//! 2. `macros_simple`: feature for implementing protocols with three participants, whatever are
+//! their name. 3. `macros_multiple`: feature for implementing protocols with any number of
+//! participants. Contains `macros_simple`. 4. `baking`: feature for implementing protocols with any
+//! number of participants and using associated functions instead of functions. Contains
+//! `macros_multiple`. 5. `transport_tcp`: feature containing primitives for communicating with TCP.
+//! **Requires `openssl`, `pkg-config` and `libssl-dev` installed on your machine**.
+//! 6. `transport_udp`: feature containing primitives for communicating with UDP. **Requires
+//! `openssl`, `pkg-config` and `libssl-dev` installed on your machine**. 7. `transport_http`:
+//! feature containing primitives for communicating with HTTP/HTTPS. **Requires `openssl`,
+//! `pkg-config` and `libssl-dev` installed on your machine**. 8. `transport`: feature containing
+//! `transport_tcp`, `transport_udp` and `transport_http`. 9. `checking`: feature for the top-down
+//! approach. Needs the [`KMC`] tool. 10. `full`: feature containing `checking`, `baking` and
+//! `transport`.
 //!
 //! [`KMC`]: https://github.com/julien-lange/kmc
 
-#[cfg(feature = "binary")]
+#[cfg(feature = "default")]
 pub mod binary;
 
-#[cfg(feature = "role")]
+#[cfg(feature = "default")]
+pub mod message;
+
+#[cfg(feature = "mpst")]
 pub mod role;
 
-#[cfg(feature = "meshedchannels")]
+#[cfg(feature = "mpst")]
+pub mod name;
+
+#[cfg(feature = "mpst")]
 pub mod meshedchannels;
 
-#[cfg(feature = "functionmpst")]
+#[cfg(feature = "mpst")]
 pub mod functionmpst;
 
 #[cfg(feature = "checking")]
@@ -313,6 +329,19 @@ pub mod baking;
 #[cfg_attr(doc_cfg, doc(cfg(feature = "interleaved")))]
 pub mod interleaved;
 
+#[cfg(feature = "binary_atmp")]
+pub mod binary_atmp;
+
+#[cfg(feature = "baking_atmp")]
+pub mod baking_atmp;
+
+#[cfg(feature = "transport")]
 pub mod transport;
+
+#[cfg(feature = "protobuf")]
+pub mod protobuf;
+
+#[cfg(feature = "top_down_nuscr")]
+pub mod top_down_nuscr;
 
 pub mod attempt;

@@ -5,8 +5,8 @@ use mpstthree::functionmpst::fork::fork_mpst;
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    create_multiple_normal_role, create_recv_mpst_session_1, create_recv_mpst_session_2,
-    create_send_mpst_session_1, create_send_mpst_session_2,
+    create_multiple_normal_name, create_multiple_normal_role, create_recv_mpst_session_1,
+    create_recv_mpst_session_2, create_send_mpst_session_1, create_send_mpst_session_2,
 };
 use std::error::Error;
 
@@ -17,28 +17,27 @@ create_multiple_normal_role!(
     RoleD, RoleDDual |
 );
 
-type TestA = RoleA<RoleEnd>;
-type TestB = RoleB<RoleEnd>;
-type TestD = RoleD<RoleEnd>;
+// Create new names
+create_multiple_normal_name!(NameA, NameB, NameD);
 
-type SendMeshedChannelsD<N> = MeshedChannels<Send<N, End>, End, TestA, TestD>;
+type SendMeshedChannelsD<N> = MeshedChannels<Send<N, End>, End, RoleA<RoleEnd>, NameD>;
 
-type SendMeshedChannelsA<N> = MeshedChannels<End, Send<N, End>, TestD, TestA>;
+type SendMeshedChannelsA<N> = MeshedChannels<End, Send<N, End>, RoleD<RoleEnd>, NameA>;
 
-type RecvMeshedChannelsD<N> = MeshedChannels<Recv<N, End>, End, TestA, TestD>;
+type RecvMeshedChannelsD<N> = MeshedChannels<Recv<N, End>, End, RoleA<RoleEnd>, NameD>;
 
-type RecvMeshedChannelsA<N> = MeshedChannels<End, Recv<N, End>, TestD, TestA>;
+type RecvMeshedChannelsA<N> = MeshedChannels<End, Recv<N, End>, RoleD<RoleEnd>, NameA>;
 
 // Create an B dummy
-type Dummy = MeshedChannels<End, End, RoleEnd, TestB>;
+type Dummy = MeshedChannels<End, End, RoleEnd, NameB>;
 
 // Create new send functions
-create_send_mpst_session_1!(send_mpst_d_to_a, RoleA, RoleD);
-create_send_mpst_session_2!(send_mpst_a_to_d, RoleD, RoleA);
+create_send_mpst_session_1!(send_mpst_d_to_a, RoleA, NameD);
+create_send_mpst_session_2!(send_mpst_a_to_d, RoleD, NameA);
 
 // Create new recv functions
-create_recv_mpst_session_1!(recv_mpst_d_from_a, RoleA, RoleD);
-create_recv_mpst_session_2!(recv_mpst_a_from_d, RoleD, RoleA);
+create_recv_mpst_session_1!(recv_mpst_d_from_a, RoleA, NameD);
+create_recv_mpst_session_2!(recv_mpst_a_from_d, RoleD, NameA);
 
 // The functions for the basic exchanges
 fn send_a_to_d(s: SendMeshedChannelsA<i32>) -> Result<(), Box<dyn Error>> {
@@ -68,29 +67,17 @@ fn dummy(s: Dummy) -> Result<(), Box<dyn Error>> {
 /////////////////////////////////////////
 
 pub fn basic_macros_send() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        {
-            let (thread_a, thread_dummy, thread_d) = fork_mpst(send_a_to_d, dummy, recv_d_to_a);
+    let (thread_a, thread_dummy, thread_d) = fork_mpst(send_a_to_d, dummy, recv_d_to_a);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_dummy.join().is_ok());
-            assert!(thread_d.join().is_ok());
-        }
-        Ok(())
-    }()
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_dummy.join().is_ok());
+    assert!(thread_d.join().is_ok());
 }
 
 pub fn basic_macros_recv() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        {
-            let (thread_a, thread_dummy, thread_d) = fork_mpst(recv_a_to_d, dummy, send_d_to_a);
+    let (thread_a, thread_dummy, thread_d) = fork_mpst(recv_a_to_d, dummy, send_d_to_a);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_dummy.join().is_ok());
-            assert!(thread_d.join().is_ok());
-        }
-        Ok(())
-    }()
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_dummy.join().is_ok());
+    assert!(thread_d.join().is_ok());
 }

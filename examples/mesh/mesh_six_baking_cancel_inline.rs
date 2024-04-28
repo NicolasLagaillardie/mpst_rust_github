@@ -5,7 +5,7 @@
 )]
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send};
-use mpstthree::bundle_impl_with_enum_and_cancel;
+use mpstthree::generate;
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 
@@ -14,20 +14,13 @@ use std::error::Error;
 static LOOPS: i64 = 100;
 
 // Create new roles
-bundle_impl_with_enum_and_cancel!(MeshedChannelsSix, A, B, C, D, E, F);
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
-type NameC = RoleC<RoleEnd>;
-type NameD = RoleD<RoleEnd>;
-type NameE = RoleE<RoleEnd>;
-type NameF = RoleF<RoleEnd>;
+generate!("rec_and_cancel", MeshedChannels, A, B, C, D, E, F);
 
 // Types
 // Send/Recv
 type RS = Recv<(), Send<(), End>>;
 type SR = Send<(), Recv<(), End>>;
+
 // Roles
 type R2A<R> = RoleA<RoleA<R>>;
 type R2B<R> = RoleB<RoleB<R>>;
@@ -35,10 +28,11 @@ type R2C<R> = RoleC<RoleC<R>>;
 type R2D<R> = RoleD<RoleD<R>>;
 type R2E<R> = RoleE<RoleE<R>>;
 type R2F<R> = RoleF<RoleF<R>>;
+
 // A
 enum Branching0fromFtoA {
     More(
-        MeshedChannelsSix<
+        MeshedChannels<
             RS,
             RS,
             RS,
@@ -48,13 +42,14 @@ enum Branching0fromFtoA {
             NameA,
         >,
     ),
-    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameA>),
+    Done(MeshedChannels<End, End, End, End, End, RoleEnd, NameA>),
 }
 type RecursAtoF = Recv<Branching0fromFtoA, End>;
+
 // B
 enum Branching0fromFtoB {
     More(
-        MeshedChannelsSix<
+        MeshedChannels<
             SR,
             RS,
             RS,
@@ -64,13 +59,14 @@ enum Branching0fromFtoB {
             NameB,
         >,
     ),
-    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameB>),
+    Done(MeshedChannels<End, End, End, End, End, RoleEnd, NameB>),
 }
 type RecursBtoF = Recv<Branching0fromFtoB, End>;
+
 // C
 enum Branching0fromFtoC {
     More(
-        MeshedChannelsSix<
+        MeshedChannels<
             SR,
             SR,
             RS,
@@ -80,13 +76,14 @@ enum Branching0fromFtoC {
             NameC,
         >,
     ),
-    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameC>),
+    Done(MeshedChannels<End, End, End, End, End, RoleEnd, NameC>),
 }
 type RecursCtoF = Recv<Branching0fromFtoC, End>;
+
 // D
 enum Branching0fromFtoD {
     More(
-        MeshedChannelsSix<
+        MeshedChannels<
             SR,
             SR,
             SR,
@@ -96,13 +93,14 @@ enum Branching0fromFtoD {
             NameD,
         >,
     ),
-    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameD>),
+    Done(MeshedChannels<End, End, End, End, End, RoleEnd, NameD>),
 }
 type RecursDtoF = Recv<Branching0fromFtoD, End>;
+
 // E
 enum Branching0fromFtoE {
     More(
-        MeshedChannelsSix<
+        MeshedChannels<
             SR,
             SR,
             SR,
@@ -112,16 +110,17 @@ enum Branching0fromFtoE {
             NameE,
         >,
     ),
-    Done(MeshedChannelsSix<End, End, End, End, End, RoleEnd, NameE>),
+    Done(MeshedChannels<End, End, End, End, End, RoleEnd, NameE>),
 }
 type RecursEtoF = Recv<Branching0fromFtoE, End>;
+
 // F
 type Choose0fromFtoA = Send<Branching0fromFtoA, End>;
 type Choose0fromFtoB = Send<Branching0fromFtoB, End>;
 type Choose0fromFtoC = Send<Branching0fromFtoC, End>;
 type Choose0fromFtoD = Send<Branching0fromFtoD, End>;
 type Choose0fromFtoE = Send<Branching0fromFtoE, End>;
-type EndpointMoreF = MeshedChannelsSix<
+type EndpointMoreF = MeshedChannels<
     Send<(), Recv<(), Choose0fromFtoA>>,
     Send<(), Recv<(), Choose0fromFtoB>>,
     Send<(), Recv<(), Choose0fromFtoC>>,
@@ -132,12 +131,12 @@ type EndpointMoreF = MeshedChannelsSix<
 >;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsSix<End, End, End, End, RecursAtoF, RoleF<RoleEnd>, NameA>;
-type EndpointB = MeshedChannelsSix<End, End, End, End, RecursBtoF, RoleF<RoleEnd>, NameB>;
-type EndpointC = MeshedChannelsSix<End, End, End, End, RecursCtoF, RoleF<RoleEnd>, NameC>;
-type EndpointD = MeshedChannelsSix<End, End, End, End, RecursDtoF, RoleF<RoleEnd>, NameD>;
-type EndpointE = MeshedChannelsSix<End, End, End, End, RecursEtoF, RoleF<RoleEnd>, NameE>;
-type EndpointF = MeshedChannelsSix<
+type EndpointA = MeshedChannels<End, End, End, End, RecursAtoF, RoleF<RoleEnd>, NameA>;
+type EndpointB = MeshedChannels<End, End, End, End, RecursBtoF, RoleF<RoleEnd>, NameB>;
+type EndpointC = MeshedChannels<End, End, End, End, RecursCtoF, RoleF<RoleEnd>, NameC>;
+type EndpointD = MeshedChannels<End, End, End, End, RecursDtoF, RoleF<RoleEnd>, NameD>;
+type EndpointE = MeshedChannels<End, End, End, End, RecursEtoF, RoleF<RoleEnd>, NameE>;
+type EndpointF = MeshedChannels<
     Choose0fromFtoA,
     Choose0fromFtoB,
     Choose0fromFtoC,

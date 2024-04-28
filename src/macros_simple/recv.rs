@@ -19,12 +19,13 @@
 ///
 /// ```
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::{create_normal_role, create_recv_mpst_session_1};
+/// use mpstthree::{create_normal_name, create_normal_role, create_recv_mpst_session_1};
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleC, RoleCDual);
+/// create_normal_name!(NameC);
 ///
-/// create_recv_mpst_session_1!(recv_mpst_c_from_a, RoleA, RoleC);
+/// create_recv_mpst_session_1!(recv_mpst_c_from_a, RoleA, NameC);
 /// ```
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
@@ -32,7 +33,14 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_recv_mpst_session_1 {
     ($func_name:ident, $sender:ident, $receiver:ident) => {
-        mpst_seq::create_recv_mpst_session!($func_name, $sender, $receiver, MeshedChannels, 3, 1);
+        mpst_seq_proc::create_recv_mpst_session!(
+            $func_name,
+            $sender,
+            $receiver,
+            MeshedChannels,
+            3,
+            1
+        );
     };
 }
 
@@ -50,12 +58,13 @@ macro_rules! create_recv_mpst_session_1 {
 ///
 /// ```
 /// use mpstthree::meshedchannels::MeshedChannels;
-/// use mpstthree::{create_normal_role, create_recv_mpst_session_2};
+/// use mpstthree::{create_normal_name, create_normal_role, create_recv_mpst_session_2};
 ///
 /// create_normal_role!(RoleA, RoleADual);
 /// create_normal_role!(RoleC, RoleCDual);
+/// create_normal_name!(NameA);
 ///
-/// create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, RoleA);
+/// create_recv_mpst_session_2!(recv_mpst_a_from_c, RoleC, NameA);
 /// ```
 ///
 /// [`MeshedChannels`]: crate::meshedchannels::MeshedChannels
@@ -66,6 +75,13 @@ macro_rules! create_recv_mpst_session_1 {
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_recv_mpst_session_2 {
     ($func_name:ident, $sender:ident, $receiver:ident) => {
-        mpst_seq::create_recv_mpst_session!($func_name, $sender, $receiver, MeshedChannels, 3, 2);
+        mpst_seq_proc::create_recv_mpst_session!(
+            $func_name,
+            $sender,
+            $receiver,
+            MeshedChannels,
+            3,
+            2
+        );
     };
 }

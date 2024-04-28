@@ -41,7 +41,7 @@ fn main() {
                     });
                 }
                 Err(e) => {
-                    println!("Error: {}", e);
+                    println!("Error: {e:?}");
                     /* connection failed */
                 }
             }

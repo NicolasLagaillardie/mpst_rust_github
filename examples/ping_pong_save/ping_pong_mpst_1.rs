@@ -2,31 +2,15 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::role::broadcast::RoleBroadcast;
 use mpstthree::role::end::RoleEnd;
 use mpstthree::{
-    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_role,
-    create_recv_mpst_session_bundle, create_send_mpst_session_bundle, offer_mpst,
+    bundle_struct_fork_close_multi, choose_mpst_multi_to_all, create_multiple_normal_name,
+    create_multiple_normal_role, create_recv_mpst_session_bundle, create_send_mpst_session_bundle,
+    offer_mpst,
 };
 
 use std::error::Error;
 
-// global protocol ping_pong(role A, role B)
-// {
-//     rec PP
-//     {
-//         choice at A
-//         {
-//             ping(()) from A to B;
-//             pong(()) from B to A;
-//             continue PP;
-//         }
-//         or
-//         {
-//             stop() from A to B;
-//         }
-//     }
-// }
-
 // Create the new MeshedChannels for three participants and the close and fork functions
-bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannelsTwo, 2);
+bundle_struct_fork_close_multi!(close_mpst_multi, fork_mpst, MeshedChannels, 2);
 
 // Create new roles
 // normal
@@ -35,33 +19,34 @@ create_multiple_normal_role!(
     RoleB, RoleBDual |
 );
 
+// Create new names
+create_multiple_normal_name!(NameA, NameB);
+
 // Create new send functions
 // A
 create_send_mpst_session_bundle!(
     send_mpst_a_to_b, RoleB, 1 | =>
-    RoleA, MeshedChannelsTwo, 2
+    NameA, MeshedChannels, 2
 );
+
 // B
 create_send_mpst_session_bundle!(
     send_mpst_b_to_a, RoleA, 1 | =>
-    RoleB, MeshedChannelsTwo, 2
+    NameB, MeshedChannels, 2
 );
 
 // Create new recv functions and related types
 // A
 create_recv_mpst_session_bundle!(
     recv_mpst_a_from_b, RoleB, 1 | =>
-    RoleA, MeshedChannelsTwo, 2
+    NameA, MeshedChannels, 2
 );
+
 // B
 create_recv_mpst_session_bundle!(
     recv_mpst_b_from_a, RoleA, 1 | =>
-    RoleB, MeshedChannelsTwo, 2
+    NameB, MeshedChannels, 2
 );
-
-// Names
-type NameA = RoleA<RoleEnd>;
-type NameB = RoleB<RoleEnd>;
 
 // Types
 // A
@@ -69,15 +54,14 @@ type Choose0fromAtoB = <RecursBtoA as Session>::Dual;
 
 // B
 enum Branching0fromAtoB {
-    More(MeshedChannelsTwo<Recv<(), Send<(), RecursBtoA>>, ThreeRoleA, NameB>),
-    Done(MeshedChannelsTwo<End, RoleEnd, NameB>),
+    More(MeshedChannels<Recv<(), Send<(), RecursBtoA>>, RoleA<RoleA<RoleA<RoleEnd>>>, NameB>),
+    Done(MeshedChannels<End, RoleEnd, NameB>),
 }
-type ThreeRoleA = RoleA<RoleA<RoleA<RoleEnd>>>;
 type RecursBtoA = Recv<Branching0fromAtoB, End>;
 
 // Creating the MP sessions
-type EndpointA = MeshedChannelsTwo<Choose0fromAtoB, RoleBroadcast, NameA>;
-type EndpointB = MeshedChannelsTwo<RecursBtoA, RoleA<RoleEnd>, NameB>;
+type EndpointA = MeshedChannels<Choose0fromAtoB, RoleBroadcast, NameA>;
+type EndpointB = MeshedChannels<RecursBtoA, RoleA<RoleEnd>, NameB>;
 
 // Functions
 fn endpoint_a(s: EndpointA) -> Result<(), Box<dyn Error>> {
@@ -90,9 +74,8 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromAtoB::Done, =>
-                RoleB, =>
-                RoleA,
-                MeshedChannelsTwo,
+                NameA,
+                MeshedChannels,
                 1
             );
 
@@ -102,9 +85,8 @@ fn recurs_a(s: EndpointA, index: i64) -> Result<(), Box<dyn Error>> {
             let s = choose_mpst_multi_to_all!(
                 s,
                 Branching0fromAtoB::More, =>
-                RoleB, =>
-                RoleA,
-                MeshedChannelsTwo,
+                NameA,
+                MeshedChannels,
                 1
             );
 
@@ -132,8 +114,8 @@ fn recurs_b(s: EndpointB) -> Result<(), Box<dyn Error>> {
 fn main() {
     let (thread_a, thread_b) = fork_mpst(endpoint_a, recurs_b);
 
-    assert!(thread_a.join().is_ok());
-    assert!(thread_b.join().is_ok());
+    thread_a.join().unwrap();
+    thread_b.join().unwrap();
 }
 
 /////////////////////////

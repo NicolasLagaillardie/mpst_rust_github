@@ -1,5 +1,3 @@
-#![allow(clippy::type_complexity)]
-
 mod basics_mod;
 
 #[test]
@@ -39,13 +37,6 @@ fn unit_tests_basics_roles() {
     basics_mod::unit_roles::role_broadcast_fields_2();
 }
 
-#[test]
-fn from_str() {
-    basics_mod::from_str::binary_sessions();
-    basics_mod::from_str::meshedchannels();
-    basics_mod::from_str::roles();
-}
-
 // Tests for basic functions
 #[test]
 fn simple_basics() {
@@ -54,19 +45,23 @@ fn simple_basics() {
     basics_mod::simple_basics::simple::simple_triple_endpoints_checker();
 
     // Choose
-    basics_mod::simple_basics::choose::simple_choice();
+    basics_mod::simple_basics::choose::simple_choice_left();
+    basics_mod::simple_basics::choose::simple_choice_right();
     basics_mod::simple_basics::choose::simple_choice_checker();
 
     // Choose 2 A
-    basics_mod::simple_basics::a_choose::double_choice();
+    basics_mod::simple_basics::a_choose::double_choice_left();
+    basics_mod::simple_basics::a_choose::double_choice_right();
     basics_mod::simple_basics::a_choose::double_choice_checker();
 
     // Choose 2 A
-    basics_mod::simple_basics::b_choose::double_choice();
+    basics_mod::simple_basics::b_choose::double_choice_left();
+    basics_mod::simple_basics::b_choose::double_choice_right();
     basics_mod::simple_basics::b_choose::double_choice_checker();
 
     // Choose 2 A
-    basics_mod::simple_basics::c_choose::double_choice();
+    basics_mod::simple_basics::c_choose::double_choice_left();
+    basics_mod::simple_basics::c_choose::double_choice_right();
     basics_mod::simple_basics::c_choose::double_choice_checker();
 
     // Usecase simple A

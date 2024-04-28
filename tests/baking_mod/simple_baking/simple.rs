@@ -1,4 +1,3 @@
-use std::boxed::Box;
 use std::error::Error;
 
 use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session::Session};
@@ -11,6 +10,10 @@ use mpstthree::role::a::RoleA;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
+
+use mpstthree::name::a::NameA;
+use mpstthree::name::b::NameB;
+use mpstthree::name::c::NameC;
 
 use petgraph::dot::Dot;
 
@@ -30,9 +33,9 @@ type StackB = RoleA<RoleC<RoleEnd>>;
 type StackC = RoleA<RoleB<RoleEnd>>;
 
 // Creating the MP sessions
-type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, RoleA<RoleEnd>>;
-type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, RoleB<RoleEnd>>;
-type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, RoleC<RoleEnd>>;
+type EndpointA<N> = MeshedChannels<AtoB<N>, AtoC<N>, StackA, NameA>;
+type EndpointB<N> = MeshedChannels<BtoA<N>, BtoC<N>, StackB, NameB>;
+type EndpointC<N> = MeshedChannels<CtoA<N>, CtoB<N>, StackC, NameC>;
 
 // Single test for A
 fn endpoint_a(s: EndpointA<i32>) -> Result<(), Box<dyn Error>> {
@@ -64,21 +67,16 @@ fn endpoint_c(s: EndpointC<i32>) -> Result<(), Box<dyn Error>> {
 /////////////////////////////////////////
 
 pub fn simple_triple_endpoints() {
-    assert!(|| -> Result<(), Box<dyn Error>> {
-        {
-            let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
+    let (thread_a, thread_b, thread_c) = fork_mpst(endpoint_a, endpoint_b, endpoint_c);
 
-            assert!(thread_a.join().is_ok());
-            assert!(thread_b.join().is_ok());
-            assert!(thread_c.join().is_ok());
-        }
-        Ok(())
-    }()
-    .is_ok());
+    assert!(thread_a.join().is_ok());
+    assert!(thread_b.join().is_ok());
+    assert!(thread_c.join().is_ok());
 }
 
 pub fn simple_triple_endpoints_checker() {
-    let (graphs, kmc) = checker_concat!(EndpointB<i32>, EndpointC<i32>, EndpointA<i32>).unwrap();
+    let (graphs, kmc) =
+        checker_concat!("", EndpointB<i32>, EndpointC<i32>, EndpointA<i32>).unwrap();
 
     ////////////// Test graph A
     let graph_a = &graphs["RoleA"];

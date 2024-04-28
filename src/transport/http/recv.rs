@@ -6,9 +6,26 @@
 //! the `"transport"` feature or the `"transport_http"` feature.*
 
 use crate::binary::struct_trait::{recv::Recv, session::Session};
-use hyper::client::ResponseFuture;
-use hyper::{Body, Response};
-use std::boxed::Box;
+
+
+
+
+// use hyper::client::ResponseFuture;
+// use hyper::{Body, Response};
+
+
+
+use std::convert::Infallible;
+use http_body_util::Empty;
+use hyper::Request;
+use hyper::body::Bytes;
+use hyper_util::rt::TokioIo;
+use tokio::net::TcpStream;
+
+
+
+
+
 use std::error::Error;
 use std::marker;
 use tokio::runtime::Runtime;
@@ -22,11 +39,11 @@ use tokio::runtime::Runtime;
     doc_cfg,
     doc(cfg(any(feature = "transport", feature = "transport_http")))
 )]
-pub fn recv_http<T, S>(
+pub async fn recv_http<T, S>(
     s: Recv<T, S>,
     http: bool,
     req: ResponseFuture,
-) -> Result<(T, S, Response<Body>), Box<dyn Error>>
+) -> Result<(T, S), Box<dyn std::error::Error + Send + Sync>>
 where
     T: marker::Send,
     S: Session,
@@ -35,7 +52,7 @@ where
     let resp = match http {
         true => {
             let rt = Runtime::new()?;
-            rt.block_on(async move { req.await })?
+            rt.block_on(req)?
         }
         false => Response::default(),
     };
@@ -91,7 +108,7 @@ macro_rules! create_recv_http_session {
         $n_sessions:literal,
         $exclusion:literal
     ) => {
-        mpst_seq::create_recv_http_session!(
+        mpst_seq_proc::create_recv_http_session!(
             $func_name,
             $sender,
             $receiver,

@@ -22,9 +22,9 @@ use crossbeam_channel::{bounded, Sender};
 /// use mpstthree::role::end::RoleEnd;
 /// use mpstthree::role::Role; // Only used for example
 ///
-/// type NameADual = RoleADual<RoleEnd>;
+/// type StackADual = RoleADual<RoleEnd>;
 ///
-/// let _ = NameADual::new(); // Only used for example
+/// let _ = StackADual::new(); // Only used for example
 /// ```
 #[derive(Debug)]
 pub struct RoleADual<R>
@@ -39,7 +39,6 @@ where
 impl<R: Role> Role for RoleADual<R> {
     type Dual = RoleA<R::Dual>;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender_normal, _) = bounded::<R>(1);
         let (sender_dual, _) = bounded::<R::Dual>(1);
@@ -54,22 +53,18 @@ impl<R: Role> Role for RoleADual<R> {
         )
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         "RoleADual".to_string()
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         format!("{}<{}>", R::head_str(), R::tail_str())
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         "RoleADual".to_string()
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         format!("{}<{}>", R::head_str(), R::tail_str())
     }

@@ -2,7 +2,7 @@ use mpstthree::binary::struct_trait::{end::End, recv::Recv, send::Send, session:
 use mpstthree::meshedchannels::MeshedChannels;
 use mpstthree::role::broadcast::RoleBroadcast;
 
-use mpstthree::checker_concat;
+use mpstthree::{checker_concat, checker_concat_impl};
 
 use petgraph::dot::Dot;
 
@@ -11,6 +11,10 @@ use mpstthree::role::a::RoleA;
 use mpstthree::role::b::RoleB;
 use mpstthree::role::c::RoleC;
 use mpstthree::role::end::RoleEnd;
+
+use mpstthree::name::a::NameA;
+use mpstthree::name::b::NameB;
+use mpstthree::name::c::NameC;
 
 // Test our usecase
 // Simple types
@@ -33,12 +37,12 @@ type RecursCtoB = Recv<Branches0CtoB, End>;
 type RecursAtoB = Recv<Branches0AtoB, End>;
 
 enum Branches0CtoB {
-    End(MeshedChannels<CtoAClose, CtoBClose, StackCEnd, RoleC<RoleEnd>>),
-    Video(MeshedChannels<CtoAVideo, CtoBVideo, StackCVideo, RoleC<RoleEnd>>),
+    End(MeshedChannels<CtoAClose, CtoBClose, StackCEnd, NameC>),
+    Video(MeshedChannels<CtoAVideo, CtoBVideo, StackCVideo, NameC>),
 }
 enum Branches0AtoB {
-    End(MeshedChannels<AtoBClose, AtoCClose, StackAEnd, RoleA<RoleEnd>>),
-    Video(MeshedChannels<RecursAtoB, AtoCVideo, StackAVideo, RoleA<RoleEnd>>),
+    End(MeshedChannels<AtoBClose, AtoCClose, StackAEnd, NameA>),
+    Video(MeshedChannels<RecursAtoB, AtoCVideo, StackAVideo, NameA>),
 }
 type Choose0fromBtoC = Send<Branches0CtoB, End>;
 type Choose0fromBtoA = Send<Branches0AtoB, End>;
@@ -60,16 +64,21 @@ type StackBFull = RoleC<RoleC<StackBRecurs>>;
 // Creating the MP sessions
 
 // For B
-type EndpointBEnd = MeshedChannels<End, End, RoleEnd, RoleB<RoleEnd>>;
-type EndpointBFull = MeshedChannels<Choose0fromBtoA, InitB, StackBFull, RoleB<RoleEnd>>;
+type EndpointBEnd = MeshedChannels<End, End, RoleEnd, NameB>;
+type EndpointBFull = MeshedChannels<Choose0fromBtoA, InitB, StackBFull, NameB>;
 
 // For C
-type EndpointCFull = MeshedChannels<End, InitC, StackCInit, RoleC<RoleEnd>>;
+type EndpointCFull = MeshedChannels<End, InitC, StackCInit, NameC>;
 
 // For A
-type EndpointARecurs = MeshedChannels<RecursAtoB, End, StackARecurs, RoleA<RoleEnd>>;
+type EndpointARecurs = MeshedChannels<RecursAtoB, End, StackARecurs, NameA>;
 
 /////////////////////////////////////////
+
+checker_concat_impl!(
+    [Branches0AtoB, Video, Branches0CtoB, Video],
+    [Branches0AtoB, End, Branches0CtoB, End]
+);
 
 pub fn main() {
     let (graphs, kmc) = checker_concat!(

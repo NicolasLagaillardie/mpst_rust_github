@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct ChooseTypeMulti {
+pub(crate) struct ChooseTypeMulti {
     type_name: Ident,
     meshedchannels_name: Ident,
     n_sessions: u64,
@@ -36,12 +36,12 @@ impl From<ChooseTypeMulti> for TokenStream {
 
 impl ChooseTypeMulti {
     fn expand(&self) -> TokenStream {
-        let type_name = self.type_name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let type_name = &self.type_name;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let all_sessions: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -50,7 +50,7 @@ impl ChooseTypeMulti {
 
         let sessions_left: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -59,7 +59,7 @@ impl ChooseTypeMulti {
 
         let sessions_right: Vec<TokenStream> = (self.n_sessions..(2 * self.n_sessions - 1))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }

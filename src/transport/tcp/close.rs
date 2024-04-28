@@ -6,7 +6,7 @@
 //! the `"transport"` feature or the `"transport_tcp"` feature.*
 
 use crate::binary::struct_trait::{end::End, end::Signal};
-use std::boxed::Box;
+
 use std::error::Error;
 use std::mem;
 use std::net::{Shutdown, TcpStream};

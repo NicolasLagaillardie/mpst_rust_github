@@ -15,7 +15,7 @@
 //! // If A is the current receiving role,
 //! // then its binary channel with B is the first
 //! // one.
-//! mpst_seq::recv_all_aux_simple!(s, 1)()
+//! mpst_seq_proc::recv_all_aux_simple!(s, 1)()
 //! ```
 
 use proc_macro2::TokenStream;
@@ -24,7 +24,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Expr, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct RecvAllAuxSimple {
+pub(crate) struct RecvAllAuxSimple {
     session: Expr,
     exclusion: u64,
 }
@@ -48,7 +48,7 @@ impl From<RecvAllAuxSimple> for TokenStream {
 
 impl RecvAllAuxSimple {
     fn expand(&self) -> TokenStream {
-        let session = self.session.clone();
+        let session = &self.session;
         let recv_session = format_ident!("session{}", self.exclusion);
 
         let mut new_sessions = Vec::new();

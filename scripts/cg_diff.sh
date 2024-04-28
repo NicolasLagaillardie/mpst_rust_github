@@ -3,7 +3,7 @@
 # counts instructions for a standard workload
 
 # Exit if error
-set -e
+set -eou pipefail
 
 # Get the name of the Rust file in example
 read -p 'Name of the example file: ' NAME

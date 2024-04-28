@@ -1,0 +1,19 @@
+
+timed global protocol ping_pong(role A, role B)
+{
+    rec PP
+    {
+        choice at A
+        {
+            ping(()) from A to B within [0;1] using a and resetting ();
+
+            pong(()) from B to A within [0;1] using a and resetting ();
+
+            continue PP within [0;1] using a and resetting ();
+        }
+        or
+        {
+            stop() from A to B within [0;1] using a and resetting ();
+        }
+    }
+}

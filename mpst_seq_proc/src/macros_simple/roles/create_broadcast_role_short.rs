@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, Result};
 
 #[derive(Debug)]
-pub struct CreateBroadcastRoleShort {
+pub(crate) struct CreateBroadcastRoleShort {
     role: Ident,
 }
 
@@ -24,13 +24,13 @@ impl From<CreateBroadcastRoleShort> for TokenStream {
 
 impl CreateBroadcastRoleShort {
     fn expand(&self) -> TokenStream {
-        let role = self.role.clone();
+        let role = &self.role;
 
         // Build the new names
         // role to all
-        let role_to_all_name = Ident::new(&format!("Role{}toAll", role), Span::call_site());
+        let role_to_all_name = Ident::new(&format!("Role{role}toAll"), Span::call_site());
         // dual to all
-        let dual_to_all_name = Ident::new(&format!("RoleAllto{}", role), Span::call_site());
+        let dual_to_all_name = Ident::new(&format!("RoleAllto{role}"), Span::call_site());
 
         quote! {
             ////////////////////////////////////////////

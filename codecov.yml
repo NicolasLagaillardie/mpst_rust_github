@@ -4,6 +4,8 @@ codecov:
 ignore:
   - "mpst_seq/"
   - "mpst_seq_proc/"
+  - "benches/"
+  - "examples/"
 
 coverage:
   precision: 2
@@ -25,9 +27,9 @@ parsers:
       conditional: yes
       loop: yes
       method: yes
-      macro: yes
+      macro: no # Might be changed
 
 comment:
-  layout: "reach,diff,flags,files,footer"
+  layout: "reach, diff, flags, files, footer"
   behavior: default
   require_changes: yes

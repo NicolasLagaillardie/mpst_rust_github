@@ -29,7 +29,6 @@ pub struct RoleBroadcast {
 impl crate::role::Role for RoleBroadcast {
     type Dual = RoleBroadcast;
 
-    #[doc(hidden)]
     fn new() -> (Self, Self::Dual) {
         let (sender1, receiver1) = bounded::<()>(1);
         let (sender2, receiver2) = bounded::<()>(1);
@@ -46,22 +45,18 @@ impl crate::role::Role for RoleBroadcast {
         )
     }
 
-    #[doc(hidden)]
     fn head_str() -> String {
         "RoleBroadcast".to_string()
     }
 
-    #[doc(hidden)]
     fn tail_str() -> String {
         "".to_string()
     }
 
-    #[doc(hidden)]
     fn self_head_str(&self) -> String {
         "RoleBroadcast".to_string()
     }
 
-    #[doc(hidden)]
     fn self_tail_str(&self) -> String {
         "".to_string()
     }

@@ -1,5 +1,3 @@
-#![cfg(feature = "macros_simple")]
-
 //! This module contains all the macros that are used for
 //! the parametrisation on the name of the participants.
 //!
@@ -16,6 +14,9 @@ pub mod choose;
 
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 pub mod name;
+
+#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+pub mod role;
 
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
 pub mod offer;

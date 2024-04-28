@@ -4,7 +4,7 @@ use syn::parse::{Parse, ParseStream};
 use syn::{Ident, LitInt, Result, Token};
 
 #[derive(Debug)]
-pub struct OfferMPSTSessionMulti {
+pub(crate) struct OfferMPSTSessionMulti {
     func_name: Ident,
     type_name: Ident,
     role: Ident,
@@ -56,15 +56,15 @@ impl From<OfferMPSTSessionMulti> for TokenStream {
 
 impl OfferMPSTSessionMulti {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let type_name = self.type_name.clone();
-        let role = self.role.clone();
-        let name = self.name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let type_name = &self.type_name;
+        let role = &self.role;
+        let name = &self.name;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let all_sessions: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -73,7 +73,7 @@ impl OfferMPSTSessionMulti {
 
         let all_sessions_struct: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident : mpstthree::binary::struct_trait::session::Session,
                 }
@@ -89,7 +89,7 @@ impl OfferMPSTSessionMulti {
                 } else {
                     let temp_all_sessions: Vec<TokenStream> = (1..(2 * self.n_sessions - 1))
                         .map(|i| {
-                            let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                            let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                             quote! {
                                 #temp_ident ,
                             }
@@ -103,9 +103,7 @@ impl OfferMPSTSessionMulti {
                             )*
                             R1,
                             R2,
-                            #name<
-                                mpstthree::role::end::RoleEnd
-                            >
+                            #name
                         >,
                     }
                 }
@@ -114,7 +112,7 @@ impl OfferMPSTSessionMulti {
 
         let sessions_left: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -123,7 +121,7 @@ impl OfferMPSTSessionMulti {
 
         let sessions_right: Vec<TokenStream> = (self.n_sessions..(2 * self.n_sessions - 1))
             .map(|i| {
-                let temp_ident = Ident::new(&format!("S{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("S{i}"), Span::call_site());
                 quote! {
                     #temp_ident ,
                 }
@@ -135,7 +133,7 @@ impl OfferMPSTSessionMulti {
                 if i != self.exclusion {
                     quote! {}
                 } else {
-                    let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
+                    let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                     quote! {
                         let (e, new_session) = mpstthree::binary::recv::recv(s.#temp_ident)?;
                     }
@@ -145,7 +143,7 @@ impl OfferMPSTSessionMulti {
 
         let new_sessions: Vec<TokenStream> = (1..self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("session{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("session{i}"), Span::call_site());
                 if i == self.exclusion {
                     quote! {
                         #temp_ident : new_session ,
@@ -175,7 +173,7 @@ impl OfferMPSTSessionMulti {
                         #new_types
                     )*
                     #role<mpstthree::role::end::RoleEnd, mpstthree::role::end::RoleEnd>,
-                    #name<mpstthree::role::end::RoleEnd>,
+                    #name,
                 >,
                 f: F,
                 g: G,
@@ -192,7 +190,7 @@ impl OfferMPSTSessionMulti {
                             #sessions_left
                         )*
                         R1,
-                        #name<mpstthree::role::end::RoleEnd>,
+                        #name,
                     >,
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
                 G: FnOnce(
@@ -201,7 +199,7 @@ impl OfferMPSTSessionMulti {
                             #sessions_right
                         )*
                         R2,
-                        #name<mpstthree::role::end::RoleEnd>,
+                        #name,
                     >,
                 ) -> Result<U, Box<dyn std::error::Error + 'a>>,
             {

@@ -1,10 +1,12 @@
 use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{Ident, LitInt, Result, Token};
+use syn::{Ident, Result};
+
+use crate::common_functions::parsing::parse_stream_sessions;
 
 #[derive(Debug)]
-pub struct CloseMpstInterleaved {
+pub(crate) struct CloseMpstInterleaved {
     func_name: Ident,
     meshedchannels_name: Ident,
     n_sessions: u64,
@@ -12,13 +14,7 @@ pub struct CloseMpstInterleaved {
 
 impl Parse for CloseMpstInterleaved {
     fn parse(input: ParseStream) -> Result<Self> {
-        let func_name = Ident::parse(input)?;
-        <Token![,]>::parse(input)?;
-
-        let meshedchannels_name = Ident::parse(input)?;
-        <Token![,]>::parse(input)?;
-
-        let n_sessions = (LitInt::parse(input)?).base10_parse::<u64>().unwrap();
+        let (func_name, meshedchannels_name, n_sessions) = parse_stream_sessions(input)?;
 
         Ok(CloseMpstInterleaved {
             func_name,
@@ -36,12 +32,12 @@ impl From<CloseMpstInterleaved> for TokenStream {
 
 impl CloseMpstInterleaved {
     fn expand(&self) -> TokenStream {
-        let func_name = self.func_name.clone();
-        let meshedchannels_name = self.meshedchannels_name.clone();
+        let func_name = &self.func_name;
+        let meshedchannels_name = &self.meshedchannels_name;
 
         let role_names: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_name = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("R{i}"), Span::call_site());
 
                 quote! {
                     #temp_name ,
@@ -51,10 +47,10 @@ impl CloseMpstInterleaved {
 
         let role_struct: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_name = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("R{i}"), Span::call_site());
 
                 quote! {
-                    #temp_name : mpstthree::role::Role ,
+                    #temp_name : mpstthree::name::Name ,
                 }
             })
             .collect();
@@ -67,9 +63,9 @@ impl CloseMpstInterleaved {
                     })
                     .collect();
 
-                let temp_session = Ident::new(&format!("s_{}", i), Span::call_site());
+                let temp_session = Ident::new(&format!("s_{i}"), Span::call_site());
 
-                let temp_name = Ident::new(&format!("R{}", i), Span::call_site());
+                let temp_name = Ident::new(&format!("R{i}"), Span::call_site());
 
                 quote! {
                     #temp_session:
@@ -87,12 +83,12 @@ impl CloseMpstInterleaved {
         let session_send: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
                 let temp_ident =
-                    Ident::new(&format!("s_{}", i), Span::call_site());
+                    Ident::new(&format!("s_{i}"), Span::call_site());
 
                 let temp_session_send: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
                         let temp_session =
-                            Ident::new(&format!("session{}", j), Span::call_site());
+                            Ident::new(&format!("session{j}"), Span::call_site());
                         quote! {
                             #temp_ident.#temp_session.sender.send(mpstthree::binary::struct_trait::end::Signal::Stop).unwrap_or(());
                         }
@@ -109,11 +105,11 @@ impl CloseMpstInterleaved {
 
         let session_recv: Vec<TokenStream> = (1..=self.n_sessions)
             .map(|i| {
-                let temp_ident = Ident::new(&format!("s_{}", i), Span::call_site());
+                let temp_ident = Ident::new(&format!("s_{i}"), Span::call_site());
 
                 let temp_session_recv: Vec<TokenStream> = (1..self.n_sessions)
                     .map(|j| {
-                        let temp_session = Ident::new(&format!("session{}", j), Span::call_site());
+                        let temp_session = Ident::new(&format!("session{j}"), Span::call_site());
                         quote! {
                             #temp_ident.#temp_session.receiver.recv()?;
                         }

@@ -1,3 +1,2 @@
-pub mod close_mpst_interleaved;
-pub mod fork_mpst_multi_interleaved;
-pub mod fork_mpst_multi_solo;
+pub(crate) mod close_mpst_interleaved;
+pub(crate) mod fork_mpst_multi_solo;

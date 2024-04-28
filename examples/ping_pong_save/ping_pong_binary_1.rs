@@ -8,7 +8,6 @@ use mpstthree::{choose, offer};
 use std::error::Error;
 use std::thread::{spawn, JoinHandle};
 
-
 // A
 enum BinaryA {
     More(Recv<(), Send<(), RecursA>>),
@@ -57,10 +56,10 @@ fn main() {
             .into_iter()
             .for_each(|s| close(choose!(BinaryA::Done, s)).unwrap());
 
-        threads.into_iter().for_each(|elt| assert!(elt.join().is_ok()));
+        threads.into_iter().for_each(|elt| elt.join().unwrap());
     });
 
-    assert!(main.join().is_ok());
+    main.join().unwrap();
 }
 
 /////////////////////////

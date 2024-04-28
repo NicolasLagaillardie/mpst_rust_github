@@ -28,7 +28,7 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_offer_type_multi {
     ($type_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
-        mpst_seq::create_offer_type_multi!($type_name, $meshedchannels_name, $n_sessions);
+        mpst_seq_proc::create_offer_type_multi!($type_name, $meshedchannels_name, $n_sessions);
     };
 }
 
@@ -52,12 +52,14 @@ macro_rules! create_offer_type_multi {
 ///
 /// ```
 /// use mpstthree::{
-///     create_broadcast_role, create_meshedchannels, create_normal_role,
+///     create_broadcast_role, create_meshedchannels, create_normal_name, create_normal_role,
 ///     create_offer_mpst_session_multi, create_offer_type_multi,
 /// };
 ///
 /// create_normal_role!(RoleB, RoleBDual);
 /// create_broadcast_role!(RoleAlltoD, RoleDtoAll);
+///
+/// create_normal_name!(NameB);
 ///
 /// create_meshedchannels!(MeshedChannels, 3);
 /// create_offer_type_multi!(OfferMpstThree, MeshedChannels, 3);
@@ -66,7 +68,7 @@ macro_rules! create_offer_type_multi {
 ///     offer_mpst_session_b_to_d,
 ///     OfferMpstThree,
 ///     RoleAlltoD,
-///     RoleB,
+///     NameB,
 ///     MeshedChannels,
 ///     3,
 ///     2
@@ -87,7 +89,7 @@ macro_rules! create_offer_mpst_session_multi {
         $n_sessions:literal,
         $exclusion:literal
     ) => {
-        mpst_seq::create_offer_mpst_session_multi!(
+        mpst_seq_proc::create_offer_mpst_session_multi!(
             $func_name,
             $type_name,
             $role,
@@ -126,11 +128,11 @@ macro_rules! create_offer_mpst_session_multi {
 ///             authenticator_recurs(s)
 ///         },
 ///     }
+
 /// )?;
 /// ```
 ///
 /// # Baking example
-///
 /// ```ignore
 /// offer_mpst!(
 ///     s,
@@ -146,6 +148,7 @@ macro_rules! create_offer_mpst_session_multi {
 ///             authenticator_recurs(s)
 ///         },
 ///     }
+
 /// )?;
 /// ```
 ///
