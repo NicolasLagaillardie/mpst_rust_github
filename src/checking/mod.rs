@@ -79,7 +79,7 @@ type HashGraph = HashMap<String, Graph<String, String>>;
 ///
 /// May have to be used with the [`checker_concat_impl`]! macro.
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "checking")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "checking")))]
 macro_rules! checker_concat {
     (
         $name_file: expr,
@@ -228,7 +228,7 @@ macro_rules! checker_concat {
 /// Notice that there are only the name of the branches,
 /// grouped by choice and role.
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "checking")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "checking")))]
 macro_rules! checker_concat_impl {
     (
         $(

@@ -57,7 +57,7 @@
 /// *This macro is available only if MultiCrusty is built with
 /// the `"baking_atmp"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "baking_atmp")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "baking_atmp")))]
 macro_rules! choose_atmp_mpst_multi_to_all {
     (
         $session: expr,

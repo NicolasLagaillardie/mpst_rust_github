@@ -388,7 +388,7 @@ pub(crate) fn process_line(
 
                     if let Some((index, looping_messages)) = global_elements
                         .loops
-                        .get_mut(&(captured_fields["loop"].to_string()))
+                        .get_mut(&captured_fields["loop"])
                     {
                         let mut do_something = false;
 

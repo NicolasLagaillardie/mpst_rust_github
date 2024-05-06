@@ -12,7 +12,7 @@
 /// the `"transport"` feature or the `"transport_udp"` feature.*
 #[macro_export]
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_udp")))
 )]
 macro_rules! offer_udp {

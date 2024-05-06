@@ -19,7 +19,7 @@ type UdpData = [u8; 128];
 /// *This function is available only if MultiCrusty is built with
 /// the `"transport"` feature or the `"transport_udp"` feature.*
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_udp")))
 )]
 pub fn send_udp<T, S>(

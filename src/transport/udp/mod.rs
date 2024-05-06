@@ -5,37 +5,37 @@
 //! the `"transport"` feature or the `"transport_udp"` feature.*
 
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_udp")))
 )]
 pub mod choose;
 
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_udp")))
 )]
 pub mod offer;
 
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_udp")))
 )]
 pub mod recv;
 
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_udp")))
 )]
 pub mod send;
 
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_udp")))
 )]
 pub mod fork;
 
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_udp")))
 )]
 pub mod cancel;

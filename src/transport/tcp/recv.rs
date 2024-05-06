@@ -22,7 +22,7 @@ type TupleRecv<T, S> = (T, S, TcpData, TcpStream);
 /// *This function is available only if MultiCrusty is built with
 /// the `"transport"` feature or the `"transport_tcp"` feature.*
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_tcp")))
 )]
 pub fn recv_tcp<T, S>(

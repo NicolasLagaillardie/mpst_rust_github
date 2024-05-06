@@ -25,7 +25,7 @@
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_offer_type_multi {
     ($type_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
         mpst_seq_proc::create_offer_type_multi!($type_name, $meshedchannels_name, $n_sessions);
@@ -78,7 +78,7 @@ macro_rules! create_offer_type_multi {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_offer_mpst_session_multi {
     (
         $func_name:ident,
@@ -155,7 +155,7 @@ macro_rules! create_offer_mpst_session_multi {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! offer_mpst {
     ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )+ }) => {
         (move || -> Result<_, _> {
@@ -195,7 +195,7 @@ macro_rules! offer_mpst {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! offer_cancel_mpst {
     ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )+ }) => {
         (move || -> Result<_, _> {
@@ -241,7 +241,7 @@ macro_rules! offer_cancel_mpst {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! offer_http_mpst {
     ($session: expr, $recv_mpst: ident, { $( $pat: pat => $result: expr, )+ }) => {
         (move || -> Result<_, _> {

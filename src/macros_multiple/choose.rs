@@ -25,7 +25,7 @@
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_type_multi {
     ($type_name:ident, $meshedchannels_name:ident, $n_sessions:literal) => {
         mpst_seq_proc::create_choose_type_multi!($type_name, $meshedchannels_name, $n_sessions);
@@ -75,7 +75,7 @@ macro_rules! create_choose_type_multi {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_mpst_session_multi_left {
     (
         $func_name:ident,
@@ -139,7 +139,7 @@ macro_rules! create_choose_mpst_session_multi_left {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_mpst_session_multi_right {
     (
         $func_name:ident,
@@ -205,7 +205,7 @@ macro_rules! create_choose_mpst_session_multi_right {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_choose_mpst_session_multi_both {
     (
         $func_name_left:ident,
@@ -285,7 +285,7 @@ macro_rules! create_choose_mpst_session_multi_both {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! choose_mpst_multi_to_all {
     (
         $session: expr,
@@ -358,7 +358,7 @@ macro_rules! choose_mpst_multi_to_all {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! choose_mpst_create_multi_to_all {
     ($name:expr, $sender:ident, $meshedchannels_name:ident, $exclusion:literal) => {
         mpst_seq_proc::choose_mpst_create_multi_to_all!(
@@ -474,7 +474,7 @@ macro_rules! choose_mpst_create_multi_to_all {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! choose_mpst_multi_cancel_to_all {
     (
         $session: expr,
@@ -535,7 +535,7 @@ macro_rules! choose_mpst_multi_cancel_to_all {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
     (
         $( $fn_name: ident , )+ =>
@@ -599,7 +599,7 @@ macro_rules! create_fn_choose_mpst_multi_to_all_bundle {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_fn_choose_mpst_cancel_multi_to_all_bundle {
     (
         $( $fn_name: ident , )+ =>

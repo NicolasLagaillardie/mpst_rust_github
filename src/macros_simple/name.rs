@@ -24,7 +24,7 @@
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_normal_name {
     ($name:ident) => {
         ////////////////////////////////////////////
@@ -104,7 +104,7 @@ macro_rules! create_normal_name {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_multiple_normal_name {
     ($( $name: ident),+ $(,)? ) => {
         $(mpstthree::create_normal_name!($name);)+
@@ -140,7 +140,7 @@ macro_rules! create_multiple_normal_name {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_normal_name_short {
     ($name:ident) => {
         mpst_seq_proc::create_normal_name_short!($name);
@@ -175,7 +175,7 @@ macro_rules! create_normal_name_short {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_multiple_normal_name_short {
     ($( $name: ident),+ $(,)? ) => {
         $(

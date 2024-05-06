@@ -249,7 +249,7 @@ macro_rules! create_choose_from_3_to_1_2 {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_right_from_3_to_1_and_2 {
     (
         $func_name:ident,
@@ -354,7 +354,7 @@ macro_rules! create_choose_right_from_3_to_1_and_2 {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_left_from_3_to_1_and_2 {
     (
         $func_name:ident,
@@ -459,7 +459,7 @@ macro_rules! create_choose_left_from_3_to_1_and_2 {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_left_from_1_to_2_and_3 {
     (
         $func_name:ident,
@@ -564,7 +564,7 @@ macro_rules! create_choose_left_from_1_to_2_and_3 {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_right_from_1_to_2_and_3 {
     (
         $func_name:ident,
@@ -669,7 +669,7 @@ macro_rules! create_choose_right_from_1_to_2_and_3 {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_left_from_2_to_1_and_3 {
     (
         $func_name:ident,
@@ -774,7 +774,7 @@ macro_rules! create_choose_left_from_2_to_1_and_3 {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_right_from_2_to_1_and_3 {
     (
         $func_name:ident,
@@ -883,7 +883,7 @@ macro_rules! create_choose_right_from_2_to_1_and_3 {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_both_from_2_to_1_and_3 {
     (
         $func_name_right:ident,
@@ -963,7 +963,7 @@ macro_rules! create_choose_both_from_2_to_1_and_3 {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_both_from_1_to_2_and_3 {
     (
         $func_name_right:ident,
@@ -1043,7 +1043,7 @@ macro_rules! create_choose_both_from_1_to_2_and_3 {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_choose_both_from_3_to_1_and_2 {
     (
         $func_name_right:ident,
@@ -1120,7 +1120,7 @@ macro_rules! create_choose_both_from_3_to_1_and_2 {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! choose_mpst_to_all {
     (
         $session: expr ,

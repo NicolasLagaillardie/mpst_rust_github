@@ -34,7 +34,7 @@ use std::net::{Shutdown, TcpStream};
 /// *This function is available only if MultiCrusty is built with
 /// the `"transport"` feature or the `"transport_tcp"` feature.*
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_tcp")))
 )]
 pub fn cancel_tcp<T>(s: T, stream: TcpStream) {

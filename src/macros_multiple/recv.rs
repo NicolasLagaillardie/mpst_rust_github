@@ -39,7 +39,7 @@
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_recv_mpst_session {
     (
         $func_name:ident,
@@ -105,7 +105,7 @@ macro_rules! create_recv_mpst_session {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_recv_mpst_session_bundle {
     ($( $func_name: ident, $sender: ident, $exclusion: literal | )+ => $receiver: ident, $meshedchannels_name: ident, $n_sessions: literal) => {
        $(

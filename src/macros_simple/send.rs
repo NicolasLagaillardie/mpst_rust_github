@@ -32,7 +32,7 @@
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_send_mpst_session_1 {
     ($func_name:ident, $receiver:ident, $sender:ident) => {
         mpst_seq_proc::create_send_mpst_session!(
@@ -73,7 +73,7 @@ macro_rules! create_send_mpst_session_1 {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_send_mpst_session_2 {
     ($func_name:ident, $receiver:ident, $sender:ident) => {
         mpst_seq_proc::create_send_mpst_session!(

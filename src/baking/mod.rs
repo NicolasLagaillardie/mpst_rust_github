@@ -94,7 +94,7 @@
 /// );
 /// ```
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "baking")))]
 macro_rules! generate {
     (
         "basic",

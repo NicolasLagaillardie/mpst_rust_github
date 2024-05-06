@@ -14,43 +14,35 @@ generate_atmp!(MeshedChannels, A, B, C);
 // Types of the payloads
 struct Payload;
 
+struct Test6 { payload: Payload }
 struct Test7;
 struct Test5 { payload: Payload }
 struct Test8 { payload: Payload }
-struct Test6 { payload: Payload }
 
 
-struct Test4 { payload: Payload }
+struct Test3;
 struct Test1;
 struct Test2 { payload: Payload }
-struct Test3;
+struct Test4 { payload: Payload }
 
 // Binary sessions in depth 0
+// Binary sessions for A
+type Message_0_v_0_FromAToB = SendTimed<Choice_0_FromAToB, ' ', -2, false, -1, false, ' ', End>;
+type Message_0_v_0_FromAToC = SendTimed<Choice_0_FromAToC, ' ', -2, false, -1, false, ' ', End>;
+
+// Binary sessions for B
+type Message_0_v_0_FromBToC = End;
+type Message_0_v_0_FromBToA = RecvTimed<Choice_0_FromAToB, ' ', -2, false, -1, false, ' ', End>;
+
 // Binary sessions for C
 type Message_0_v_0_FromCToB = End;
 type Message_0_v_0_FromCToA = RecvTimed<Choice_0_FromAToC, ' ', -2, false, -1, false, ' ', End>;
-
-// Binary sessions for A
-type Message_0_v_0_FromAToC = SendTimed<Choice_0_FromAToC, ' ', -2, false, -1, false, ' ', End>;
-type Message_0_v_0_FromAToB = SendTimed<Choice_0_FromAToB, ' ', -2, false, -1, false, ' ', End>;
-
-// Binary sessions for B
-type Message_0_v_0_FromBToA = RecvTimed<Choice_0_FromAToB, ' ', -2, false, -1, false, ' ', End>;
-type Message_0_v_0_FromBToC = End;
 
 // Binary sessions in depth 0.2
 // Binary sessions for C
 type Message_0_2_v_0_FromCToA = RecvTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_2_v_1_FromCToA>;
 type Message_0_2_v_1_FromCToA = End;
 type Message_0_2_v_0_FromCToB = End;
-
-// Binary sessions for B
-type Message_0_2_v_0_FromBToC = End;
-type Message_0_2_v_0_FromBToA = RecvTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_2_v_1_FromBToA>;
-type Message_0_2_v_1_FromBToA = RecvTimed<Test6, 'a', 0, true, 1, true, ' ', Message_0_2_v_2_FromBToA>;
-type Message_0_2_v_2_FromBToA = RecvTimed<Test7, 'a', 0, true, 1, true, 'a', Message_0_2_v_3_FromBToA>;
-type Message_0_2_v_3_FromBToA = RecvTimed<Test8, 'a', 0, true, 1, true, 'a', Message_0_2_v_4_FromBToA>;
-type Message_0_2_v_4_FromBToA = End;
 
 // Binary sessions for A
 type Message_0_2_v_0_FromAToB = SendTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_2_v_1_FromAToB>;
@@ -61,21 +53,15 @@ type Message_0_2_v_4_FromAToB = End;
 type Message_0_2_v_0_FromAToC = SendTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_2_v_1_FromAToC>;
 type Message_0_2_v_1_FromAToC = End;
 
+// Binary sessions for B
+type Message_0_2_v_0_FromBToC = End;
+type Message_0_2_v_0_FromBToA = RecvTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_2_v_1_FromBToA>;
+type Message_0_2_v_1_FromBToA = RecvTimed<Test6, 'a', 0, true, 1, true, ' ', Message_0_2_v_2_FromBToA>;
+type Message_0_2_v_2_FromBToA = RecvTimed<Test7, 'a', 0, true, 1, true, 'a', Message_0_2_v_3_FromBToA>;
+type Message_0_2_v_3_FromBToA = RecvTimed<Test8, 'a', 0, true, 1, true, 'a', Message_0_2_v_4_FromBToA>;
+type Message_0_2_v_4_FromBToA = End;
+
 // Binary sessions in depth 0.1
-// Binary sessions for A
-type Message_0_1_v_0_FromAToC = SendTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_1_v_1_FromAToC>;
-type Message_0_1_v_1_FromAToC = End;
-type Message_0_1_v_0_FromAToB = SendTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_1_v_1_FromAToB>;
-type Message_0_1_v_1_FromAToB = SendTimed<Test6, 'a', 0, true, 1, true, ' ', Message_0_1_v_2_FromAToB>;
-type Message_0_1_v_2_FromAToB = SendTimed<Test7, 'a', 0, true, 1, true, 'a', Message_0_1_v_3_FromAToB>;
-type Message_0_1_v_3_FromAToB = SendTimed<Test8, 'a', 0, true, 1, true, 'a', Message_0_1_v_4_FromAToB>;
-type Message_0_1_v_4_FromAToB = End;
-
-// Binary sessions for C
-type Message_0_1_v_0_FromCToB = End;
-type Message_0_1_v_0_FromCToA = RecvTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_1_v_1_FromCToA>;
-type Message_0_1_v_1_FromCToA = End;
-
 // Binary sessions for B
 type Message_0_1_v_0_FromBToC = End;
 type Message_0_1_v_0_FromBToA = RecvTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_1_v_1_FromBToA>;
@@ -84,28 +70,42 @@ type Message_0_1_v_2_FromBToA = RecvTimed<Test7, 'a', 0, true, 1, true, 'a', Mes
 type Message_0_1_v_3_FromBToA = RecvTimed<Test8, 'a', 0, true, 1, true, 'a', Message_0_1_v_4_FromBToA>;
 type Message_0_1_v_4_FromBToA = End;
 
+// Binary sessions for A
+type Message_0_1_v_0_FromAToB = SendTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_1_v_1_FromAToB>;
+type Message_0_1_v_1_FromAToB = SendTimed<Test6, 'a', 0, true, 1, true, ' ', Message_0_1_v_2_FromAToB>;
+type Message_0_1_v_2_FromAToB = SendTimed<Test7, 'a', 0, true, 1, true, 'a', Message_0_1_v_3_FromAToB>;
+type Message_0_1_v_3_FromAToB = SendTimed<Test8, 'a', 0, true, 1, true, 'a', Message_0_1_v_4_FromAToB>;
+type Message_0_1_v_4_FromAToB = End;
+type Message_0_1_v_0_FromAToC = SendTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_1_v_1_FromAToC>;
+type Message_0_1_v_1_FromAToC = End;
+
+// Binary sessions for C
+type Message_0_1_v_0_FromCToB = End;
+type Message_0_1_v_0_FromCToA = RecvTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_1_v_1_FromCToA>;
+type Message_0_1_v_1_FromCToA = End;
+
 // Binary sessions in depth 0.0
-// Binary sessions for B
-type Message_0_0_v_0_FromBToA = RecvTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_0_v_1_FromBToA>;
-type Message_0_0_v_1_FromBToA = RecvTimed<Test2, 'a', 0, true, 1, true, ' ', Message_0_0_v_2_FromBToA>;
-type Message_0_0_v_2_FromBToA = RecvTimed<Test3, 'a', 0, true, 1, true, 'a', Message_0_0_v_3_FromBToA>;
-type Message_0_0_v_3_FromBToA = RecvTimed<Test4, 'a', 0, true, 1, true, 'a', Message_0_0_v_4_FromBToA>;
-type Message_0_0_v_4_FromBToA = End;
-type Message_0_0_v_0_FromBToC = End;
+// Binary sessions for C
+type Message_0_0_v_0_FromCToA = RecvTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_0_v_1_FromCToA>;
+type Message_0_0_v_1_FromCToA = End;
+type Message_0_0_v_0_FromCToB = End;
 
 // Binary sessions for A
+type Message_0_0_v_0_FromAToC = SendTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_0_v_1_FromAToC>;
+type Message_0_0_v_1_FromAToC = End;
 type Message_0_0_v_0_FromAToB = SendTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_0_v_1_FromAToB>;
 type Message_0_0_v_1_FromAToB = SendTimed<Test2, 'a', 0, true, 1, true, ' ', Message_0_0_v_2_FromAToB>;
 type Message_0_0_v_2_FromAToB = SendTimed<Test3, 'a', 0, true, 1, true, 'a', Message_0_0_v_3_FromAToB>;
 type Message_0_0_v_3_FromAToB = SendTimed<Test4, 'a', 0, true, 1, true, 'a', Message_0_0_v_4_FromAToB>;
 type Message_0_0_v_4_FromAToB = End;
-type Message_0_0_v_0_FromAToC = SendTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_0_v_1_FromAToC>;
-type Message_0_0_v_1_FromAToC = End;
 
-// Binary sessions for C
-type Message_0_0_v_0_FromCToA = RecvTimed<Test5, 'a', 0, true, 1, true, ' ', Message_0_0_v_1_FromCToA>;
-type Message_0_0_v_1_FromCToA = End;
-type Message_0_0_v_0_FromCToB = End;
+// Binary sessions for B
+type Message_0_0_v_0_FromBToC = End;
+type Message_0_0_v_0_FromBToA = RecvTimed<Test1, 'a', 0, true, 1, true, ' ', Message_0_0_v_1_FromBToA>;
+type Message_0_0_v_1_FromBToA = RecvTimed<Test2, 'a', 0, true, 1, true, ' ', Message_0_0_v_2_FromBToA>;
+type Message_0_0_v_2_FromBToA = RecvTimed<Test3, 'a', 0, true, 1, true, 'a', Message_0_0_v_3_FromBToA>;
+type Message_0_0_v_3_FromBToA = RecvTimed<Test4, 'a', 0, true, 1, true, 'a', Message_0_0_v_4_FromBToA>;
+type Message_0_0_v_4_FromBToA = End;
 
 // Stacks in depth 0
 // Stacks for A
@@ -118,13 +118,9 @@ type Ordering_0_v_0_ForB = RoleA<RoleEnd>;
 type Ordering_0_v_0_ForC = RoleA<RoleEnd>;
 
 // Stacks in depth 0.2
-// Stacks for A
-type Ordering_0_2_v_0_ForA = RoleB<Ordering_0_2_v_1_ForA>;
-type Ordering_0_2_v_1_ForA = RoleB<Ordering_0_2_v_2_ForA>;
-type Ordering_0_2_v_2_ForA = RoleB<Ordering_0_2_v_3_ForA>;
-type Ordering_0_2_v_3_ForA = RoleB<Ordering_0_2_v_4_ForA>;
-type Ordering_0_2_v_4_ForA = RoleC<Ordering_0_2_v_5_ForA>;
-type Ordering_0_2_v_5_ForA = RoleEnd;
+// Stacks for C
+type Ordering_0_2_v_0_ForC = RoleA<Ordering_0_2_v_1_ForC>;
+type Ordering_0_2_v_1_ForC = RoleEnd;
 
 // Stacks for B
 type Ordering_0_2_v_0_ForB = RoleA<Ordering_0_2_v_1_ForB>;
@@ -133,11 +129,19 @@ type Ordering_0_2_v_2_ForB = RoleA<Ordering_0_2_v_3_ForB>;
 type Ordering_0_2_v_3_ForB = RoleA<Ordering_0_2_v_4_ForB>;
 type Ordering_0_2_v_4_ForB = RoleEnd;
 
-// Stacks for C
-type Ordering_0_2_v_0_ForC = RoleA<Ordering_0_2_v_1_ForC>;
-type Ordering_0_2_v_1_ForC = RoleEnd;
+// Stacks for A
+type Ordering_0_2_v_0_ForA = RoleB<Ordering_0_2_v_1_ForA>;
+type Ordering_0_2_v_1_ForA = RoleB<Ordering_0_2_v_2_ForA>;
+type Ordering_0_2_v_2_ForA = RoleB<Ordering_0_2_v_3_ForA>;
+type Ordering_0_2_v_3_ForA = RoleB<Ordering_0_2_v_4_ForA>;
+type Ordering_0_2_v_4_ForA = RoleC<Ordering_0_2_v_5_ForA>;
+type Ordering_0_2_v_5_ForA = RoleEnd;
 
 // Stacks in depth 0.1
+// Stacks for C
+type Ordering_0_1_v_0_ForC = RoleA<Ordering_0_1_v_1_ForC>;
+type Ordering_0_1_v_1_ForC = RoleEnd;
+
 // Stacks for A
 type Ordering_0_1_v_0_ForA = RoleB<Ordering_0_1_v_1_ForA>;
 type Ordering_0_1_v_1_ForA = RoleB<Ordering_0_1_v_2_ForA>;
@@ -145,10 +149,6 @@ type Ordering_0_1_v_2_ForA = RoleB<Ordering_0_1_v_3_ForA>;
 type Ordering_0_1_v_3_ForA = RoleB<Ordering_0_1_v_4_ForA>;
 type Ordering_0_1_v_4_ForA = RoleC<Ordering_0_1_v_5_ForA>;
 type Ordering_0_1_v_5_ForA = RoleEnd;
-
-// Stacks for C
-type Ordering_0_1_v_0_ForC = RoleA<Ordering_0_1_v_1_ForC>;
-type Ordering_0_1_v_1_ForC = RoleEnd;
 
 // Stacks for B
 type Ordering_0_1_v_0_ForB = RoleA<Ordering_0_1_v_1_ForB>;

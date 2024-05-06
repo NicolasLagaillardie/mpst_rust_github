@@ -11,28 +11,28 @@
 //! *This module is available only if MultiCrusty is built with
 //! the `"macros_multiple"` feature.*
 
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 pub mod cancel;
 
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 pub mod choose;
 
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 pub mod close;
 
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 pub mod fork;
 
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 pub mod meshedchannels;
 
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 pub mod offer;
 
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 pub mod recv;
 
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 pub mod send;
 
 /// Creates the structure MeshedChannels
@@ -61,7 +61,7 @@ pub mod send;
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! bundle_struct_fork_close_multi {
     (
         $func_name_close:ident,
@@ -104,7 +104,7 @@ macro_rules! bundle_struct_fork_close_multi {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! bundle_struct_fork_close_multi_cancel {
     (
         $func_name_close:ident,

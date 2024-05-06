@@ -21,7 +21,7 @@ type TupleRecv<T, S> = (T, S, UdpData, usize, UdpSocket);
 /// *This function is available only if MultiCrusty is built with
 /// the `"transport"` feature or the `"transport_udp"` feature.*
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_udp")))
 )]
 pub fn recv_udp<T, S>(

@@ -4,13 +4,13 @@
 //! *This module is available only if MultiCrusty is built with
 //! the `"interleaved"` feature.*
 
-#[cfg_attr(doc_cfg, doc(cfg(feature = "interleaved")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "interleaved")))]
 pub mod fork;
 
-#[cfg_attr(doc_cfg, doc(cfg(feature = "interleaved")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "interleaved")))]
 pub mod close;
 
-#[cfg_attr(doc_cfg, doc(cfg(feature = "interleaved")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "interleaved")))]
 pub mod offer;
 
 #[macro_export]

@@ -23,7 +23,7 @@
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_multiple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 macro_rules! create_meshedchannels {
     ($meshedchannels_name:ident, $n_sessions:literal) => {
         mpst_seq_proc::create_meshedchannels!($meshedchannels_name, $n_sessions);

@@ -11,8 +11,8 @@
 )]
 #![deny(unused_must_use)]
 #![deny(semicolon_in_expressions_from_macros)]
-#![cfg_attr(doc_cfg, feature(doc_cfg))]
-#![cfg_attr(doc_cfg, deny(rustdoc::broken_intra_doc_links))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
+#![cfg_attr(docsrs, deny(rustdoc::broken_intra_doc_links))]
 #![doc(test(
     no_crate_inject,
     attr(deny(warnings, rust_2018_idioms, unused_attributes))
@@ -310,23 +310,23 @@ pub mod meshedchannels;
 pub mod functionmpst;
 
 #[cfg(feature = "checking")]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "checking")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "checking")))]
 pub mod checking;
 
 #[cfg(feature = "macros_simple")]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 pub mod macros_simple;
 
 #[cfg(feature = "macros_multiple")]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_multiple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_multiple")))]
 pub mod macros_multiple;
 
 #[cfg(feature = "baking")]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "baking")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "baking")))]
 pub mod baking;
 
 #[cfg(feature = "interleaved")]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "interleaved")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "interleaved")))]
 pub mod interleaved;
 
 #[cfg(feature = "binary_atmp")]
@@ -337,9 +337,6 @@ pub mod baking_atmp;
 
 #[cfg(feature = "transport")]
 pub mod transport;
-
-#[cfg(feature = "protobuf")]
-pub mod protobuf;
 
 #[cfg(feature = "top_down_nuscr")]
 pub mod top_down_nuscr;

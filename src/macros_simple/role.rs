@@ -25,7 +25,7 @@
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_normal_role {
     ($role_name:ident, $dual_name:ident) => {
         ////////////////////////////////////////////
@@ -201,7 +201,7 @@ macro_rules! create_normal_role {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_multiple_normal_role {
     ($( $role_name: ident, $dual_name: ident | )+ ) => {
         $(mpstthree::create_normal_role!($role_name, $dual_name);)+
@@ -231,7 +231,7 @@ macro_rules! create_multiple_normal_role {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_broadcast_role {
     ($role_name:ident, $dual_name:ident) => {
         ////////////////////////////////////////////
@@ -452,7 +452,7 @@ macro_rules! create_broadcast_role {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_multiple_broadcast_role {
     ($( $role_name: ident, $dual_name: ident | )+ ) => {
         $(
@@ -490,7 +490,7 @@ macro_rules! create_multiple_broadcast_role {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_normal_role_short {
     ($role_name:ident) => {
         mpst_seq_proc::create_normal_role_short!($role_name);
@@ -525,7 +525,7 @@ macro_rules! create_normal_role_short {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_multiple_normal_role_short {
     ($( $role_name: ident),+ $(,)? ) => {
         $(
@@ -563,7 +563,7 @@ macro_rules! create_multiple_normal_role_short {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_broadcast_role_short {
     ($role_name:ident) => {
         mpst_seq_proc::create_broadcast_role_short!($role_name);
@@ -601,7 +601,7 @@ macro_rules! create_broadcast_role_short {
 /// *This macro is available only if MultiCrusty is built with
 /// the `"macros_simple"` feature.*
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "macros_simple")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "macros_simple")))]
 macro_rules! create_multiple_broadcast_role_short {
     ($( $role_name: ident),+ $(,)? ) => {
         $(

@@ -37,7 +37,7 @@ use std::panic;
 /// *This function is available only if MultiCrusty is built with
 /// the `"transport"` feature or the `"transport_http"` feature.*
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_http")))
 )]
 pub fn send_http<T, S>(
@@ -119,7 +119,7 @@ where
 /// the `"transport"` feature or the `"transport_http"` feature.*
 #[macro_export]
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_http")))
 )]
 macro_rules! create_send_http_session {
@@ -185,7 +185,7 @@ macro_rules! create_send_http_session {
 /// the `"transport"` feature or the `"transport_http"` feature.*
 #[macro_export]
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_http")))
 )]
 macro_rules! create_send_mpst_http_bundle {

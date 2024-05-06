@@ -31,7 +31,7 @@ pub mod choose;
 /// generate_atmp!(MeshedChannels, A, B, C);
 /// ```
 #[macro_export]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "baking_atmp")))]
+#[cfg_attr(docsrs, doc(cfg(feature = "baking_atmp")))]
 macro_rules! generate_atmp {
     (
         $meshedchannels_name: ident,

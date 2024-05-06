@@ -22,7 +22,7 @@ type TcpFork<T> = Result<(JoinHandle<()>, T, TcpStream), Box<dyn Error>>;
 /// *This function is available only if MultiCrusty is built with
 /// the `"transport"` feature or the `"transport_tcp"` feature.*
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_tcp")))
 )]
 pub fn fork_tcp<S, P>(p: P, address: &str) -> TcpFork<S::Dual>

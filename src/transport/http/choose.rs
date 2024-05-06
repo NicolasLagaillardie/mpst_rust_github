@@ -57,7 +57,7 @@
 /// the `"macros_multiple"` feature.*
 #[macro_export]
 #[cfg_attr(
-    doc_cfg,
+    docsrs,
     doc(cfg(any(feature = "transport", feature = "transport_http")))
 )]
 macro_rules! choose_mpst_multi_http_to_all {

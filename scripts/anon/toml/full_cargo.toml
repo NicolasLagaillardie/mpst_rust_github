@@ -898,7 +898,6 @@ transport_macros_multiple = [
     "macros_multiple",
     "transport",
 ] # For test compile examples
-protobuf_feature = []
 affine_atmp = ["baking", "baking_atmp"]
 full_without_checking = ["baking", "transport", "interleaved"]
 full = ["baking_checking", "transport", "baking_atmp", "interleaved"]
