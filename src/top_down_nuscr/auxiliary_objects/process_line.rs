@@ -386,9 +386,8 @@ pub(crate) fn process_line(
                 } else if check_continue(&line) {
                     let captured_fields = CONTINUE.captures(&line).unwrap();
 
-                    if let Some((index, looping_messages)) = global_elements
-                        .loops
-                        .get_mut(&captured_fields["loop"])
+                    if let Some((index, looping_messages)) =
+                        global_elements.loops.get_mut(&captured_fields["loop"])
                     {
                         let mut do_something = false;
 

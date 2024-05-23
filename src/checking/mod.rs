@@ -41,7 +41,7 @@ type HashGraph = HashMap<String, Graph<String, String>>;
 /// * \[Optional\] The name of the new file after running the [`KMC`] tool
 /// * Each starting endpoint, separated by a comma
 /// * \[Optional\] Each new `MeshedChannels` adopted by each sender of each choice, along with all
-///   the different branches sent.
+///     the different branches sent.
 ///
 /// Currently, we do not support parameters for branches with `enum`
 ///

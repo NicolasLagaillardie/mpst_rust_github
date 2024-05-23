@@ -6,7 +6,14 @@ clear
 clear
 cargo clean
 rustup update
-cargo install-update -a
+
+if cargo install-update -a ; then
+	echo "cargo update successful"
+else
+	cargo install cargo-update --force
+	# cargo install cargo-update --force --features vendored-libgit2 --features vendored-openssl
+fi
+
 cargo update --workspace
 cargo fmt --all --verbose
 cargo clippy --workspace --all-features --all-targets --verbose
