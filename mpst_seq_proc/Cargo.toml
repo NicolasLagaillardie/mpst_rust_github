@@ -31,4 +31,4 @@ trybuild = "1.0.91"
 syn = { version = "2.0.60", features = ["extra-traits", "full", "parsing"] }
 quote = "1.0.36"
 proc-macro2 = "1.0.81"
-itertools = "0.12.1"
+itertools = "0.13.0"
