@@ -42,6 +42,9 @@ bench_files = [
     'Heart Rate',
 ]
 
+if len(compile_files) != len(bench_files):
+    raise RuntimeError("compile_files and bench_files do not have the same lenght")
+
 # Indexing for bar lists
 index_compile = {}
 
@@ -118,11 +121,11 @@ for protocol, index in index_compile.items():
                 bar_build_ampst[index] = statistics.mean(temp_build)/10**6
                 bar_run_ampst[index] = bench[protocol]/10**6
             else:
-                print('Issue with ', name_file)
+                print('Issue with ' + name_file + ' : cannot find atmp or ampst version')
                 # exit()
 
         except:
-            print('Issue with ', protocol)
+            print('Issue with ' + protocol + ' : tried and failed opening file and extracting data')
             # # exit()
     else:
         print(protocol + " not in compiled files")

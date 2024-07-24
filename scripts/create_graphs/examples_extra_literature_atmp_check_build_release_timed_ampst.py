@@ -57,11 +57,13 @@ bench_files = [
     'HTTP',
     'Remote data',
     'Servo',
-    'Circuit breaker',
     'Gravity Android',
     'Heart Rate',
     'Car-Key',
 ]
+
+if len(compile_files) != len(bench_files):
+    raise RuntimeError("compile_files and bench_files do not have the same lenght")
 
 # Indexing for bar lists
 index_compile = {}

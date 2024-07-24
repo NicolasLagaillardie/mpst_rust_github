@@ -691,7 +691,7 @@ fn endpoint_client(
         },
         OpenTCPConnectionByServerToClient::Success(s) => {
             let (_, s) = s.recv(all_clocks)?;
-            recurs_client(s, 100, all_clocks)
+            recurs_client(s, LOOPS, all_clocks)
         },
     })
 }
@@ -1290,6 +1290,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn http(c: &mut Criterion) {
     c.bench_function("ATMP HTTP", |b| b.iter(aux));

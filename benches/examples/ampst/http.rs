@@ -529,7 +529,7 @@ fn endpoint_client(s: EndpointClient) -> Result<(), Box<dyn Error>> {
         OpenTCPConnectionByServerToClient::Success(s) => {
 
                         let (_, s) = s.recv()?;
-            recurs_client(s, 100)
+            recurs_client(s, LOOPS)
         },
     })
 }
@@ -886,7 +886,7 @@ fn endpoint_server(s: EndpointServer) -> Result<(), Box<dyn Error>> {
     let (_, s) = s.recv()?;
 
     // 10 percent chance of failure
-    match thread_rng().gen_range(1..10) {
+    match thread_rng().gen_range(2..10) {
         1 => {
             let s: EndpointServerFail = choose_mpst_server_to_all!(
                 s,
@@ -1106,6 +1106,8 @@ fn aux() {
 }
 
 /////////////////////////
+
+static LOOPS: i32 = 100;
 
 pub fn http(c: &mut Criterion) {
     c.bench_function("HTTP AMPST", |b| b.iter(aux));
