@@ -18,7 +18,7 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp, mpstthree::binary
    |                       ^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>>>>`
+note: required because it appears within the type `Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<SumOp, End>>>>>`
   --> src/binary/struct_trait/send.rs
    |
    | pub struct Send<T, S>
@@ -36,6 +36,8 @@ note: required by a bound in `Recv`
    | where
    |     T: marker::Send,
    |        ^^^^^^^^^^^^ required by this bound in `Recv`
+   = note: the full name for the type has been written to '$DIR/target/tests/trybuild/x86_64-unknown-linux-gnu/debug/deps/$CRATE-d7264d1664384dce.long-type-6482031964287942452.txt'
+   = note: consider using `--verbose` to print the full type name to the console
 
 error[E0275]: overflow evaluating the requirement `Recv<SumOp, mpstthree::binary::struct_trait::end::End>: Session`
   --> tests/infinite_type/fail_3.rs:22:29
@@ -44,7 +46,7 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp, mpstthree::binary
    |                             ^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>>>>`
+note: required because it appears within the type `Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<SumOp, End>>>>>`
   --> src/binary/struct_trait/send.rs
    |
    | pub struct Send<T, S>
@@ -62,6 +64,8 @@ note: required by a bound in `Recv`
    | where
    |     T: marker::Send,
    |        ^^^^^^^^^^^^ required by this bound in `Recv`
+   = note: the full name for the type has been written to '$DIR/target/tests/trybuild/x86_64-unknown-linux-gnu/debug/deps/$CRATE-d7264d1664384dce.long-type-6482031964287942452.txt'
+   = note: consider using `--verbose` to print the full type name to the console
 
 error[E0275]: overflow evaluating the requirement `Recv<SumOp, mpstthree::binary::struct_trait::end::End>: Session`
   --> tests/infinite_type/fail_3.rs:38:29
@@ -70,7 +74,7 @@ error[E0275]: overflow evaluating the requirement `Recv<SumOp, mpstthree::binary
    |                             ^^^^^^^^^^^^^
    |
    = note: required for `Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>` to implement `Session`
-note: required because it appears within the type `mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, mpstthree::binary::struct_trait::send::Send<i32, Recv<i32, Recv<SumOp, mpstthree::binary::struct_trait::end::End>>>>>`
+note: required because it appears within the type `Send<i32, Recv<i32, Send<i32, Recv<i32, Recv<SumOp, End>>>>>`
   --> src/binary/struct_trait/send.rs
    |
    | pub struct Send<T, S>
@@ -81,3 +85,5 @@ note: required because it appears within the type `SumOp`
 11 | enum SumOp {
    |      ^^^^^
    = note: required for `Recv<SumOp, mpstthree::binary::struct_trait::end::End>` to implement `Session`
+   = note: the full name for the type has been written to '$DIR/target/tests/trybuild/x86_64-unknown-linux-gnu/debug/deps/$CRATE-d7264d1664384dce.long-type-6482031964287942452.txt'
+   = note: consider using `--verbose` to print the full type name to the console
